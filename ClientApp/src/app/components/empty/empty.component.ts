@@ -15,7 +15,7 @@ export class EmptyComponent implements OnInit, AfterViewInit {
   constructor(
     private quranService: QuranService, private titleService: Title
   ) {
-    this.titleService.setTitle("Holy Quran - DigitalKhatt");
+    this.titleService.setTitle("DigitalKhatt Mushaf");
   }
 
   ngOnInit() {

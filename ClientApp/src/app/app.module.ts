@@ -131,14 +131,14 @@ export class MyHammerConfig extends HammerGestureConfig {
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'holyquran'
-      },
+        redirectTo: 'digitalmushaf'
+      },     
       {
         path: '',
         component: QuranComponent,
         children: [
           {
-            path: 'holyquran',
+            path: 'digitalmushaf',
             component: EmptyComponent
           },
           {
@@ -150,7 +150,7 @@ export class MyHammerConfig extends HammerGestureConfig {
       },
       {
         path: '**',
-        redirectTo: 'holyquran'
+        redirectTo: 'digitalmushaf'
       }
 
 
