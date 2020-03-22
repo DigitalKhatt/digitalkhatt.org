@@ -1,0 +1,10 @@
+<div style="position:relative;">
+  <canvas #canvas height="5" width="5"></canvas>
+</div>
+<div>
+  <mat-slider invert [style.min-width.px]="(min + max) * CSS_UNITS * scale" [style.width.px]="(min + max) * CSS_UNITS * scale" [min]="-min" [max]="max" step="0.1" value="0"
+          (input)="linewidthChanged($event)" style="top:-10px;height:32px;"
+          [(ngModel)] ="tatweel" >
+
+  </mat-slider>
+</div>

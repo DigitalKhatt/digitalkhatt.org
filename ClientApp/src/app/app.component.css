@@ -1,0 +1,19 @@
+@media (max-width: 767px) {
+  /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */
+  .body-content {
+    padding-top: 50px;
+  }
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.docs-angular-logo {
+  height: 36px;
+  margin: 0 4px 3px 0;
+  vertical-align: middle;
+  opacity: 1;
+}

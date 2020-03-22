@@ -1,0 +1,59 @@
+<div class="quran-toolbar" *ngIf="loaded">
+  <div class="quran-toolbar-row">
+    <div class="leftnav">
+      <button mat-button class="toolbarbutton backbutton" title="Quran" routerLink="/holyquran">
+        <mat-icon style="color:darkblue;">arrow_back</mat-icon>Holy Quran
+      </button>
+    </div>
+    <div class="rightnav">
+
+      <a mat-icon-button href="https://twitter.com/DigitalKhatt" title="Twitter" aria-label="DigitalKhatt on twitter">
+        <mat-icon svgIcon="logos:twitter"></mat-icon>
+      </a>
+
+    </div>
+  </div>
+</div>
+
+<div class="content">
+  <h1>About</h1>
+  <p>
+    DigitalKhatt is an advanced Arabic typesetter based on a Metafont-designed parametric font that can generate a glyph with
+    a given width during layout and justification while respecting the curvilinear nature of Arabic letters. The typesetter extends the OpenType layout engine to support the varying width and shape of the glyphs.
+  </p>
+  <p>
+    This site presents the Holy Quran typeset using DigitalKhatt to be used as an ebook application.
+    Also, since Quranic transcriptions are the gold standards for Arabic script, we will be able to measure the quality of the typesetter by comparing it to the Medina Mushaf, from which the glyphs have been digitalized, in order to guide the future developments until reaching a high-quality digital copy  comparable to the handwritten one.
+  </p>
+  <p>
+    In what follows, some examples are presented to  highlight  the dynamic nature of DigitalKhatt.
+  </p>
+
+
+
+  <p>The glyphs below show some intra-expandanble letters using curvilinear stretchings. You can move the slider to see how the glyphs expand.</p>
+  <div id="canvasContainer">
+    <canvas *ngFor="let glyphName of glyphNames" height="200" width="300" style="height:10px;width:10px;" [id]="glyphName"></canvas>
+  </div>
+  <div style="width:100px;">
+    <mat-slider style="width:100%" id="tatweel" name="tatweel" min="0" max="12" step="0.1" value="0" [hidden]="!loaded" [(ngModel)]="tatweel" (input)="tatweelChanged($event)"></mat-slider>
+    <!--
+    <input type="range" id="tatweel" name="tatweel" min="0" max="12" step="any" value="0" [hidden]="!loaded" [(ngModel)]="tatweel"
+           (ngModelChange)="tatweelChanged()"
+           class="custom-range">-->
+  </div>
+  <quran-joinletters></quran-joinletters>
+  <p>The example below shows how a word can change width and shape dynamically, by stretching or shrinking the joining letters, depending on the length available.</p>
+  <quran-dynamictext text="رَبَّنَآ" [min]="30" [max]="30" [scale]="1"></quran-dynamictext>
+  <!--<quran-dynamictext  text="محمد" [min]="30" [max]="30" [scale]="1" style="display:inline-block;width:200px;"></quran-dynamictext>-->
+  <p>
+    The following example shows the first line of the third page of Medina Mushaf. By increasing or decreasing the line width, the typesetter justifies the line dynamically by adjusting the letter widths and shapes according to the given justification rules.
+  </p>
+  <quran-dynamictext text="إِنَّ ٱلَّذِينَ كَفَرُوا۟ سَوَآءٌ عَلَيْهِمْ ءَأَنذَرْتَهُمْ أَمْ لَمْ تُنذِرْهُمْ" [min]="50" [max]="100"></quran-dynamictext>
+  <p>Below is another example of the two first lines of page 205 of Medina Mushaf.</p>
+  <quran-dynamictext text="ٱلتَّٰٓئِبُونَ ٱلْعَٰبِدُونَ ٱلْحَٰمِدُونَ ٱلسَّٰٓئِحُونَ" [min]="50" [max]="100"></quran-dynamictext>
+  <quran-dynamictext text="ٱلرَّٰكِعُونَ ٱلسَّٰجِدُونَ ٱلْأٓمِرُونَ بِٱلْمَعْرُوفِ" [min]="50" [max]="100"></quran-dynamictext>
+</div>
+
+
+

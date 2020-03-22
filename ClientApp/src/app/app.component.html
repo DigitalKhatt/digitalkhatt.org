@@ -1,0 +1,40 @@
+<!--
+<mat-toolbar color="primary" style="flex:0 1 auto">
+  <mat-toolbar-row>
+    <button mat-button class="hamburger" [class.starting]="isStarting" (click)="sidenav.toggle()" title="Quran menu">
+      <mat-icon svgIcon="menu"></mat-icon>
+    </button>
+    <a class="docs-button" routerLink="/" [routerLink]='["/"]'>
+      <img class="docs-angular-logo"
+           src="assets/qurantypesettinglogo_white.svg"
+           alt="Quran">
+    </a>
+    <app-nav-menu></app-nav-menu>
+
+  </mat-toolbar-row>
+
+
+</mat-toolbar>
+<mat-sidenav-container class="sidenav-container" [class.starting]="isStarting" [class.has-floating-toc]="hasFloatingToc" role="main" style="flex:1 1 auto;height:1px">
+
+  <mat-sidenav [ngClass]="{'collapsed': !isSideBySide}" #sidenav class="sidenav" [mode]="mode" [opened]="isOpened" (openedChange)="updateHostClasses()">
+    <ng-template cdkPortalOutlet></ng-template>
+    <ng-container #toolbarButtonsContainer></ng-container>
+  </mat-sidenav>
+
+
+  <router-outlet></router-outlet>
+
+
+</mat-sidenav-container>
+  -->
+<!--<app-quran-component></app-quran-component>-->
+<router-outlet></router-outlet>
+
+
+
+
+
+
+
+
