@@ -1156,32 +1156,6 @@
         }
       ]
     },
-    "laminitbehmedi": {
-      "name": "laminitbehmedi",
-      "feature": "calt",
-      "type": "chainingsub",
-      "flags": [ false, false, false, false ],
-      "markSet": [ "smallalef" ],
-      "lookups": {
-        "l1": {
-          "type": "single",
-          "flags": [ false, false, false, true ],
-          "data": {
-            "lam.init": "lam.init.beforebeh",
-            "behshape.medi": "behshape.medi.afterlam"
-          }
-        }
-      },
-      "subtables": [
-        {
-          "input": [
-            [ "lam.init" ],
-            [ "behshape.medi" ]
-          ],
-          "lookuprecords": [ "l1", "l1" ]
-        }
-      ]
-    },
     "kaflamalef": {
       "name": "kaflamalef",
       "feature": "calt",

@@ -1,10 +1,30 @@
+<!--
+Copyright (c) 2019-2020 Amine Anane. http://digitalkhatt/license
+
+This file is part of DigitalKhatt.
+
+DigitalKhatt is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+DigitalKhatt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with DigitalKhatt.  If not, see
+<https: //www.gnu.org/licenses />.
+-->
+
 <p>The following images illustrate some inter-expandanble letters using curvilinear stretchings (i.e. Kashidas). You can move the sliders to see how the glyphs expand.</p>
 <div>
   <canvas *ngFor="let glyphName of glyphNames" height="200" width="300" style="height:10px;width:10px;" [id]="'jl_' + glyphName"></canvas>
 </div>
 <div style="width:100%;">
-  Left expansion: <mat-slider  min="-0.5" max="6" step="0.1" value="0"  [(ngModel)]="leftTatweel" (input)="leftTatweelChanged($event)"></mat-slider>
-  Right expansion: <mat-slider  min="-0.5" max="6" step="0.1" value="0" [(ngModel)]="rightTatweel" (input)="rightTatweelChanged($event)"></mat-slider>
+  Left expansion: <mat-slider min="-0.5" max="6" step="0.1" value="0" [(ngModel)]="leftTatweel" (input)="leftTatweelChanged($event)"></mat-slider>
+  Right expansion: <mat-slider min="-0.5" max="6" step="0.1" value="0" [(ngModel)]="rightTatweel" (input)="rightTatweelChanged($event)"></mat-slider>
   <!--
   <input type="range" id="tatweel" name="tatweel" min="0" max="12" step="any" value="0" [hidden]="!loaded" [(ngModel)]="tatweel"
          (ngModelChange)="tatweelChanged()"

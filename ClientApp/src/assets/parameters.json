@@ -125,6 +125,10 @@
         "onedotdown": {
             "onedotdown": {
                 "baseparameters": {
+                    "behshape.fina.expa": [
+                        0,
+                        -39
+                    ],
                     "behshape.init": [
                         48,
                         -12
@@ -316,6 +320,10 @@
                     "behshape.isol": [
                         36,
                         -160
+                    ],
+                    "behshape.isol.expa": [
+                        66,
+                        -173
                     ],
                     "behshape.medi.beforereh": [
                         -18,
@@ -860,6 +868,10 @@
                     "behshape.fina": [
                         116,
                         -83
+                    ],
+                    "behshape.fina.expa": [
+                        129,
+                        -151
                     ],
                     "behshape.init.beforehah": [
                         22,
@@ -1518,8 +1530,12 @@
                         28
                     ],
                     "yehshape.fina.ii": [
-                        203,
-                        0
+                        49,
+                        17
+                    ],
+                    "yehshape.fina.ii.expa": [
+                        90,
+                        -54
                     ]
                 }
             }
