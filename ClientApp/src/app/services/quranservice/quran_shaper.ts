@@ -1,4 +1,5 @@
 /*
+ * Copyright 2012 Mozilla Foundation (Some code is derived from https://github.com/mozilla/pdf.js/blob/master/src/display/api.js)
  * Copyright (c) 2019-2020 Amine Anane. http: //digitalkhatt/license
  * This file is part of DigitalKhatt.
  *
