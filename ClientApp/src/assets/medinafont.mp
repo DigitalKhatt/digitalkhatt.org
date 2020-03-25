@@ -1473,7 +1473,7 @@ fill
 %%beginbody
 savepicture:=1;
 endchar;
-beginchar(smallhighyeh,1767,-1,-1,-1);
+beginchar(smallhighyeh,-1,-1,-1,-1);
 %%beginbody
 drawcomp(smallyeh,identity);
 leftbearing := 0;
@@ -1896,7 +1896,7 @@ leftbearing := 0;
 rightbearing := 0;
 
 endchar;
-beginchar(smallhighseen,1756,-1,-1,-1);
+beginchar(smallhighseen,-1,-1,-1,-1);
 %%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/smallhighseen.jpg,-1316.42,-567.369,1,0,0,1
 
 %%beginpaths
@@ -1941,7 +1941,7 @@ leftbearing := 0;
 rightbearing := 0;
 
 endchar;
-beginchar(smallhighnoon,1768,-1,-1,-1);
+beginchar(smallhighnoon,-1,-1,-1,-1);
 %%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/smallhighnoon.jpg,-1227.5,-1039.44,1,0,0,1
 
 %%beginpaths
@@ -3507,53 +3507,6 @@ z2 ..
 (137.208,615.477) .. tension 14.0434 and 1.47049 ..
  {down}(198.63,171.315) .. tension 2.10317 and 1 ..
 (159.722,38.7731) .. tension 0.979627 and 0.923892 ..
- cycle
-;
-
-%%endpaths
-%%beginbody
-
-enddefchar;
-defchar(lam.init.beforebeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lam.init.jpg,-2743.84,-1151.57,1,0,0,1
-%%beginparams
-z1 = (95.5417,9.47223);
-z2 = (96.0047,89.3624);
-
-%%beginverbatim
-%charlt := 4; % numeric
-lefttatweel := charlt +0.0;
-%interim left_verticalextratio :=10;
-if left_tatweeltension = 0 : left_tatweeltension := 1; fi
-if left_verticalextratio = 0 : left_verticalextratio := 10; fi
-%lefttatweel_const := (163, y1 -1 );
-
-
-
-
-
-%%endverbatim
-
-%%beginpaths
-
-fill
-z1 join
-z2 ..
-(129.83,95.9572) .. tension 1 and 2.1102 ..
- {up}(165.366,118.63) .. tension 6.60465 and 15.5474 ..
-(86.3148,649.949) .. tension 1 and 1 ..
- {up}(63,694) .. tension 2.23645 and 2.62674 ..
- {right}(109.523,778.736) .. tension 3.26377 and 1.33449 ..
-(133,720) .. tension 1.34175 and 1.47482 ..
- {down}(171,689.528) .. tension 0.75 and 4.0387 ..
-(137.208,615.477) .. tension 14.0434 and 1.47049 ..
- {down}(198.63,171.315) .. tension 2.10317 and 1 ..
-(159.722,38.7731) .. tension 0.979627 and 0.923892 ..
- cycle
-;
-fill
-(242,409) .. tension 1 and 1 ..
-(109,-95) .. tension 1 and 1 ..
  cycle
 ;
 
@@ -6619,6 +6572,8 @@ leftbearing := - x2 + x1;
 
 z70 = z2 shifted z60;
 
+tr_ := tr_ shifted (0,-150);
+
 
 
 setCursiveAnchor(behmediyehfina,z70, ExitAnchor);
@@ -8704,32 +8659,39 @@ fill (0.0,0.0)
  .. controls (172.0,0.0) and (78.0,0.0) .. cycle;
 endchar;
 beginchar(tah.isol.ii,983121,1114,941,-105);
-%%beginbody
 
-fill (59.0,59.0)
- .. controls (59.0,68.0) and (67.0,73.0) .. (76.0,73.0)
- .. controls (101.961914062,73.0) and (150.872070312,-9.0) .. (402.0,-9.0)
- .. controls (437.127929688,-9.0) and (577.0,98.0) .. (577.0,98.0)
- .. controls (577.083984375,103.672851562) and (577.140625,109.33984375) .. (577.140625,115.0)
- .. controls (577.140625,317.805664062) and (531.620117188,512.56640625) .. (518.0,712.0)
- .. controls (518.0,712.0) and (482.0,743.0) .. (482.0,770.0)
- .. controls (482.0,842.0) and (529.977539062,941.0) .. (552.0,941.0)
- .. controls (564.0,941.0) and (573.0,932.0) .. (573.0,920.0)
- .. controls (573.0,896.0) and (566.0,882.0) .. (566.0,858.0)
- .. controls (566.0,834.0) and (583.9765625,809.0) .. (605.0,809.0)
- .. controls (614.0,809.0) and (620.0,791.0) .. (620.0,791.0)
- .. controls (620.235351562,745.798828125) and (584.0,719.822265625) .. (584.0,675.0)
- .. controls (606.111328125,535.25390625) and (632.04296875,384.73828125) .. (632.04296875,241.0)
- .. controls (632.04296875,205.842773438) and (631.516601562,168.08984375) .. (628.0,134.0)
- .. controls (628.0,135.170898438) and (739.541015625,249.0) .. (924.0,249.0)
- .. controls (979.0,249.0) and (1051.0,210.086914062) .. (1051.0,187.0)
- .. controls (1051.0,-39.001953125) and (707.0,-105.0) .. (404.0,-105.0)
- .. controls (202.877929688,-105.0) and (59.0,6.0) .. cycle;
-unfill (834.0,157.0)
- .. controls (705.0,157.0) and (542.0,-1.0) .. (542.0,-1.0)
- .. controls (542.0,-8.150390625) and (558.940429688,-11.8583984375) .. (586.0,-11.8583984375)
- .. controls (693.952148438,-11.8583984375) and (958.416992188,66.19140625) .. (960.0,117.0)
- .. controls (960.0,132.231445312) and (886.0,157.0) .. cycle;
+%%beginpaths
+
+fill
+(59,59) .. controls (59,68) and (67,73)  ..
+(76,73) .. controls (101.962,73) and (150.872,-9)  ..
+(402,-9) .. controls (437.128,-9) and (577,98)  ..
+(577,98) .. controls (577.084,103.673) and (577.141,109.34)  ..
+(577.141,115) .. controls (577.141,317.806) and (531.62,512.566)  ..
+(518,712) .. controls (518,712) and (482,743)  ..
+(482,770) .. controls (482,842) and (529.978,941)  ..
+(552,941) .. controls (564,941) and (573,932)  ..
+(573,920) .. controls (573,896) and (566,882)  ..
+(566,858) .. controls (566,834) and (583.977,809)  ..
+(605,809) .. controls (614,809) and (620,791)  ..
+(620,791) .. controls (620.235,745.799) and (584,719.822)  ..
+(584,675) .. controls (606.111,535.254) and (632.043,384.738)  ..
+(632.043,241) .. controls (632.043,205.843) and (631.517,168.09)  ..
+(628,134) .. controls (628,135.171) and (739.541,249)  ..
+(924,249) .. controls (979,249) and (1051,210.087)  ..
+(1051,187) .. controls (1051,-39.002) and (707,-105)  ..
+(404,-105) .. controls (202.878,-105) and (59,6)  ..
+ cycle
+;
+fill
+(834,157) .. controls (705,157) and (542,-1)  ..
+(542,-1) .. controls (542,-8.15039) and (558.94,-11.8584)  ..
+(586,-11.8584) .. controls (693.952,-11.8584) and (958.417,66.1914)  ..
+(960,117) .. controls (960,132.231) and (886,157)  ..
+ cycle
+;
+
+%%endpaths
 endchar;
 beginchar(noon.fina.test,983147,261,321,0);
 %%backgroundimage:D:/projects/Fonts/design/BackgroundImages/noon.fina.tawil.jpg,-246.944,-1367.45,1.18,0,0,1.18
@@ -8834,6 +8796,56 @@ fill
 
 %%endpaths
 enddefchar;
+defchar(expaform.ii,-1,-1,-1,-1);
+%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/beh.isol.expa.jpg,-336.256,-941.48,1,0,0,1
+%%beginparams
+d1 := 169.44; % numeric
+z33 = (-230.163,45.5019);
+z34 = (863.733,83.4418);
+z35 = (974.307,215.364);
+
+%%beginverbatim
+
+lefttatweel := lefttatweel -2;
+
+z33p = z33 rotatepen 105;
+z34p = z34 rotatepen 72;
+
+z101 = (-lefttatweel*nuqta,0 );
+z102 = (-(lefttatweel+2)*nuqta / 1.5, -(lefttatweel +2) *7 );
+
+z10 = dir d1;
+z10p = -z10;
+
+
+
+
+
+
+%%endverbatim
+
+%%beginpaths
+
+fill
+((-385.986,177.089)+ z101) .. tension 1.10251 and 0.877686 ..
+ {right}((-379.955,187.306)+ z101) .. tension 3.69555 and 0.958307 ..
+((-326.392,163.92)+ z101) ..
+z33p + z101 .. tension atleast 0.977039 ..
+((382.566,70.8723)+ z102) {right} .. tension atleast 1.28097 ..
+z34p ..
+ {curl1}z35 {down} ..
+z34 .. tension atleast 1.13363 ..
+((334.149,-7.3231)+ z102) {left} .. tension atleast 1.32141 ..
+z33 + z101 .. tension 1.84753 and 3.02182 ..
+ {up} cycle
+;
+
+%%endpaths
+%%beginbody
+
+
+
+enddefchar;
 defchar(expaform.i,-1,0,-1,-1);
 %%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/noon.taweel.jpg,-548.542,-1065.9,1,0,0,1
 %%beginparams
@@ -8891,30 +8903,17 @@ z3 {z10p} .. tension 0.75 and 2.05837 ..
 
 
 enddefchar;
-defchar(expaform.ii,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/beh.isol.expa.jpg,-336.256,-941.48,1,0,0,1
+defchar(behshape.fina.expa,-1,-1,-1,-1);
+%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/behshape.fina.expa.ii.jpg,-2739,-1324,1,0,0,1
 %%beginparams
-d1 := 169.44; % numeric
-z33 = (-230.163,45.5019);
-z34 = (863.733,83.4418);
-z35 = (974.307,215.364);
+z1 = (-57.1139,358.285);
 
 %%beginverbatim
 
-lefttatweel := lefttatweel -2;
-
-z33p = z33 rotatepen 105;
-z34p = z34 rotatepen 72;
-
-z101 = (-lefttatweel*nuqta,0 );
-z102 = (-(lefttatweel+2)*nuqta / 1.5, -(lefttatweel +2) *7 );
-
-z10 = dir d1;
-z10p = -z10;
 
 
 
-
+righttatweel_const := (10,0);
 
 
 %%endverbatim
@@ -8922,21 +8921,51 @@ z10p = -z10;
 %%beginpaths
 
 fill
-((-385.986,177.089)+ z101) .. tension 1.10251 and 0.877686 ..
- {right}((-379.955,187.306)+ z101) .. tension 3.69555 and 0.958307 ..
-((-326.392,163.92)+ z101) ..
-z33p + z101 .. tension atleast 0.977039 ..
-((382.566,70.8723)+ z102) {right} .. tension atleast 1.28097 ..
-z34p ..
- {curl1}z35 {down} ..
-z34 .. tension atleast 1.13363 ..
-((334.149,-7.3231)+ z102) {left} .. tension atleast 1.32141 ..
-z33 + z101 .. tension 1.84753 and 3.02182 ..
- {up} cycle
+(-25.5694,313.282) .. tension 1 and 1.05645 ..
+ {dir 112.833}z1 {dir 36.4847} .. tension 0.886502 and 1 ..
+(9.25926,420.139) .. tension 1 and 2.11294 ..
+ {right}(36.4861,460.259) .. tension 1 and 1.46819 ..
+ {down}(43.8565,445.736) .. tension 1 and 2.31366 ..
+ {down}(8.48611,363.545) .. tension 2.82467 and 1 ..
+(63.932,331.967) join
+(126.834,237.5) .. tension 1 and 1 ..
+ cycle
 ;
 
 %%endpaths
 %%beginbody
+
+
+
+path sinna;
+sinna := pathpart currentpicture;
+
+currentpicture:= nullpicture;
+
+lefttatweel := lefttatweel - 2;
+
+expaform.ii_(lefttatweel,0);
+
+pair shift;
+
+shift := (z35-z1);
+
+currentpicture := currentpicture shifted  - shift;
+
+path p;
+
+p := pathpart currentpicture;
+
+currentpicture:= nullpicture;
+
+%sinna := sinna  shifted shift;
+fill  subpath(0,4) of p .. tension 1.2 .. subpath(1,11) of sinna {curl1}  .. subpath(7,length p) of p ..  cycle;
+
+%fill subpath(0,4) of p .. z35 ..  subpath(6,length p ) of p .. cycle;
+
+%rightanchor := rightanchor +  shift;
+
+tr_  := tr_ shifted (0,-240);
 
 
 
@@ -9068,12 +9097,9 @@ pair shift;
 
 shift := (points1 - z10);
 
-draw pic shifted shift;
+currentpicture := currentpicture shifted -shift;
 
-rightanchor := rightanchor + shift;
-
-
-
+draw pic; % shifted shift;
 
 enddefchar;
 defchar(behshape.isol.expa,-1,-1,-1,-1);
@@ -9094,69 +9120,6 @@ sinna := image(behsinna_(lefttatweel,0));
 
 draw sinna shifted (z35 - z2behsinna);
 
-
-
-
-enddefchar;
-defchar(behshape.fina.expa,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/behshape.fina.expa.ii.jpg,-2739,-1324,1,0,0,1
-%%beginparams
-z1 = (-57.1139,358.285);
-
-%%beginverbatim
-
-
-
-
-righttatweel_const := (10,0);
-
-
-%%endverbatim
-
-%%beginpaths
-
-fill
-(-25.5694,313.282) .. tension 1 and 1.05645 ..
- {dir 112.833}z1 {dir 36.4847} .. tension 0.886502 and 1 ..
-(9.25926,420.139) .. tension 1 and 2.11294 ..
- {right}(36.4861,460.259) .. tension 1 and 1.46819 ..
- {down}(43.8565,445.736) .. tension 1 and 2.31366 ..
- {down}(8.48611,363.545) .. tension 2.82467 and 1 ..
-(63.932,331.967) join
-(126.834,237.5) .. tension 1 and 1 ..
- cycle
-;
-
-%%endpaths
-%%beginbody
-
-
-
-path sinna;
-sinna := pathpart currentpicture;
-
-currentpicture:= nullpicture;
-
-lefttatweel := lefttatweel - 2;
-
-expaform.ii_(lefttatweel,0);
-
-path p;
-
-p := pathpart currentpicture;
-
-currentpicture:= nullpicture;
-
-pair shift;
-
-shift := (z35-z1);
-
-sinna := sinna  shifted shift;
-fill  subpath(0,4) of p .. tension 1.2 .. subpath(1,11) of sinna {curl1}  .. subpath(7,length p) of p ..  cycle;
-
-%fill subpath(0,4) of p .. z35 ..  subpath(6,length p ) of p .. cycle;
-
-rightanchor := rightanchor +  shift;
 
 
 
@@ -9314,7 +9277,7 @@ drawcomp(minikaf,identity shifted (z0.1 + z101/2));
 
 enddefchar;
 defchar(noon.isol.expa,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/noon.taweel.jpg,-14.828,-1062.14,1,0,0,1
+%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/noon.taweel.jpg,-12.828,-1062.14,1,0,0,1
 %%beginparams
 z11 = (696.824,159.666);
 %%beginbody
@@ -9371,11 +9334,11 @@ defchar(noon.fina.expa,-1,-1,-1,-1);
 %%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/noon.fina.jpg,-81.196,-1162.59,1,0,0,1
 %%beginparams
 z2b = (598.433,28.4592);
-z3b = (709.907,91.4956);
+z3b = (701.277,82.7086);
 
 %%beginverbatim
 
-z1b = z2b rotatepen 105;
+z1b = z2b rotatepen 95;
 
 righttatweel := righttatweel  + 0.0;
 
@@ -9410,6 +9373,8 @@ disp := (-15,86.0528)+ z1 - ((z1b + z2b) / 2);
  rightanchor := z_4 shifted disp;
 
 draw pic shifted disp;
+
+tr_ := tr_ shifted (0,-ypart disp);
 
 
 enddefchar;
@@ -9744,12 +9709,14 @@ noonshape.expa_(lefttatweel,0);
 points1 := z1;
 endgroup;
 
-draw pic shifted (points1 - z11 + (30,45));
+currentpicture := currentpicture shifted - (points1 - z11 + (30,45)) ;
+
+draw pic; % shifted (points1 - z11 + (30,45));
 
 
-currentpicture := currentpicture shifted (0,-100);
 
-rightanchor := rightanchor +  (points1 - z11 + (30,45)) +  (0,-100);
+
+%rightanchor := rightanchor +  (points1 - z11 + (30,45)) +  (0,-100);
 
 enddefchar;
 defchar(qaf.isol.expa,-1,-1,-1,-1);
@@ -9851,7 +9818,9 @@ shift := (points1 - z10);
 
 draw pic shifted shift;
 
-rightanchor := rightanchor + shift;
+rightanchor := rightanchor  + shift;
+
+which_in_baseline := 2;
 
 
 enddefchar;
