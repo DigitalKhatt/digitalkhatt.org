@@ -321,21 +321,6 @@ lookup adjustmarks {
 		pos /^alef/ hamzaabove [behshape.init.beforenoon]'lookup adjustmarks.l5.l1;
 		
 	} adjustmarks.l5;
-
-	lookup adjustmarks_madda {
-
-		feature mkmk;	
-
-		lookupflag UseMarkFilteringSet [ hamzaabove.joined smallalef.joined maddahabove];
-
-		lookup adjustmarks_madda.l1 {
-			pos hamzaabove.joined <0 -150 0 0>;						
-		} adjustmarks_madda.l1;
-
-		pos maddahabove hamzaabove.joined'lookup  adjustmarks_madda.l1 smallalef.joined;
-
-	} adjustmarks_madda;
-
 	
 	lookup adjustmarks_kaf {
 
@@ -628,6 +613,8 @@ lookup tajweedcolor {
 		pos ([/^lam/ /^meem/ ] maddahabove)'lookup red4;
 
 		pos ([/^alef/ /^waw/ /^alefmaksura/ /^yehshape/ /^smallalef/ smallwaw smallyeh ] maddahabove)'lookup red3;
+
+		pos (/^behshape/  twodotsdown maddahabove)'lookup red3;
 
 		pos  /^waw/'lookup red2 (sukun | NULL)'lookup red2 @bases @marks ( @marks | NULL ) space /^aya/;
 		pos  (/^behshape/ twodotsdown)'lookup red2 (sukun | NULL)'lookup red2 @bases @marks ( @marks | NULL ) space /^aya/;		
@@ -1138,12 +1125,24 @@ feature ccmp {
 	lookup lamhamzaalef;
 	lookup deletespace;
 	lookup miscellaneoussubst;
+
 	# needed to prevent reordering (since 0x034F deleted otherwise space inserted) when applying justification (page 282 line 14)
 	# Can be implemented in normalize (keeped here to adhere to the standard in case we want to generate an OpenType font)
-	lookup smallhighwaw_changecode {
+	lookup smallhighseen_lig {
+		feature ccmp;
+		sub  \0x034F \0x06DC by smallhighseen;
+	} smallhighseen_lig;
+
+	lookup smallhigh_changecode {
 		feature ccmp;
 		sub \0x08F3 by  smallhighwaw;
-	} smallhighwaw_changecode;
+		sub \0x06E7 by  smallhighyeh;
+		sub \0x06DC by  smallhighseen;
+		sub \0x06E8 by  smallhighnoon;
+		
+	} smallhigh_changecode;
+
+	
 } ccmp;
 
 feature init {
@@ -1160,7 +1159,7 @@ feature fina {
 
 feature rlig {
 	lookup meemfina;
-	lookup adjustseenhigh;
+	# lookup adjustseenhigh;
 	lookup requiredligature;
 	lookup otherliga;
 	# lookup forsmallhighwaw;
@@ -1221,11 +1220,23 @@ feature mark {
     lookup joinedsmallletters;
 } mark;
 
+lookup smallhighyehshadda {
+
+	feature mkmk;	
+
+	lookup smallhighyehshadda.kasra {			
+		pos mark  shadda <anchor 0 0> markClass kasra <anchor 0 0> @smallhighyehshadda ;		
+	} smallhighyehshadda.kasra;
+	
+	pos (smallhighyeh shadda kasra)'lookup smallhighyehshadda.kasra;
+
+}  smallhighyehshadda;
 
 feature mkmk {
-	lookup defaultmkmk;
-	lookup hamzaabovebelow;
 	lookup defaultmarkdotmarks;
+	lookup defaultmkmk;
+	lookup smallhighyehshadda;
+	lookup hamzaabovebelow;	
 	lookup lowmarkafterwawandreh;
 	lookup kafinityehfinesmallalefmaddah;
 	lookup defaultkasrameemiqlab;

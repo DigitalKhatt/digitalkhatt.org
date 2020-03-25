@@ -107,6 +107,7 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
   private CSS_UNITS = 96.0 / 72.0;
   private sideBySideWidth = 992;
   private maxCanvasPixels = 16777216;
+  private totalPageTex = 649;
 
 
 
@@ -243,8 +244,8 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.texFormat = true;
 
-    this.totalPages = 646;
-    this.maxPages = 646;
+    this.totalPages = this.totalPageTex;
+    this.maxPages = this.totalPages;
 
     this.pages = new Array(this.maxPages);
 
@@ -375,7 +376,7 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.formatCtrl.valueChanges.subscribe(value => {
           if (value == 1) {
-            this.totalPages = 646;
+            this.totalPages = this.totalPageTex;
             this.texFormat = true;
             this.fontScale = 1;
             this.quranService.quranShaper.setScalePoint(this.fontScale);

@@ -276,8 +276,8 @@
                         -38
                     ],
                     "sad.isol.expa": [
-                        -200,
-                        20
+                        -264,
+                        4
                     ],
                     "tah.fina": [
                         278,
@@ -544,7 +544,7 @@
                         48
                     ],
                     "dammatanidgham": [
-                        -33,
+                        -1,
                         -16
                     ]
                 }
@@ -719,6 +719,10 @@
                         134,
                         512
                     ],
+                    "meem.medi.beforeyeh": [
+                        69,
+                        0
+                    ],
                     "noon.fina": [
                         114,
                         0
@@ -747,6 +751,10 @@
                         228,
                         196
                     ],
+                    "seen.init.beforeyeh": [
+                        259,
+                        115
+                    ],
                     "seen.isol": [
                         316,
                         250
@@ -759,8 +767,24 @@
             },
             "smallletters": {
                 "baseparameters": {
+                    "behshape.init": [
+                        -25,
+                        -25
+                    ],
+                    "behshape.medi": [
+                        -50,
+                        0
+                    ],
+                    "fehshape.init": [
+                        -50,
+                        0
+                    ],
                     "hah.medi": [
                         -41,
+                        0
+                    ],
+                    "hah.medi.afterbeh": [
+                        -53,
                         0
                     ],
                     "hah.medi.beforemeem": [
@@ -790,6 +814,10 @@
                     "kaf.medi": [
                         -27,
                         -13
+                    ],
+                    "kaf.medi.ii": [
+                        -28,
+                        0
                     ],
                     "sad.medi": [
                         84,
@@ -1046,8 +1074,8 @@
                         -48
                     ],
                     "lam.medi.beforeheh": [
-                        -100,
-                        -40
+                        -125,
+                        10
                     ],
                     "lam.medi.beforeyeh": [
                         -141,
@@ -1077,6 +1105,10 @@
                         83,
                         -16
                     ],
+                    "noon.fina.expa": [
+                        0,
+                        -83
+                    ],
                     "qaf.fina": [
                         94,
                         -56
@@ -1092,6 +1124,14 @@
                     "reh.isol": [
                         45,
                         0
+                    ],
+                    "seen.fina": [
+                        192,
+                        -168
+                    ],
+                    "seen.fina.expa": [
+                        0,
+                        -138
                     ],
                     "seen.init.beforeyeh": [
                         211,
@@ -1209,6 +1249,10 @@
                         46,
                         -209
                     ],
+                    "smallalef.isol": [
+                        40,
+                        -100
+                    ],
                     "waw.fina": [
                         50,
                         -171
@@ -1294,6 +1338,10 @@
                     "yehshape.fina.ii": [
                         27,
                         -149
+                    ],
+                    "yehshape.isol.expa": [
+                        34,
+                        -276
                     ]
                 }
             }
@@ -1465,8 +1513,12 @@
                         120,
                         7
                     ],
+                    "yehshape.fina.afterbeh": [
+                        86,
+                        28
+                    ],
                     "yehshape.fina.ii": [
-                        31,
+                        203,
                         0
                     ]
                 }
@@ -1531,6 +1583,10 @@
                         -86,
                         216
                     ],
+                    "noon.fina.expa": [
+                        -138,
+                        165
+                    ],
                     "sad.medi": [
                         28,
                         -201
@@ -1541,9 +1597,21 @@
         "smallhighyeh": {
             "smallhighyeh": {
                 "baseparameters": {
+                    "behshape.init": [
+                        -25,
+                        0
+                    ],
+                    "behshape.medi": [
+                        -50,
+                        0
+                    ],
                     "behshape.medi.pluslt_200": [
                         -11,
                         -69
+                    ],
+                    "lam.init": [
+                        0,
+                        -24
                     ]
                 }
             }
@@ -1612,12 +1680,16 @@
             "lowmarks": {
                 "baseparameters": {
                     "hamzaabove.joined": [
-                        59,
-                        -290
+                        11,
+                        -232
                     ],
                     "hamzabelow": [
                         9,
                         77
+                    ],
+                    "smallhighyeh": [
+                        57,
+                        -259
                     ]
                 }
             }
@@ -1644,8 +1716,8 @@
                         55
                     ],
                     "hamzaabove.joined": [
-                        -58,
-                        34
+                        -82,
+                        58
                     ],
                     "hamzaabove.lamalef": [
                         -127,
@@ -1666,6 +1738,10 @@
                     "smallhighwaw": [
                         34,
                         104
+                    ],
+                    "smallhighyeh": [
+                        -24,
+                        24
                     ]
                 },
                 "markparameters": {
@@ -1688,7 +1764,7 @@
             "hamzaabove.joined": {
                 "baseparameters": {
                     "maddahabove": [
-                        -109,
+                        -157,
                         -391
                     ]
                 }
@@ -2394,8 +2470,8 @@
             "kasra": {
                 "baseparameters": {
                     "behshape.init": [
-                        122,
-                        -151
+                        94,
+                        -208
                     ],
                     "behshape.init.beforehah": [
                         105,
@@ -2470,18 +2546,6 @@
                         320
                     ]
                 }
-            }
-        }
-    },
-    "red3": {
-        "subtable1": {
-            "parameters": {
-                "smallalef.joined": [
-                    -28,
-                    115,
-                    0,
-                    0
-                ]
             }
         }
     },
@@ -2672,6 +2736,30 @@
                     85,
                     -18
                 ]
+            }
+        }
+    },
+    "smallalefjoined": {
+        "smallalefjoined": {
+            "smallalef.joined": {
+                "baseparameters": {
+                    "hamzaabove.joined": [
+                        -9,
+                        116
+                    ]
+                }
+            }
+        }
+    },
+    "smallhighyehshadda.kasra": {
+        "subtable1": {
+            "smallhighyehshadda": {
+                "baseparameters": {
+                    "shadda": [
+                        34,
+                        -712
+                    ]
+                }
             }
         }
     },
