@@ -18,7 +18,7 @@
 %%
 
 beginchar(allah,983084,2000,602,-24);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/Allah.jpg,-150,-1325.56,1,0,0,1
+%%backgroundimage:images/Allah.jpg,-150,-1325.56,1,0,0,1
 %%beginparams
 z1 = (357.639,59.0278);
 z2 = (728.009,81.0185);
@@ -80,7 +80,7 @@ savepicture:=1;
 
 endchar;
 defchar(behshape_hah.init,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/yeh_hah.init.jpg,-2402,-1310,1,0,0,1
+%%backgroundimage:images/yeh_hah.init.jpg,-2402,-1310,1,0,0,1
 %%beginparams
 lefttatweel := 1.14; % numeric
 z1 = (187.843,35.3787);
@@ -134,7 +134,7 @@ z3 .. tension 1.6654 ..
 
 enddefchar;
 defchar(behmediyehfina,-1,1100,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/behmediyehfina.jpg,-2931.69,-1241.9,1,0,0,1
+%%backgroundimage:images/behmediyehfina.jpg,-2931.69,-1241.9,1,0,0,1
 %%beginparams
 z1 = (328.914,133.709);
 z2 = (495,58.3396);
@@ -188,7 +188,7 @@ fill
 %%endpaths
 enddefchar;
 defchar(lam_hah.init,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lam_hah.jpg,-2275,-1322,1,0,0,1
+%%backgroundimage:images/lam_hah.jpg,-2275,-1322,1,0,0,1
 %%beginparams
 lefttatweel := 1.14; % numeric
 z1 = (120.521,22.7438);
@@ -248,7 +248,7 @@ beginchar(space.ii,-1,-1,-1,-1);
 charwd := 0;
 endchar;
 beginchar(rubelhizb,1758,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/hizb.jpg,-925.291,-1293.96,1,0,0,1
+%%backgroundimage:images/hizb.jpg,-925.291,-1293.96,1,0,0,1
 %%beginparams
 z1 = (277.778,265.278);
 %%beginbody
@@ -294,7 +294,7 @@ rightbearing :=100;
 
 endchar;
 beginchar(placeofsajdah,1769,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/sajda.jpg,-1086.5,-1089.55,1,0,0,1
+%%backgroundimage:images/sajda.jpg,-1086.5,-1089.55,1,0,0,1
 
 %%beginpaths
 
@@ -348,7 +348,7 @@ leftbearing:=0;
 rightbearing:=100;
 endchar;
 beginchar(endofaya,1757,1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/aya.jpg,-368.206,-1170.09,1,0,0,1
+%%backgroundimage:images/aya.jpg,-368.206,-1170.09,1,0,0,1
 %%beginparams
 z1 = (516.686,563.695);
 z2 = (959.421,241.222);
@@ -564,7 +564,7 @@ charwd := xpart (lrcorner currentpicture) - xpart (llcorner currentpicture) + le
 
 endchar;
 beginchar(one_dot,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/dots.jpg,-125.732,-297.828,1,0,0,1
+%%backgroundimage:images/dots.jpg,-125.732,-297.828,1,0,0,1
 %%beginparams
 z1 = (0,0);
 
@@ -617,7 +617,7 @@ savepicture:=1;
 
 endchar;
 beginchar(two_dots,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/dots.jpg,-125.732,-297.828,1,0,0,1
+%%backgroundimage:images/dots.jpg,-125.732,-297.828,1,0,0,1
 %%beginparams
 z1 = (106,25);
 %%beginbody
@@ -629,7 +629,7 @@ savepicture:=1;
 
 endchar;
 beginchar(thankyou,-1,1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/thankyou.bmp,-217.731,-387.955,1,0,0,1
+%%backgroundimage:images/thankyou.bmp,-217.731,-387.955,1,0,0,1
 
 %%beginpaths
 
@@ -871,7 +871,7 @@ fill
 currentpicture := currentpicture shifted (-10,-50) scaled 7;
 endchar;
 defchar(minikaf,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kkaf.fina.jpg,-449.167,-956.89,1,0,0,1
+%%backgroundimage:images/kkaf.fina.jpg,-449.167,-956.89,1,0,0,1
 %%beginparams
 z1 = (683.006,10.9988);
 z3 = (721.065,-12.7315);
@@ -912,7 +912,7 @@ currentpicture := currentpicture shifted (0,-ypart llcorner currentpicture);
 savepicture:=1;
 enddefchar;
 beginchar(three_dots,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/dots.jpg,-125.732,-297.828,1,0,0,1
+%%backgroundimage:images/dots.jpg,-125.732,-297.828,1,0,0,1
 %%beginparams
 z2 = (25.0415,133.882);
 %%beginbody
@@ -924,7 +924,7 @@ drawcomp(one_dot,identity shifted z2);
 
 endchar;
 beginchar(onedotup,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/dots.jpg,-125.732,-297.828,1,0,0,1
+%%backgroundimage:images/dots.jpg,-125.732,-297.828,1,0,0,1
 %%beginparams
 z1 = (106,25);
 %%beginbody
@@ -933,7 +933,7 @@ interim rightbearing := 0;
 drawcomp(one_dot,identity);
 endchar;
 beginchar(onedotdown,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/dots.jpg,-125.732,-297.828,1,0,0,1
+%%backgroundimage:images/dots.jpg,-125.732,-297.828,1,0,0,1
 %%beginparams
 z1 = (106,25);
 %%beginbody
@@ -942,7 +942,7 @@ interim rightbearing := 0;
 drawcomp(one_dot,identity);
 endchar;
 beginchar(twodotsup,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/dots.jpg,-125.732,-297.828,1,0,0,1
+%%backgroundimage:images/dots.jpg,-125.732,-297.828,1,0,0,1
 %%beginparams
 z1 = (106,25);
 %%beginbody
@@ -951,7 +951,7 @@ interim rightbearing := 0;
 drawcomp(two_dots,identity);
 endchar;
 beginchar(twodotsdown,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/dots.jpg,-125.732,-297.828,1,0,0,1
+%%backgroundimage:images/dots.jpg,-125.732,-297.828,1,0,0,1
 %%beginparams
 z1 = (106,25);
 %%beginbody
@@ -960,7 +960,7 @@ interim rightbearing := 0;
 drawcomp(two_dots,identity);
 endchar;
 defchar(fatha,1614,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/shadda.jpg,-1598.98,-850.892,1,0,0,1
+%%backgroundimage:images/shadda.jpg,-1598.98,-850.892,1,0,0,1
 %%beginparams
 z1 = (0,0);
 
@@ -1030,7 +1030,7 @@ leftbearing := 0;
 rightbearing := 0;
 endchar;
 beginchar(fathatan,1611,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kastratan.jpg,-388,-876,1,0,0,1
+%%backgroundimage:images/kastratan.jpg,-388,-876,1,0,0,1
 %%beginbody
 
 
@@ -1049,7 +1049,7 @@ rightbearing := 0;
 savepicture:=1;
 endchar;
 beginchar(kasratan,1613,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kastratan.jpg,-388,-876,1,0,0,1
+%%backgroundimage:images/kastratan.jpg,-388,-876,1,0,0,1
 %%beginbody
 
 leftbearing := rightbearing := 0;
@@ -1059,7 +1059,7 @@ drawcomp(fathatan,identity);
 
 endchar;
 beginchar(fathatanidgham,2288,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kastratanidgham.jpg,-2861,-1448,1,0,0,1
+%%backgroundimage:images/kastratanidgham.jpg,-2861,-1448,1,0,0,1
 %%beginbody
 
 
@@ -1082,7 +1082,7 @@ interim leftbearing := 0;
 interim rightbearing := 0;
 endchar;
 beginchar(damma,1615,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/damma.jpg,-181.157,-471.404,1,0,0,1
+%%backgroundimage:images/damma.jpg,-181.157,-471.404,1,0,0,1
 
 %%beginpaths
 
@@ -1111,7 +1111,7 @@ currentpicture := currentpicture shifted (0,-ypart llcorner currentpicture);
 savepicture:=1;
 endchar;
 beginchar(dammatanidgham,2289,477,327,-2);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/dammatanidgham.jpg,-628,-606,1,0,0,1
+%%backgroundimage:images/dammatanidgham.jpg,-628,-606,1,0,0,1
 %%beginbody
 
 drawcomp(damma,identity scaled 0.9 rotated 5);
@@ -1123,7 +1123,7 @@ currentpicture := currentpicture shifted (0,-ypart llcorner currentpicture);
 
 endchar;
 beginchar(dammatan,1612,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/dammatanii.jpg,-438,-893,1,0,0,1
+%%backgroundimage:images/dammatanii.jpg,-438,-893,1,0,0,1
 
 %%beginpaths
 
@@ -1173,7 +1173,7 @@ rightbearing := 0;
 
 endchar;
 beginchar(dammatan.ii,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/dammatan.jpg,-2762.05,-783.434,1,0,0,1
+%%backgroundimage:images/dammatan.jpg,-2762.05,-783.434,1,0,0,1
 
 %%beginpaths
 
@@ -1223,7 +1223,7 @@ rightbearing := 0;
 
 endchar;
 beginchar(shadda,1617,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/shadda.2.jpg,-136.605,-807.326,1,0,0,1
+%%backgroundimage:images/shadda.2.jpg,-136.605,-807.326,1,0,0,1
 
 %%beginpaths
 
@@ -1257,7 +1257,7 @@ rightbearing := 0;
 
 endchar;
 beginchar(headkhah,1761,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/sukun.jpg,-1778.91,-655.535,1,0,0,1
+%%backgroundimage:images/sukun.jpg,-1778.91,-655.535,1,0,0,1
 
 %%beginpaths
 
@@ -1292,7 +1292,7 @@ rightbearing := 0;
 
 endchar;
 beginchar(maddahabove,1619,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/madda.2.jpg,-358.007,-749.167,1,0,0,1
+%%backgroundimage:images/madda.2.jpg,-358.007,-749.167,1,0,0,1
 
 %%beginpaths
 
@@ -1319,7 +1319,7 @@ leftbearing := 0;
 rightbearing := 0;
 endchar;
 beginchar(smallalef,1648,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/alefsmall.jpg,-345.838,-749.068,1,0,0,1
+%%backgroundimage:images/alefsmall.jpg,-345.838,-749.068,1,0,0,1
 
 %%beginpaths
 
@@ -1359,7 +1359,7 @@ rightbearing := 0;
 drawcomp(smallalef,identity);
 endchar;
 beginchar(wasla,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/wasla.jpg,-584.203,-400.423,1,0,0,1
+%%backgroundimage:images/wasla.jpg,-584.203,-400.423,1,0,0,1
 
 %%beginpaths
 
@@ -1394,7 +1394,7 @@ rightbearing := 0;
 
 endchar;
 beginchar(meemiqlab,1762,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/meemiqlab.jpg,-578.676,-977.056,1,0,0,1
+%%backgroundimage:images/meemiqlab.jpg,-578.676,-977.056,1,0,0,1
 
 %%beginpaths
 
@@ -1427,7 +1427,7 @@ currentpicture := currentpicture shifted (0,-ypart llcorner currentpicture);
 
 endchar;
 beginchar(smallwaw,1765,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/waw.added.jpg,-659,-752,1,0,0,1
+%%backgroundimage:images/waw.added.jpg,-659,-752,1,0,0,1
 
 %%beginpaths
 
@@ -1465,7 +1465,7 @@ currentpicture := currentpicture shifted (0,-ypart llcorner currentpicture);
 
 endchar;
 beginchar(smallyeh,1766,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/smallyeh.jpg,-1037.51,-1348.78,1,0,0,1
+%%backgroundimage:images/smallyeh.jpg,-1037.51,-1348.78,1,0,0,1
 
 %%beginpaths
 
@@ -1500,7 +1500,7 @@ rightbearing := 0;
 currentpicture := currentpicture shifted (0,-ypart llcorner currentpicture);
 endchar;
 beginchar(smallhighroundedzero,1759,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/smallhighroundedzero.jpg,-145.991,-381.589,1,0,0,1
+%%backgroundimage:images/smallhighroundedzero.jpg,-145.991,-381.589,1,0,0,1
 
 %%beginpaths
 
@@ -1530,7 +1530,7 @@ rightbearing := 0;
 
 endchar;
 beginchar(rectangularzero,1760,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/rectangularzero.jpg,-522,-444,1,0,0,1
+%%backgroundimage:images/rectangularzero.jpg,-522,-444,1,0,0,1
 
 %%beginpaths
 
@@ -1558,7 +1558,7 @@ rightbearing := 0;
 
 endchar;
 beginchar(roundedfilledhigh,1772,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/filleddot.jpg,-381,-565,1,0,0,1
+%%backgroundimage:images/filleddot.jpg,-381,-565,1,0,0,1
 %%beginbody
 
 fill fullcircle scaled 180;
@@ -1569,7 +1569,7 @@ rightbearing := 0;
 savepicture:=1;
 endchar;
 beginchar(roundedfilledlow,1628,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/filleddotlow.jpg,-1319,-1780,1,0,0,1
+%%backgroundimage:images/filleddotlow.jpg,-1319,-1780,1,0,0,1
 %%beginbody
 leftbearing := 0;
 rightbearing := 0;
@@ -1577,7 +1577,7 @@ drawcomp(roundedfilledhigh,identity scaled 1);
 
 endchar;
 beginchar(hamzaabove,1620,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/hamzabelow.jpg,-779.894,-1760.27,1,0,0,1
+%%backgroundimage:images/hamzabelow.jpg,-779.894,-1760.27,1,0,0,1
 
 %%beginpaths
 
@@ -1616,7 +1616,7 @@ leftbearing := 0;
 rightbearing := 0;
 endchar;
 beginchar(hamzaabove.lamalef,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/hamzaabove.lamalef.jpg,-1584.88,-676.814,1,0,0,1
+%%backgroundimage:images/hamzaabove.lamalef.jpg,-1584.88,-676.814,1,0,0,1
 
 %%beginpaths
 
@@ -1646,7 +1646,7 @@ rightbearing := 0;
 currentpicture := currentpicture shifted (0,-ypart llcorner currentpicture);
 endchar;
 beginchar(hamzaabove.ii,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/hamzamark.jpg,-378.14,-416.744,1,0,0,1
+%%backgroundimage:images/hamzamark.jpg,-378.14,-416.744,1,0,0,1
 
 %%beginpaths
 
@@ -1711,7 +1711,7 @@ rightbearing := 0;
 currentpicture := currentpicture shifted (0,-ypart llcorner currentpicture);
 endchar;
 beginchar(waqf.qaf,1751,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/qaf.waqf.2.jpg,-76.9301,-616.605,1,0,0,1
+%%backgroundimage:images/qaf.waqf.2.jpg,-76.9301,-616.605,1,0,0,1
 
 %%beginpaths
 
@@ -1775,7 +1775,7 @@ currentpicture := currentpicture shifted (0,-ypart llcorner currentpicture);
 
 endchar;
 beginchar(waqf.jeem,1754,287,1199,0);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/jeem_waqf.jpg,-1184,-1161,1,0,0,1
+%%backgroundimage:images/jeem_waqf.jpg,-1184,-1161,1,0,0,1
 
 %%beginpaths
 
@@ -1815,7 +1815,7 @@ rightbearing := 0;
 
 endchar;
 beginchar(waqf.sad,1750,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/saad_waqf.jpg,-763.968,-1703.61,1,0,0,1
+%%backgroundimage:images/saad_waqf.jpg,-763.968,-1703.61,1,0,0,1
 
 %%beginpaths
 
@@ -1866,7 +1866,7 @@ rightbearing := 0;
 
 endchar;
 beginchar(waqf.smallhighthreedots,1755,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/threedots.jpg,-1556.63,-369.787,1,0,0,1
+%%backgroundimage:images/threedots.jpg,-1556.63,-369.787,1,0,0,1
 %%beginparams
 z1 = (101,-129);
 %%beginbody
@@ -1881,7 +1881,7 @@ rightbearing := 0;
 currentpicture := currentpicture shifted (-xpart llcorner currentpicture,-ypart llcorner currentpicture);
 endchar;
 beginchar(waqf.meem,1752,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/meem.waqf.jpg,-236.35,-613.558,1,0,0,1
+%%backgroundimage:images/meem.waqf.jpg,-236.35,-613.558,1,0,0,1
 
 %%beginpaths
 
@@ -1916,7 +1916,7 @@ rightbearing := 0;
 
 endchar;
 beginchar(smallhighseen,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/smallhighseen.jpg,-1316.42,-567.369,1,0,0,1
+%%backgroundimage:images/smallhighseen.jpg,-1316.42,-567.369,1,0,0,1
 
 %%beginpaths
 
@@ -1961,7 +1961,7 @@ rightbearing := 0;
 
 endchar;
 beginchar(smallhighnoon,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/smallhighnoon.jpg,-1227.5,-1039.44,1,0,0,1
+%%backgroundimage:images/smallhighnoon.jpg,-1227.5,-1039.44,1,0,0,1
 
 %%beginpaths
 
@@ -2196,7 +2196,7 @@ currentpicture := currentpicture shifted (-x2,0);
 
 endchar;
 beginchar(hamza.isol,1569,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/hamza.jpg,-1969.7,-1615.21,1,0,0,1
+%%backgroundimage:images/hamza.jpg,-1969.7,-1615.21,1,0,0,1
 
 %%beginpaths
 
@@ -2245,7 +2245,7 @@ fill
 leftbearing := leftbearing + 0;
 enddefchar;
 defchar(alef.isol.ii,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/alef.isol.ii.jpg,-1944.68,-934.792,1,0,0,1
+%%backgroundimage:images/alef.isol.ii.jpg,-1944.68,-934.792,1,0,0,1
 
 %%beginpaths
 
@@ -2264,7 +2264,7 @@ fill
 leftbearing := leftbearing; % - 50;
 enddefchar;
 defchar(alef.fina,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/testheight.jpg,-12360.3,-1476.82,1,0,0,1
+%%backgroundimage:images/testheight.jpg,-12360.3,-1476.82,1,0,0,1
 %%beginparams
 z1 = (227.307,8.175);
 z2 = (214.577,102.4);
@@ -2300,7 +2300,7 @@ z1 ..
 leftbearing := leftbearing ; %- 50;
 enddefchar;
 defchar(alef.fina.afterkaf,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kafinitaleffina.jpg,-1985.62,-1287.62,1,0,0,1
+%%backgroundimage:images/kafinitaleffina.jpg,-1985.62,-1287.62,1,0,0,1
 %%beginparams
 z1 = (218.241,8.61867);
 z2 = (192.916,132.608);
@@ -2331,7 +2331,7 @@ z1 ..
 leftbearing := leftbearing; % - 50;
 enddefchar;
 defchar(lam.medi.laf,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lamaleffina.jpg,-1004.91,-1261.34,1,0,0,1
+%%backgroundimage:images/lamaleffina.jpg,-1004.91,-1261.34,1,0,0,1
 %%beginparams
 z1 = (732.796,55.5319);
 z11 = (598.418,151.953);
@@ -2391,7 +2391,7 @@ lam.medi.laf_(charlt,charrt-0.4);
 
 enddefchar;
 defchar(alef.fina.laf,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lamaleffina.jpg,-889.361,-1326.47,1,0,0,1
+%%backgroundimage:images/lamaleffina.jpg,-889.361,-1326.47,1,0,0,1
 %%beginparams
 z1 = (725.273,67.106);
 z11 = (569.777,217.906);
@@ -2426,7 +2426,7 @@ setCursiveAnchor(aleffinalaf,z11, EntryAnchor);
 
 enddefchar;
 defchar(lamalef.isol,-1,680,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lamalef.2.jpg,-2492,-1573,1,0,0,1
+%%backgroundimage:images/lamalef.2.jpg,-2492,-1573,1,0,0,1
 %%beginparams
 z1 = (505.513,86.3828);
 z2 = (524.443,8.01897);
@@ -2471,7 +2471,7 @@ glyphs[lamalef.isol].points[1] := z1;
 glyphs[lamalef.isol].points[2] := z2;
 enddefchar;
 beginchar(lamalef.isol.ii,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lamalef.jpg,-3318.6,-1251.8,1,0,0,1
+%%backgroundimage:images/lamalef.jpg,-3318.6,-1251.8,1,0,0,1
 %%beginparams
 z1 = (527.84,91.1272);
 z2 = (547.591,12.6486);
@@ -2515,7 +2515,7 @@ z2 .. tension 27.3804 and 21.246 ..
 
 endchar;
 beginchar(lam.init.lamalef,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lamalef.jpg,-3318.6,-1251.8,1,0,0,1
+%%backgroundimage:images/lamalef.jpg,-3318.6,-1251.8,1,0,0,1
 %%beginbody
 
 
@@ -2551,7 +2551,7 @@ leftbearing := 0;
 
 endchar;
 beginchar(alef.fina.lamalef,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lamalef.jpg,-3318.6,-1251.8,1,0,0,1
+%%backgroundimage:images/lamalef.jpg,-3318.6,-1251.8,1,0,0,1
 %%beginbody
 
 path p;
@@ -2589,7 +2589,7 @@ rightbearing := -250;
 
 endchar;
 defchar(behshape.isol,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/teh.fina.jpg,-283.339,-1305.02,1,0,0,1
+%%backgroundimage:images/teh.fina.jpg,-283.339,-1305.02,1,0,0,1
 
 %%beginpaths
 
@@ -2613,7 +2613,7 @@ fill
 
 enddefchar;
 defchar(behshape.init,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/beh.init.jpg,-1385,-1287,1,0,0,1
+%%backgroundimage:images/beh.init.jpg,-1385,-1287,1,0,0,1
 %%beginparams
 z1 = (192,41);
 
@@ -2652,7 +2652,7 @@ z2 .. tension 1 and 2.69891 ..
 
 enddefchar;
 defchar(behshape.init.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/behshape.init.yeh.jpg,-885.528,-1239.69,1,0,0,1
+%%backgroundimage:images/behshape.init.yeh.jpg,-885.528,-1239.69,1,0,0,1
 %%beginparams
 z1 = (0,90);
 
@@ -2674,7 +2674,7 @@ charwd:= xpart (urcorner currentpicture) - x1 + rightbearing;
 setCursiveAnchor(yehcursive1,z1,ExitAnchor);
 enddefchar;
 defchar(behshape.init.beforeseen,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/behbeforeseen.jpg,-3329,-1124.89,1,0,0,1
+%%backgroundimage:images/behbeforeseen.jpg,-3329,-1124.89,1,0,0,1
 %%beginparams
 lefttatweel := 0; % numeric
 z1 = (43.5244,24.3482);
@@ -2707,7 +2707,7 @@ z2 .. tension atleast 1 ..
 
 enddefchar;
 defchar(behshape.init.beforenoon,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/behnoon.jpg,-511.096,-1089.58,1,0,0,1
+%%backgroundimage:images/behnoon.jpg,-511.096,-1089.58,1,0,0,1
 %%beginparams
 z1 = (-0.482253,-0.482253);
 
@@ -2742,7 +2742,7 @@ setCursiveAnchor(behnoon,(0,0), ExitAnchorRTL);
 
 enddefchar;
 defchar(behshape.init.beforehah,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/yeh_hah.init.jpg,-2401.81,-1310,1,0,0,1
+%%backgroundimage:images/yeh_hah.init.jpg,-2401.81,-1310,1,0,0,1
 %%beginbody
 
 path p;
@@ -2776,7 +2776,7 @@ setCursiveAnchor(beforehah1,z4, ExitAnchorRTL);
 
 enddefchar;
 defchar(behshape.init.beforehahyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/behhahyeh.jpg,-1415.46,-1005.31,1,0,0,1
+%%backgroundimage:images/behhahyeh.jpg,-1415.46,-1005.31,1,0,0,1
 %%beginparams
 z1 = (28.9352,193.866);
 
@@ -2819,7 +2819,7 @@ lefttatweel := charlt + x100/nuqta;
 behshape.init_(lefttatweel,0);
 endchar;
 defchar(behshape.medi,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/behshape.medi.2.jpg,-836.499,-1438.96,1,0,0,1
+%%backgroundimage:images/behshape.medi.2.jpg,-836.499,-1438.96,1,0,0,1
 %%beginparams
 z1 = (219.986,47.4628);
 z3 = (132.906,38.769);
@@ -2865,7 +2865,7 @@ show rightanchor;
 
 enddefchar;
 defchar(behshape.medi.beforeseen,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/behlongsenna.jpg,-2516,-1032,1,0,0,1
+%%backgroundimage:images/behlongsenna.jpg,-2516,-1032,1,0,0,1
 %%beginparams
 z1 = (219.986,43.1091);
 z3 = (112.812,25.0382);
@@ -2913,7 +2913,7 @@ show rightanchor;
 
 enddefchar;
 defchar(behshape.medi.afterlam,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/behshape.medi.2.jpg,-836.499,-1438.96,1,0,0,1
+%%backgroundimage:images/behshape.medi.2.jpg,-836.499,-1438.96,1,0,0,1
 %%beginparams
 z1 = (219.986,47.4628);
 z3 = (132.906,38.769);
@@ -2972,7 +2972,7 @@ setCursiveAnchor(behmediyehfina,z2, ExitAnchor);
 
 enddefchar;
 defchar(behshape.medi.beforereh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/behreh.jpg,-1516,-1251,1,0,0,1
+%%backgroundimage:images/behreh.jpg,-1516,-1251,1,0,0,1
 %%beginparams
 z1 = (273.876,-176.505);
 z3 = (5.21991,-30.6748);
@@ -3031,7 +3031,7 @@ rightanchor := rightanchor  shifted (0,- ypart rightanchor);
 
 enddefchar;
 defchar(behshape.fina,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/teh.fina.2.jpg,-144,-1121,1,0,0,1
+%%backgroundimage:images/teh.fina.2.jpg,-144,-1121,1,0,0,1
 %%beginparams
 z1 = (837.906,47.3136);
 z2 = (869.14,101.131);
@@ -3073,7 +3073,7 @@ z1 .. tension 1.49205 and 7.09381 ..
 
 enddefchar;
 beginchar(seen.isol,1587,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/seen.isol.jpg,-25.2994,-1452.74,1,0,0,1
+%%backgroundimage:images/seen.isol.jpg,-25.2994,-1452.74,1,0,0,1
 
 %%beginpaths
 
@@ -3113,7 +3113,7 @@ fill
 savepicture:=1;
 endchar;
 defchar(seen.init,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/seen.init.jpg,-2132.16,-1301.28,1,0,0,1
+%%backgroundimage:images/seen.init.jpg,-2132.16,-1301.28,1,0,0,1
 %%beginparams
 z1 = (79.4975,10.3767);
 
@@ -3162,7 +3162,7 @@ z2 .. tension 1.65623 and 1 ..
 
 enddefchar;
 defchar(seen.init.beforereh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/seeninitreh.jpg,-3427.12,-1143.68,1,0,0,1
+%%backgroundimage:images/seeninitreh.jpg,-3427.12,-1143.68,1,0,0,1
 %%beginparams
 z1 = (-20.8312,12.6749);
 
@@ -3221,7 +3221,7 @@ tr_ := tr_ shifted (0,-100);
 
 enddefchar;
 defchar(seen.medi.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/seenyeh.jpg,-1288.06,-967.732,1,0,0,1
+%%backgroundimage:images/seenyeh.jpg,-1288.06,-967.732,1,0,0,1
 %%beginparams
 z10 = (563.545,26.8501);
 z20 = (590.028,75.6836);
@@ -3292,7 +3292,7 @@ setCursiveAnchor(behmediyehfina,z70, ExitAnchor);
 
 enddefchar;
 defchar(seen.medi.beforereh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/seenreh.jpg,-2456.51,-1172.74,1,0,0,1
+%%backgroundimage:images/seenreh.jpg,-2456.51,-1172.74,1,0,0,1
 %%beginparams
 z1 = (567.362,32.9727);
 z11 = (693,12);
@@ -3350,7 +3350,7 @@ leftbearing := 0;
 setCursiveAnchor(seenreh,z3 + (0,15), ExitAnchor);
 enddefchar;
 defchar(seen.fina,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/sheen.medi.jpg,-74.4111,-1141.68,1,0,0,1
+%%backgroundimage:images/sheen.medi.jpg,-74.4111,-1141.68,1,0,0,1
 %%beginparams
 z1 = (885.119,52.522);
 z2 = (931.174,98.5424);
@@ -3403,7 +3403,7 @@ z1 .. tension 1 and 1.33159 ..
 
 enddefchar;
 defchar(seen.medi,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/sheen.medi.jpg,-1461.84,-1113.08,1,0,0,1
+%%backgroundimage:images/sheen.medi.jpg,-1461.84,-1113.08,1,0,0,1
 %%beginparams
 z.mark1 = (-40,263);
 z1 = (567.362,32.9727);
@@ -3465,7 +3465,7 @@ z1 .. tension 1 and 3.23234 ..
 setMarkAnchor(smallhighwaw,z.mark1);
 enddefchar;
 beginchar(lam.isol,1604,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lam.isol.jpg,-146.417,-1196.67,1,0,0,1
+%%backgroundimage:images/lam.isol.jpg,-146.417,-1196.67,1,0,0,1
 
 %%beginpaths
 
@@ -3492,7 +3492,7 @@ fill
 %%endpaths
 endchar;
 defchar(lam.init,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lam.init.jpg,-2743.84,-1151.57,1,0,0,1
+%%backgroundimage:images/lam.init.jpg,-2743.84,-1151.57,1,0,0,1
 %%beginparams
 z1 = (95.5417,4.47223);
 z2 = (125.011,87.5606);
@@ -3534,7 +3534,7 @@ z2 ..
 
 enddefchar;
 defchar(lam.init.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lamyeh.jpg,-418.662,-1152.51,1,0,0,1
+%%backgroundimage:images/lamyeh.jpg,-418.662,-1152.51,1,0,0,1
 %%beginparams
 z1 = (7,66);
 
@@ -3568,7 +3568,7 @@ setCursiveAnchor(yehcursive1,z1,ExitAnchor);
 
 enddefchar;
 defchar(lam.init.lam_hah,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lam_hah.jpg,-2386.89,-1032.26,1,0,0,1
+%%backgroundimage:images/lam_hah.jpg,-2386.89,-1032.26,1,0,0,1
 %%beginparams
 lefttatweel := 1.14; % numeric
 z1 = (113,295);
@@ -3615,7 +3615,7 @@ setCursiveAnchor(lamhah,z1, ExitAnchorRTL);
 
 enddefchar;
 defchar(lam.init.beforehahyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lamhahyeh.jpg,-2267.66,-1218.06,1,0,0,1
+%%backgroundimage:images/lamhahyeh.jpg,-2267.66,-1218.06,1,0,0,1
 %%beginparams
 lefttatweel := 1.14; % numeric
 z1 = (-38.4761,9.82253);
@@ -3658,7 +3658,7 @@ setCursiveAnchor(lamhah,z1 , ExitAnchorRTL);
 
 enddefchar;
 defchar(lam.init.beforedal,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lamdal.jpg,-1174,-1194,1,0,0,1
+%%backgroundimage:images/lamdal.jpg,-1174,-1194,1,0,0,1
 %%beginparams
 z1 = (54.232,-23.037);
 z2 = (38.805,41.3897);
@@ -3702,7 +3702,7 @@ charwd := x4;
 
 enddefchar;
 defchar(lam.medi,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lam.medi.jpg,-1364.06,-1307.24,1,0,0,1
+%%backgroundimage:images/lam.medi.jpg,-1364.06,-1307.24,1,0,0,1
 %%beginparams
 z1 = (284.937,45.8811);
 z11 = (383,3);
@@ -3755,7 +3755,7 @@ z1 ..
 %%endpaths
 enddefchar;
 defchar(lam.medi.afterkaf,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kafinitlammedi.jpg,-2468.03,-1389,1,0,0,1
+%%backgroundimage:images/kafinitlammedi.jpg,-2468.03,-1389,1,0,0,1
 %%beginparams
 z1 = (240.955,14.4784);
 z11 = (302.083,-16.7824);
@@ -3814,7 +3814,7 @@ z1 ..
 show leftanchor,rightanchor;
 enddefchar;
 defchar(lam.medi.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/ala.jpg,-474.601,-1101.55,1,0,0,1
+%%backgroundimage:images/ala.jpg,-474.601,-1101.55,1,0,0,1
 %%beginparams
 z1 = (230.076,3.8302);
 z3 = (256.944,22.2222);
@@ -3858,7 +3858,7 @@ setCursiveAnchor(yehcursive1,z4, ExitAnchor);
 
 enddefchar;
 defchar(lam.medi.beforeheh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lamkaf.jpg,-4552.97,-1108,1,0,0,1
+%%backgroundimage:images/lamkaf.jpg,-4552.97,-1108,1,0,0,1
 %%beginparams
 z1 = (156.234,11.1588);
 z11 = (222.721,5.25656);
@@ -3916,7 +3916,7 @@ leftbearing :=0;
 
 enddefchar;
 beginchar(lam.fina,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lam.fina.jpg,-727.528,-997,1,0,0,1
+%%backgroundimage:images/lam.fina.jpg,-727.528,-997,1,0,0,1
 %%beginparams
 z1 = (610.294,25.6982);
 z11 = (723.958,-1.15741);
@@ -3966,7 +3966,7 @@ z1 ..
 %%endpaths
 endchar;
 beginchar(lam.fina.afterkaf,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kaflam.jpg,-1331,-1271,1,0,0,1
+%%backgroundimage:images/kaflam.jpg,-1331,-1271,1,0,0,1
 %%beginparams
 z1 = (658.244,10.5709);
 z11 = (723.958,-1.15741);
@@ -4016,7 +4016,7 @@ z1 ..
 %%endpaths
 endchar;
 beginchar(meem.isol,1605,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/meem.isol.jpg,-28.4208,-1032.28,1,0,0,1
+%%backgroundimage:images/meem.isol.jpg,-28.4208,-1032.28,1,0,0,1
 
 %%beginpaths
 
@@ -4047,7 +4047,7 @@ fill
 leftbearing :=- 50;
 endchar;
 beginchar(meem.isol.ii,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/meem.isol.ii.jpg,-295.653,-1198.18,1,0,0,1
+%%backgroundimage:images/meem.isol.ii.jpg,-295.653,-1198.18,1,0,0,1
 
 %%beginpaths
 
@@ -4072,7 +4072,7 @@ fill
 
 endchar;
 defchar(meem.init,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/meem.init.jpg,-1700.28,-1335.38,1,0,0,1
+%%backgroundimage:images/meem.init.jpg,-1700.28,-1335.38,1,0,0,1
 %%beginparams
 z1 = (108.791,42.3241);
 
@@ -4125,7 +4125,7 @@ fill
 %labels(1,2);
 enddefchar;
 defchar(meem.init.beforehah,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/meemhah.jpg,-4003.61,-1170,1,0,0,1
+%%backgroundimage:images/meemhah.jpg,-4003.61,-1170,1,0,0,1
 %%beginparams
 z1 = (-126.067,-55.091);
 
@@ -4162,7 +4162,7 @@ rightbearing := 80;
 setCursiveAnchor(meemhah,z1, ExitAnchorRTL);
 enddefchar;
 defchar(meem.init.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/meeminit_yeh.jpg,-458,-1108,1,0,0,1
+%%backgroundimage:images/meeminit_yeh.jpg,-458,-1108,1,0,0,1
 %%beginparams
 z1 = (-84.713,58.838);
 
@@ -4200,7 +4200,7 @@ leftbearing := 0;
 setCursiveAnchor(yehcursive1,z1,ExitAnchor);
 enddefchar;
 defchar(meem.medi,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/meem.medi.jpg,-1089,-1541,1,0,0,1
+%%backgroundimage:images/meem.medi.jpg,-1089,-1541,1,0,0,1
 %%beginparams
 z1 = (496.396,10.8116);
 z11 = (557,3);
@@ -4265,7 +4265,7 @@ fill
 %show penangle;
 enddefchar;
 defchar(meem.medi.afterhah,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/hahmeem.jpg,-2089,-1386,1,0,0,1
+%%backgroundimage:images/hahmeem.jpg,-2089,-1386,1,0,0,1
 %%beginparams
 z1 = (132.421,35.5726);
 z3 = (254.53,242.472);
@@ -4318,7 +4318,7 @@ fill
 setCursiveAnchor(hahmeem,z3,EntryAnchorRTL);
 enddefchar;
 defchar(meem.medi.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/meemmediyeh.jpg,-1555.54,-1102.8,1,0,0,1
+%%backgroundimage:images/meemmediyeh.jpg,-1555.54,-1102.8,1,0,0,1
 %%beginparams
 z1 = (500.44,7.88133);
 z11 = (626,2);
@@ -4379,7 +4379,7 @@ setCursiveAnchor(yehcursive1,z3,ExitAnchor);
 
 enddefchar;
 defchar(meem.fina,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/meem.fina.ii.jpg,-223.903,-996.583,1,0,0,1
+%%backgroundimage:images/meem.fina.ii.jpg,-223.903,-996.583,1,0,0,1
 %%beginparams
 z.mark1 = (214,-161);
 z1 = (413.082,-7.80877);
@@ -4427,7 +4427,7 @@ setMarkAnchor(buttonmark,z.mark1);
 
 enddefchar;
 defchar(meem.fina.afterheh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/heh_meem.jpg,-570,-1294,1,0,0,1
+%%backgroundimage:images/heh_meem.jpg,-570,-1294,1,0,0,1
 %%beginparams
 z1 = (-27,75);
 
@@ -4477,7 +4477,7 @@ defchar(meem.fina.afterkaf,-1,-1,-1,-1);
 meem.fina.afterheh_(0,0);
 enddefchar;
 defchar(meem.fina.ii,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/meem.fina.ii.alt1.jpg,-4474.23,-1399.15,1,0,0,1
+%%backgroundimage:images/meem.fina.ii.alt1.jpg,-4474.23,-1399.15,1,0,0,1
 %%beginparams
 z1 = (413.082,-7.80877);
 z2 = (417.172,70.1698);
@@ -4522,7 +4522,7 @@ fill
 
 enddefchar;
 beginchar(meem.fina.ii.alt1,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/meem.fina.jpg,-1500.4,-1317.38,1,0,0,1
+%%backgroundimage:images/meem.fina.jpg,-1500.4,-1317.38,1,0,0,1
 %%beginparams
 z1 = (413.082,-7.80877);
 z2 = (426.335,72.5811);
@@ -4567,7 +4567,7 @@ fill
 
 endchar;
 beginchar(noon.isol,1606,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/noon.isol.jpg,-355.34,-1736.05,1,0,0,1
+%%backgroundimage:images/noon.isol.jpg,-355.34,-1736.05,1,0,0,1
 %%beginparams
 z11 = (183,373);
 z2 = (491,229);
@@ -4597,7 +4597,7 @@ draw one_dot.pic  shifted z11;
 setCursiveAnchor(behnoon,z2, EntryAnchorRTL);
 endchar;
 defchar(noon.fina,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/noon.fina.jpg,-107.196,-1167.59,1,0,0,1
+%%backgroundimage:images/noon.fina.jpg,-107.196,-1167.59,1,0,0,1
 %%beginparams
 z1 = (547.232,84.2321);
 z11 = (210,243);
@@ -4640,7 +4640,7 @@ show rightanchor;
 
 enddefchar;
 defchar(noon.fina.afterbeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/behmedinoon.jpg,-16.5117,-931.766,1,0,0,1
+%%backgroundimage:images/behmedinoon.jpg,-16.5117,-931.766,1,0,0,1
 %%beginparams
 z1 = (213,308);
 z2 = (503,149);
@@ -4678,7 +4678,7 @@ setCursiveAnchor(behmedinoon,z2, EntryAnchor);
 
 enddefchar;
 defchar(qaf.isol,1602,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kaf.jpg,-342.667,-1784.22,1,0,0,1
+%%backgroundimage:images/kaf.jpg,-342.667,-1784.22,1,0,0,1
 %%beginparams
 z11 = (329.861,526.042);
 
@@ -4718,7 +4718,7 @@ draw two_dots.pic  shifted z11;
 savepicture:=1;
 enddefchar;
 beginchar(feh.isol,1601,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/feh.isol.jpg,-126.477,-1060.16,1,0,0,1
+%%backgroundimage:images/feh.isol.jpg,-126.477,-1060.16,1,0,0,1
 %%beginparams
 z11 = (477.431,464.699);
 
@@ -4759,7 +4759,7 @@ draw one_dot.pic  shifted z11;
 savepicture:=1;
 endchar;
 defchar(qaf.fina,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/qaf.fina.jpg,-150.103,-969.206,1,0,0,1
+%%backgroundimage:images/qaf.fina.jpg,-150.103,-969.206,1,0,0,1
 %%beginparams
 z1 = (620.765,-0.34572);
 z11 = (265.641,332.755);
@@ -4808,7 +4808,7 @@ fill
 drawcomp(two_dots,identity shifted z11);
 enddefchar;
 defchar(fehshape.init,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/feh.init.jpg,-2338.99,-1185.34,1,0,0,1
+%%backgroundimage:images/feh.init.jpg,-2338.99,-1185.34,1,0,0,1
 %%beginparams
 z1 = (37.6792,3.86655);
 z2 = (50.2739,88.2608);
@@ -4847,7 +4847,7 @@ fill
 
 enddefchar;
 defchar(fehshape.init.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/fi.jpg,-417.778,-1448.53,1,0,0,1
+%%backgroundimage:images/fi.jpg,-417.778,-1448.53,1,0,0,1
 %%beginparams
 z1 = (0,90);
 
@@ -4879,7 +4879,7 @@ charwd:= xpart (urcorner currentpicture) - x1 + rightbearing;
 setCursiveAnchor(yehcursive1,z1,ExitAnchor);
 enddefchar;
 defchar(fehshape.medi,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/feh.medi.jpg,-923,-1016,1,0,0,1
+%%backgroundimage:images/feh.medi.jpg,-923,-1016,1,0,0,1
 %%beginparams
 z1 = (293.435,27.8949);
 z3 = (76.8991,7.37626);
@@ -4933,7 +4933,7 @@ fill
 %%endpaths
 enddefchar;
 defchar(fehshape.medi.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/fehshapeyeh.jpg,-470.797,-1157.57,1,0,0,1
+%%backgroundimage:images/fehshapeyeh.jpg,-470.797,-1157.57,1,0,0,1
 %%beginparams
 z1 = (349.461,-3.88807);
 z3 = (18.2369,-11.814);
@@ -4984,7 +4984,7 @@ fill
 setCursiveAnchor(yehcursive1,z3,ExitAnchor);
 enddefchar;
 defchar(feh.fina,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/feh.fina.jpg,-8.88889,-1206.69,1,0,0,1
+%%backgroundimage:images/feh.fina.jpg,-8.88889,-1206.69,1,0,0,1
 %%beginparams
 z1 = (889.348,1.02336);
 z11 = (618,384);
@@ -5030,7 +5030,7 @@ fill
 drawcomp(one_dot,identity shifted z11);
 enddefchar;
 defchar(hah.isol,1581,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/hah.isol.jpg,-130.833,-1156.69,1,0,0,1
+%%backgroundimage:images/hah.isol.jpg,-130.833,-1156.69,1,0,0,1
 %%beginparams
 z1 = (642.295,370.279);
 z2 = (933.189,-404.023);
@@ -5111,7 +5111,7 @@ fill
 
 enddefchar;
 defchar(hah.init,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/jeem.init.jpg,-1527.71,-1022.26,1,0,0,1
+%%backgroundimage:images/jeem.init.jpg,-1527.71,-1022.26,1,0,0,1
 %%beginparams
 z1 = (79.6351,9.36419);
 
@@ -5154,7 +5154,7 @@ z2 ..
 %%endpaths
 enddefchar;
 defchar(hah.init.ii,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/hah.init.ii.jpg,-1743,-1342,1,0,0,1
+%%backgroundimage:images/hah.init.ii.jpg,-1743,-1342,1,0,0,1
 %%beginparams
 z1 = (47.8224,2.54835);
 
@@ -5197,7 +5197,7 @@ z2 ..
 %%endpaths
 enddefchar;
 defchar(behshape.medi.beforenoon,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/behmedinoon.jpg,-576,-751.579,1,0,0,1
+%%backgroundimage:images/behmedinoon.jpg,-576,-751.579,1,0,0,1
 %%beginparams
 z1 = (273.876,-176.505);
 z3 = (39.156,8.0977);
@@ -5253,7 +5253,7 @@ rightanchor := rightanchor  shifted (0,- ypart rightanchor);
 
 enddefchar;
 defchar(hah.init.beforemeem,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/hahmeem.jpg,-2480.94,-1300.47,1,0,0,1
+%%backgroundimage:images/hahmeem.jpg,-2480.94,-1300.47,1,0,0,1
 %%beginparams
 z1 = (74.3146,159.432);
 
@@ -5298,7 +5298,7 @@ leftbearing := -170;
 setCursiveAnchor(hahmeem,z1,ExitAnchorRTL);
 enddefchar;
 defchar(hah.init.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/hahyeh.jpg,-1417,-1109,1,0,0,1
+%%backgroundimage:images/hahyeh.jpg,-1417,-1109,1,0,0,1
 %%beginparams
 z1 = (0,30.8629);
 
@@ -5327,7 +5327,7 @@ leftanchor := z1;
 setCursiveAnchor(yehcursive1,z1,ExitAnchor);
 enddefchar;
 defchar(hah.medi,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/heh.medi.jpg,-872.518,-1173,1,0,0,1
+%%backgroundimage:images/heh.medi.jpg,-872.518,-1173,1,0,0,1
 %%beginparams
 z1 = (460,38);
 z11 = (543,-2);
@@ -5388,7 +5388,7 @@ z1 ..
 
 enddefchar;
 defchar(hah.medi.afterbeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/yeh_hah.init.jpg,-2402,-1310,1,0,0,1
+%%backgroundimage:images/yeh_hah.init.jpg,-2402,-1310,1,0,0,1
 %%beginbody
 
 path p;
@@ -5420,7 +5420,7 @@ rightbearing :=x4 - x5;
 setCursiveAnchor(beforehah1,z4, EntryAnchorRTL);
 enddefchar;
 defchar(hah.medi.afterbeh.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/behhahyeh.jpg,-1385.46,-1071.31,1,0,0,1
+%%backgroundimage:images/behhahyeh.jpg,-1385.46,-1071.31,1,0,0,1
 %%beginparams
 z1 = (36.1111,66.9167);
 z2 = (65.4997,261.323);
@@ -5452,7 +5452,7 @@ setCursiveAnchor(beforehah1,z2, EntryAnchorRTL);
 
 enddefchar;
 defchar(hah.medi.afterlam.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lamhahyeh.jpg,-2136.28,-1507.73,1,0,0,1
+%%backgroundimage:images/lamhahyeh.jpg,-2136.28,-1507.73,1,0,0,1
 %%beginparams
 z1 = (26.8466,33.4149);
 z2 = (40.436,208.706);
@@ -5486,7 +5486,7 @@ setCursiveAnchor(lamhah,z3, EntryAnchorRTL);
 
 enddefchar;
 defchar(hah.medi.lam_hah,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lam_hah.jpg,-2275,-1322,1,0,0,1
+%%backgroundimage:images/lam_hah.jpg,-2275,-1322,1,0,0,1
 %%beginparams
 lefttatweel := 1.14; % numeric
 z1 = (120.521,22.7438);
@@ -5532,7 +5532,7 @@ setCursiveAnchor(lamhah,z3, EntryAnchorRTL);
 
 enddefchar;
 defchar(hah.medi.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/hahyeh.jpg,-1518.69,-1076.88,1,0,0,1
+%%backgroundimage:images/hahyeh.jpg,-1518.69,-1076.88,1,0,0,1
 %%beginparams
 z2 = (500.096,1.44676);
 
@@ -5562,7 +5562,7 @@ rightanchor := z2;
 setCursiveAnchor(yehcursive1,z1,ExitAnchor);
 enddefchar;
 defchar(hah.medi.beforemeem,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/meemhah.jpg,-4016,-1416,1,0,0,1
+%%backgroundimage:images/meemhah.jpg,-4016,-1416,1,0,0,1
 %%beginparams
 lefttatweel := 1.14; % numeric
 z1 = (120.521,22.7438);
@@ -5608,7 +5608,7 @@ rightanchor := z6 + (200,0) ;
 
 enddefchar;
 defchar(hah.fina,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/hah.fina.jpg,-79,-1132,1,0,0,1
+%%backgroundimage:images/hah.fina.jpg,-79,-1132,1,0,0,1
 %%beginparams
 z1 = (505.854,53.6437);
 z3 = (662.037,-0.578704);
@@ -5660,7 +5660,7 @@ z1 .. tension 0.75 and 1 ..
 %%endpaths
 enddefchar;
 beginchar(dal.isol,1583,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/dal.isol.jpg,-1348.15,-1233.42,1,0,0,1
+%%backgroundimage:images/dal.isol.jpg,-1348.15,-1233.42,1,0,0,1
 
 %%beginpaths
 
@@ -5684,7 +5684,7 @@ fill
 %%endpaths
 endchar;
 defchar(dal.fina,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/dal.fina.jpg,-818.43,-1091.08,1,0,0,1
+%%backgroundimage:images/dal.fina.jpg,-818.43,-1091.08,1,0,0,1
 %%beginparams
 z1 = (439.55,86.7224);
 z3 = (619.695,1.44676);
@@ -5723,7 +5723,7 @@ z1 .. tension 0.928459 and 1.33548 ..
 %%endpaths
 enddefchar;
 defchar(dal.fina.afterlam,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lamdal.jpg,-731.517,-1193.87,1,0,0,1
+%%backgroundimage:images/lamdal.jpg,-731.517,-1193.87,1,0,0,1
 %%beginparams
 z1 = (335.5,20.4796);
 z2 = (423.913,30.3278);
@@ -5762,7 +5762,7 @@ z1 .. tension 0.928459 and 26.907 ..
 %%endpaths
 enddefchar;
 defchar(reh.isol,1585,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/waw.isol.jpg,-2218.93,-1413.6,1,0,0,1
+%%backgroundimage:images/waw.isol.jpg,-2218.93,-1413.6,1,0,0,1
 %%beginparams
 z1 = (-247.942,-170.396);
 z2 = (198,257);
@@ -5783,11 +5783,11 @@ z2 .. tension 1 and 4.21397 ..
 
 %%endpaths
 %%beginbody
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/reh.isol.jpg,-1895,-1493,1,0,0,1
+%%backgroundimage:images/reh.isol.jpg,-1895,-1493,1,0,0,1
 leftbearing := -180; %4*50 - (x2-x1);
 enddefchar;
 defchar(reh.fina,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/waw.fina.jpg,-1537.12,-1081.07,1,0,0,1
+%%backgroundimage:images/waw.fina.jpg,-1537.12,-1081.07,1,0,0,1
 %%beginparams
 z1 = (343.434,8.69117);
 z3 = (426.325,6.36306);
@@ -5800,7 +5800,7 @@ z2 = z1 + (0,lineheight ) rotated -5;
 y3 := 0;
 righttatweel_const := (x3 - x1,y3 - y1);
 
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/reh.fina.jpg,-495,-1174,1,0,0,1
+%%backgroundimage:images/reh.fina.jpg,-495,-1174,1,0,0,1
 %%endverbatim
 
 %%beginpaths
@@ -5827,7 +5827,7 @@ z1 ..
 leftbearing := -180; % 230- (x4-x5);
 enddefchar;
 defchar(reh.fina.afterbehshape,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/behreh.jpg,-1271,-1233,1,0,0,1
+%%backgroundimage:images/behreh.jpg,-1271,-1233,1,0,0,1
 %%beginparams
 z1 = (250.947,199.364);
 
@@ -5854,7 +5854,7 @@ leftbearing := -150;
 setCursiveAnchor(behshapereh,z1, EntryAnchor);
 enddefchar;
 defchar(reh.fina.afterseen,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/seenreh.jpg,-2182.73,-1183.2,1,0,0,1
+%%backgroundimage:images/seenreh.jpg,-2182.73,-1183.2,1,0,0,1
 %%beginparams
 z1 = (254.588,25.8892);
 
@@ -5881,7 +5881,7 @@ leftbearing := -200;
 setCursiveAnchor(seenreh,z1, EntryAnchor);
 enddefchar;
 beginchar(waw.isol,1608,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/waw.isol.jpg,-2219.19,-1407.55,1,0,0,1
+%%backgroundimage:images/waw.isol.jpg,-2219.19,-1407.55,1,0,0,1
 %%beginparams
 z1 = (-219.929,-171.518);
 z2 = (182,151);
@@ -5917,7 +5917,7 @@ leftbearing := -180; %200- (x2-x1);
 
 endchar;
 defchar(waw.fina,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/waw.fina.jpg,-1479.12,-1058.07,1,0,0,1
+%%backgroundimage:images/waw.fina.jpg,-1479.12,-1058.07,1,0,0,1
 %%beginparams
 z1 = (272.207,3.79139);
 z3 = (311,3);
@@ -5960,7 +5960,7 @@ leftbearing :=-180; %200 - (x4 - x5);
 
 enddefchar;
 beginchar(heh.isol,1607,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/heh.isol.jpg,-437.442,-1748.84,1,0,0,1
+%%backgroundimage:images/heh.isol.jpg,-437.442,-1748.84,1,0,0,1
 
 %%beginpaths
 
@@ -5985,7 +5985,7 @@ fill
 %%endpaths
 endchar;
 defchar(heh.init,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/heh.init.2.jpg,-5378.74,-1338.79,1,0,0,1
+%%backgroundimage:images/heh.init.2.jpg,-5378.74,-1338.79,1,0,0,1
 %%beginparams
 z1 = (43.6754,4.00912);
 z1.5 = (31,-58);
@@ -6046,7 +6046,7 @@ fill
 %%endpaths
 enddefchar;
 defchar(heh.init.beforemeem,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/heh_meem.jpg,-570,-1294,1,0,0,1
+%%backgroundimage:images/heh_meem.jpg,-570,-1294,1,0,0,1
 %%beginparams
 z1 = (-27,75);
 
@@ -6106,7 +6106,7 @@ rightbearing  := -0;
 
 enddefchar;
 defchar(heh.init.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/hehyeh.jpg,-1988.26,-1032.26,1,0,0,1
+%%backgroundimage:images/hehyeh.jpg,-1988.26,-1032.26,1,0,0,1
 
 %%beginverbatim
 z1 = (0,lineheight);
@@ -6153,7 +6153,7 @@ charwd:= xpart (urcorner currentpicture) - x1;
 setCursiveAnchor(yehcursive1,z1,ExitAnchor);
 enddefchar;
 defchar(heh.medi,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/heh.medi.2.jpg,-755.119,-1278.83,1,0,0,1
+%%backgroundimage:images/heh.medi.2.jpg,-755.119,-1278.83,1,0,0,1
 %%beginparams
 z.mark1 = (267,-262);
 z1 = (63.3974,2.20693);
@@ -6228,7 +6228,7 @@ setMarkAnchor(buttonmark,z.mark1);
 
 enddefchar;
 defchar(heh.medi.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/hehyeh.jpg,-1989.38,-1042.46,1,0,0,1
+%%backgroundimage:images/hehyeh.jpg,-1989.38,-1042.46,1,0,0,1
 %%beginparams
 z2 = (593.614,-11.06);
 
@@ -6260,7 +6260,7 @@ rightanchor := z2;
 setCursiveAnchor(yehcursive1,z1,ExitAnchor);
 enddefchar;
 defchar(heh.fina,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/tehmarbouta.fina.jpg,-71.088,-1354.31,1,0,0,1
+%%backgroundimage:images/tehmarbouta.fina.jpg,-71.088,-1354.31,1,0,0,1
 %%beginparams
 z1 = (433.28,26.365);
 z3 = (550,-0.694444);
@@ -6302,7 +6302,7 @@ fill
 %%endpaths
 enddefchar;
 defchar(heh.fina.afterlam,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/lamteh.jpg,-681.217,-1312.26,1,0,0,1
+%%backgroundimage:images/lamteh.jpg,-681.217,-1312.26,1,0,0,1
 %%beginparams
 z1 = (289.317,-22.7592);
 z3 = (370,-54);
@@ -6347,7 +6347,7 @@ setCursiveAnchor(hehmeem,z1, EntryAnchor);
 
 enddefchar;
 defchar(sad.isol,1589,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/dad.isol.2.jpg,-513.597,-1104.5,1,0,0,1
+%%backgroundimage:images/dad.isol.2.jpg,-513.597,-1104.5,1,0,0,1
 %%beginparams
 z.mark1 = (859,-13);
 
@@ -6387,7 +6387,7 @@ setMarkAnchor(buttonmark,z.mark1);
 savepicture:=1;
 enddefchar;
 defchar(sad.isol.ii,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/dad.isol.jpg,-18.1204,-1153.76,1,0,0,1
+%%backgroundimage:images/dad.isol.jpg,-18.1204,-1153.76,1,0,0,1
 
 %%beginpaths
 
@@ -6420,7 +6420,7 @@ fill
 %%endpaths
 enddefchar;
 defchar(sad.init,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/sad.init.jpg,-2302.75,-1465.38,1,0,0,1
+%%backgroundimage:images/sad.init.jpg,-2302.75,-1465.38,1,0,0,1
 %%beginparams
 z.mark1 = (500,-99);
 z1 = (99.5659,26.3937);
@@ -6483,7 +6483,7 @@ fill
 setMarkAnchor(buttonmark,z.mark1);
 enddefchar;
 defchar(sad.init.beforereh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/dadinitrehfina.jpg,-3764.52,-1089.58,1,0,0,1
+%%backgroundimage:images/dadinitrehfina.jpg,-3764.52,-1089.58,1,0,0,1
 %%beginparams
 z1 = (-24.9571,36.5595);
 
@@ -6535,7 +6535,7 @@ leftbearing := 0;
 setCursiveAnchor(seenreh,z1 + (0,15), ExitAnchor);
 enddefchar;
 defchar(sad.init.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/sadinityeh.jpg,-384.061,-1200.48,1,0,0,1
+%%backgroundimage:images/sadinityeh.jpg,-384.061,-1200.48,1,0,0,1
 %%beginparams
 z10 = (352.004,170.607);
 
@@ -6640,7 +6640,7 @@ sad.init_(charlt,charrt);
 
 enddefchar;
 defchar(sad.medi.beforereh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/sadmedirehfina.jpg,-4384,-1390,1,0,0,1
+%%backgroundimage:images/sadmedirehfina.jpg,-4384,-1390,1,0,0,1
 %%beginparams
 z11 = (397,-69);
 z13 = (665,29);
@@ -6681,7 +6681,7 @@ setCursiveAnchor(seenreh,z1 + (0,15), ExitAnchor);
 
 enddefchar;
 defchar(sad.medi.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/sadinityeh.jpg,-405.333,-1019.33,1,0,0,1
+%%backgroundimage:images/sadinityeh.jpg,-405.333,-1019.33,1,0,0,1
 %%beginparams
 z11 = (364,20);
 z13 = (665,29);
@@ -6751,7 +6751,7 @@ setCursiveAnchor(behmediyehfina,z70.1, ExitAnchor);
 
 enddefchar;
 defchar(sad.fina,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/dad.fina.jpg,-144.598,-836.902,1,0,0,1
+%%backgroundimage:images/dad.fina.jpg,-144.598,-836.902,1,0,0,1
 %%beginparams
 z11 = (397,-69);
 z13 = (1005.39,13.3267);
@@ -6813,7 +6813,7 @@ fill
 
 enddefchar;
 defchar(ain.isol,1593,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/ain.isol.jpg,-121.111,-1240,1,0,0,1
+%%backgroundimage:images/ain.isol.jpg,-121.111,-1240,1,0,0,1
 %%beginparams
 z1 = (457.009,395.66);
 z2 = (764,-403.363);
@@ -6848,7 +6848,7 @@ fill
 rightbearing := rightbearing - (x2-x1);
 enddefchar;
 defchar(ain.init,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/gain.init.jpg,-1420.05,-1171.27,1,0,0,1
+%%backgroundimage:images/gain.init.jpg,-1420.05,-1171.27,1,0,0,1
 %%beginparams
 z1 = (85.0903,8.0859);
 
@@ -6894,7 +6894,7 @@ z2 ..
 
 enddefchar;
 defchar(ain.init.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/aininityeh.jpg,-452,-1232,1,0,0,1
+%%backgroundimage:images/aininityeh.jpg,-452,-1232,1,0,0,1
 %%beginparams
 z1 = (-30.7068,-39.0913);
 
@@ -6934,7 +6934,7 @@ setCursiveAnchor(yehcursive1,z1,ExitAnchor);
 
 enddefchar;
 defchar(ain.init.finjani,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/ala.jpg,-730.213,-1097.55,1,0,0,1
+%%backgroundimage:images/ala.jpg,-730.213,-1097.55,1,0,0,1
 %%beginparams
 z1 = (74.0866,6.1551);
 z1.5 = (0,-82.4653);
@@ -6988,7 +6988,7 @@ fill
 %%endpaths
 enddefchar;
 defchar(ain.medi,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/ain.medi.jpg,-863.202,-1089.41,1,0,0,1
+%%backgroundimage:images/ain.medi.jpg,-863.202,-1089.41,1,0,0,1
 %%beginparams
 z1 = (307.519,5.78968);
 z11 = (339.024,3.37577);
@@ -7043,7 +7043,7 @@ z1 .. tension 1 and 1.37611 ..
 %%endpaths
 enddefchar;
 defchar(ain.medi.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/ainmediyeh.jpg,-518.899,-1444.23,1,0,0,1
+%%backgroundimage:images/ainmediyeh.jpg,-518.899,-1444.23,1,0,0,1
 %%beginparams
 z1 = (316.199,3.95715);
 z11 = (339.024,3.37577);
@@ -7096,7 +7096,7 @@ leftbearing := 0;
 setCursiveAnchor(yehcursive1,z3,ExitAnchor);
 enddefchar;
 defchar(ain.fina,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/ain.fina.jpg,-109.971,-879.929,1,0,0,1
+%%backgroundimage:images/ain.fina.jpg,-109.971,-879.929,1,0,0,1
 %%beginparams
 z1 = (387.279,3.63301);
 z3 = (428.723,9.64506);
@@ -7142,7 +7142,7 @@ z1 .. tension 1.23661 and 1 ..
 
 enddefchar;
 defchar(tah.isol,1591,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/tah.isol.jpg,12,-1019.83,1,0,0,1
+%%backgroundimage:images/tah.isol.jpg,12,-1019.83,1,0,0,1
 %%beginparams
 z.mark1 = (708,511);
 
@@ -7186,7 +7186,7 @@ fill
 setMarkAnchor(topmark,z.mark1);
 enddefchar;
 defchar(tah.init,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/tah.init.jpg,-1283.89,-1307.16,1,0,0,1
+%%backgroundimage:images/tah.init.jpg,-1283.89,-1307.16,1,0,0,1
 %%beginparams
 z1 = (120.399,4.40296);
 z1.5 = (-2.31481,-133.681);
@@ -7243,7 +7243,7 @@ fill
 %%endpaths
 enddefchar;
 defchar(tah.init.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/tahinit_yeh.jpg,-2057.19,-1207.56,1,0,0,1
+%%backgroundimage:images/tahinit_yeh.jpg,-2057.19,-1207.56,1,0,0,1
 %%beginparams
 z1 = (40.783,80.7486);
 
@@ -7335,7 +7335,7 @@ z14 ..
 
 enddefchar;
 defchar(tah.medi.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/tahmedi_yeh.jpg,-475.47,-1279.96,1,0,0,1
+%%backgroundimage:images/tahmedi_yeh.jpg,-475.47,-1279.96,1,0,0,1
 %%beginparams
 z1 = (8.73904,-61.7067);
 z11 = (269.528,8.24846);
@@ -7450,7 +7450,7 @@ fill __test;
 
 enddefchar;
 beginchar(alefmaksura.isol,1609,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/yeh.isol.jpg,-152.194,-1072,1,0,0,1
+%%backgroundimage:images/yeh.isol.jpg,-152.194,-1072,1,0,0,1
 
 %%beginpaths
 
@@ -7486,7 +7486,7 @@ draw alefmaksura.isol.pic;
 savepicture:=1;
 enddefchar;
 beginchar(yehshape.fina,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/yehfina.jpg,-821.243,-1239,1,0,0,1
+%%backgroundimage:images/yehfina.jpg,-821.243,-1239,1,0,0,1
 %%beginparams
 z1 = (455.532,-80.6952);
 z2 = (729.142,81.4761);
@@ -7523,7 +7523,7 @@ z3 .. tension 1 and 4.78479 ..
 savepicture:=1;
 endchar;
 defchar(yehshape.fina.ii,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/ala.jpg,-47.8111,-1250.15,1,0,0,1
+%%backgroundimage:images/ala.jpg,-47.8111,-1250.15,1,0,0,1
 %%beginparams
 z1 = (400,62);
 z2 = (641.667,49.3056);
@@ -7568,7 +7568,7 @@ setCursiveAnchor(behmediyehfinartl,z2, EntryAnchorRTL);
 
 enddefchar;
 defchar(kaf.isol,1603,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kaf.fina.jpg,-68.7566,-977.691,1,0,0,1
+%%backgroundimage:images/kaf.fina.jpg,-68.7566,-977.691,1,0,0,1
 
 %%beginpaths
 
@@ -7611,7 +7611,7 @@ fill
 
 enddefchar;
 defchar(kaf.init,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kaf.init.jpg,-1599,-1157,1,0,0,1
+%%backgroundimage:images/kaf.init.jpg,-1599,-1157,1,0,0,1
 %%beginparams
 z1 = (91.93,14.8357);
 z1.5 = (86,-24);
@@ -7666,7 +7666,7 @@ rightbearing := -200; % 50 - (xpart (urcorner currentpicture) - 172);
 
 enddefchar;
 defchar(kaf.init.beforelam,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kafinitlammedi.jpg,-2695,-1404,1,0,0,1
+%%backgroundimage:images/kafinitlammedi.jpg,-2695,-1404,1,0,0,1
 %%beginparams
 z1 = (-20.8192,-0.262036);
 z1.5 = (86,-24);
@@ -7715,7 +7715,7 @@ z4 .. tension 2.17049 and 0.891964 ..
 %%endpaths
 enddefchar;
 defchar(kaf.init.beforelamalef,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kaflaf.jpg,-3472.39,-1440.22,1,0,0,1
+%%backgroundimage:images/kaflaf.jpg,-3472.39,-1440.22,1,0,0,1
 %%beginparams
 z1 = (-38.6963,0.654244);
 z1.5 = (86,-24);
@@ -7763,7 +7763,7 @@ z4 .. tension 6.25338 and 0.873858 ..
 %%endpaths
 enddefchar;
 defchar(kaf.init.beforelamfina,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kaflam.jpg,-2030,-1271.93,1,0,0,1
+%%backgroundimage:images/kaflam.jpg,-2030,-1271.93,1,0,0,1
 %%beginparams
 z1 = (-46.2581,-3.87893);
 z1.5 = (66,-20);
@@ -7812,7 +7812,7 @@ z4 .. tension 6.25338 and 0.75 ..
 %%endpaths
 enddefchar;
 defchar(kaf.init.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kafinit_yeh.jpg,-1189.91,-1356.48,1,0,0,1
+%%backgroundimage:images/kafinit_yeh.jpg,-1189.91,-1356.48,1,0,0,1
 %%beginparams
 z1 = (63.3545,113.979);
 
@@ -7851,7 +7851,7 @@ rightbearing := -300;
 
 enddefchar;
 defchar(kaf.medi,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kaf.medi.2.jpg,-8202.72,-1558.83,1,0,0,1
+%%backgroundimage:images/kaf.medi.2.jpg,-8202.72,-1558.83,1,0,0,1
 %%beginparams
 z1 = (459.084,10.094);
 z11 = (565.972,-1.73611);
@@ -7906,7 +7906,7 @@ z1 .. tension 1.25837 and 1 ..
 %%endpaths
 enddefchar;
 defchar(kaf.init.ii,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/src/visualmetafont/MPGUI/automedina/images/kaf.init.ii_2.jpg,-2244.17,-980,1,0,0,1
+%%backgroundimage:images/kaf.init.ii_2.jpg,-2244.17,-980,1,0,0,1
 %%beginparams
 z1 = (237.212,0.724611);
 z1.5 = (132.12,289.272);
@@ -7955,7 +7955,7 @@ z2 ..
 
 enddefchar;
 defchar(kaf.medi.beforemeem,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kaf_meem.jpg,-1615.56,-1172.72,1,0,0,1
+%%backgroundimage:images/kaf_meem.jpg,-1615.56,-1172.72,1,0,0,1
 %%beginparams
 z1 = (483.501,14.7329);
 z11 = (565.972,-1.73611);
@@ -8015,7 +8015,7 @@ leftbearing :=0;
 
 enddefchar;
 defchar(kaf.medi.beforeyeh,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kafmedi_yeh.jpg,-2516,-1219,1,0,0,1
+%%backgroundimage:images/kafmedi_yeh.jpg,-2516,-1219,1,0,0,1
 %%beginparams
 z1 = (440.299,41.5247);
 z11 = (565.972,-1.73611);
@@ -8073,7 +8073,7 @@ setCursiveAnchor(yehcursive1,z3,ExitAnchor);
 
 enddefchar;
 defchar(kaf.medi.beforelam,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kafmedialeffina.jpg,-2351.58,-1332.64,1,0,0,1
+%%backgroundimage:images/kafmedialeffina.jpg,-2351.58,-1332.64,1,0,0,1
 %%beginparams
 z10 = (275.998,47.282);
 z11 = (411,19);
@@ -8114,7 +8114,7 @@ z10 .. tension 1 and 1 ..
 addto currentpicture also pic_;
 enddefchar;
 defchar(kaf.medi.beforelamalef,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kafmedialeffina.jpg,-2189.58,-1410.64,1,0,0,1
+%%backgroundimage:images/kafmedialeffina.jpg,-2189.58,-1410.64,1,0,0,1
 %%beginparams
 z10 = (112.783,136.418);
 z11 = (355,-2);
@@ -8155,7 +8155,7 @@ z10 .. tension 1 and 1 ..
 addto currentpicture also pic_;
 enddefchar;
 defchar(kaf.medi.beforelamfina,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kafmedialeffina.jpg,-2189.58,-1410.64,1,0,0,1
+%%backgroundimage:images/kafmedialeffina.jpg,-2189.58,-1410.64,1,0,0,1
 %%beginparams
 z10 = (163.27,85.6913);
 z11 = (369,-4);
@@ -8195,7 +8195,7 @@ z10 .. tension 1 and 1 ..
 addto currentpicture also pic_;
 enddefchar;
 defchar(kaf.fina,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kkaf.fina.jpg,-262.167,-1138.89,1,0,0,1
+%%backgroundimage:images/kkaf.fina.jpg,-262.167,-1138.89,1,0,0,1
 %%beginparams
 z1 = (683.006,10.9988);
 z3 = (721.065,-12.7315);
@@ -8249,7 +8249,7 @@ fill
 %%endpaths
 enddefchar;
 defchar(kaf.fina.expa.old,-1,1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kaf_fina_exp.jpg,-847.113,-1504.75,1,0,0,1
+%%backgroundimage:images/kaf_fina_exp.jpg,-847.113,-1504.75,1,0,0,1
 %%beginparams
 d1 := -30; % numeric
 t1 := 1.6; % numeric
@@ -8321,7 +8321,7 @@ drawcomp(minikaf,identity shifted z0.1);
 
 enddefchar;
 defchar(kaf.fina.afterlam,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kkaf.fina.jpg,-212.848,-1143.21,1,0,0,1
+%%backgroundimage:images/kkaf.fina.jpg,-212.848,-1143.21,1,0,0,1
 %%beginparams
 z1 = (673.673,9.35991);
 z3 = (720.139,-44.4444);
@@ -8373,7 +8373,7 @@ fill
 %%endpaths
 enddefchar;
 defchar(kaf.medi.ii,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kaf.ii.jpg,-724,-1009,1,0,0,1
+%%backgroundimage:images/kaf.ii.jpg,-724,-1009,1,0,0,1
 %%beginparams
 z.medi1 = (930.81,87.4816);
 
@@ -8411,7 +8411,7 @@ draw pic_;
 
 enddefchar;
 beginchar(zeroindic,1632,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/10.jpg,-1016.12,-1231.58,1,0,0,1
+%%backgroundimage:images/10.jpg,-1016.12,-1231.58,1,0,0,1
 
 %%beginpaths
 
@@ -8432,7 +8432,7 @@ currentpicture := currentpicture shifted (0,-ypart llcorner currentpicture + 80)
 
 endchar;
 beginchar(oneindic,1633,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/14.jpg,-957.352,-1047.22,1,0,0,1
+%%backgroundimage:images/14.jpg,-957.352,-1047.22,1,0,0,1
 
 %%beginpaths
 
@@ -8456,7 +8456,7 @@ currentpicture := currentpicture shifted (0,-ypart llcorner currentpicture);
 
 endchar;
 beginchar(twoindic,1634,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/12,-900,-1290,1,0,0,1
+%%backgroundimage:images/12,-900,-1290,1,0,0,1
 
 %%beginpaths
 
@@ -8481,7 +8481,7 @@ rightbearing := 0;
 currentpicture := currentpicture shifted (0,-ypart llcorner currentpicture);
 endchar;
 beginchar(threeindic,1635,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/13.jpg,-1222,-1669,1,0,0,1
+%%backgroundimage:images/13.jpg,-1222,-1669,1,0,0,1
 
 %%beginpaths
 
@@ -8512,7 +8512,7 @@ currentpicture := currentpicture shifted (0,-ypart llcorner currentpicture);
 
 endchar;
 beginchar(fourindic,1636,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/14,-1145,-1044,1,0,0,1
+%%backgroundimage:images/14,-1145,-1044,1,0,0,1
 
 %%beginpaths
 
@@ -8542,7 +8542,7 @@ currentpicture := currentpicture shifted (0,-ypart llcorner currentpicture + 0) 
 
 endchar;
 beginchar(fiveindic,1637,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/15.jpg,-1036.94,-1169.24,1,0,0,1
+%%backgroundimage:images/15.jpg,-1036.94,-1169.24,1,0,0,1
 
 %%beginpaths
 
@@ -8570,7 +8570,7 @@ currentpicture := currentpicture shifted (0,-ypart llcorner currentpicture + 20)
 
 endchar;
 beginchar(sixindic,1638,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/16.jpg,-994,-1024,1,0,0,1
+%%backgroundimage:images/16.jpg,-994,-1024,1,0,0,1
 
 %%beginpaths
 
@@ -8598,7 +8598,7 @@ currentpicture := currentpicture shifted (0,-ypart llcorner currentpicture + 10)
 
 endchar;
 beginchar(sevenindic,1639,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/47.jpg,-758.439,-948.17,1,0,0,1
+%%backgroundimage:images/47.jpg,-758.439,-948.17,1,0,0,1
 
 %%beginpaths
 
@@ -8624,7 +8624,7 @@ currentpicture := currentpicture shifted (0,-ypart llcorner currentpicture + 0) 
 savepicture:=1;
 endchar;
 beginchar(eightindic,1640,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/8.jpg,-299,-802,1,0,0,1
+%%backgroundimage:images/8.jpg,-299,-802,1,0,0,1
 %%beginbody
 
 draw sevenindic.pic reflectedabout ((0,0),(1,0)) ;
@@ -8634,7 +8634,7 @@ currentpicture := currentpicture shifted (0,-ypart llcorner currentpicture + 0) 
 savepicture:=1;
 endchar;
 beginchar(nineindic,1641,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/9.jpg,-561.526,-1265.55,1,0,0,1
+%%backgroundimage:images/9.jpg,-561.526,-1265.55,1,0,0,1
 
 %%beginpaths
 
@@ -8778,7 +8778,7 @@ fill  points1 {left}
 %labelspoints.top(1,2,3,4,5,6,7,77,8,9);
 endchar;
 defchar(noonsinna,-1,0,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/noon.taweel.jpg,-1102.83,-1042.14,1,0,0,1
+%%backgroundimage:images/noon.taweel.jpg,-1102.83,-1042.14,1,0,0,1
 %%beginparams
 z1 = (296.92,130.759);
 
@@ -8796,7 +8796,7 @@ fill
 %%endpaths
 enddefchar;
 defchar(behsinna,-1,0,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/beh.isol.expa.jpg,-1314.69,-1042.05,1,0,0,1
+%%backgroundimage:images/beh.isol.expa.jpg,-1314.69,-1042.05,1,0,0,1
 %%beginparams
 z1 = (298.581,107.599);
 z2behsinna = (342.076,137.056);
@@ -8816,7 +8816,7 @@ fill
 %%endpaths
 enddefchar;
 defchar(expaform.ii,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/beh.isol.expa.jpg,-336.256,-941.48,1,0,0,1
+%%backgroundimage:images/beh.isol.expa.jpg,-336.256,-941.48,1,0,0,1
 %%beginparams
 d1 := 169.44; % numeric
 z33 = (-230.163,45.5019);
@@ -8866,7 +8866,7 @@ z33 + z101 .. tension 1.84753 and 3.02182 ..
 
 enddefchar;
 defchar(expaform.i,-1,0,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/noon.taweel.jpg,-548.542,-1065.9,1,0,0,1
+%%backgroundimage:images/noon.taweel.jpg,-548.542,-1065.9,1,0,0,1
 %%beginparams
 ll := 21; % numeric
 rr := 45; % numeric
@@ -8923,7 +8923,7 @@ z3 {z10p} .. tension 0.75 and 2.05837 ..
 
 enddefchar;
 defchar(behshape.fina.expa,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/behshape.fina.expa.ii.jpg,-2739,-1324,1,0,0,1
+%%backgroundimage:images/behshape.fina.expa.ii.jpg,-2739,-1324,1,0,0,1
 %%beginparams
 z1 = (-57.1139,358.285);
 
@@ -8990,7 +8990,7 @@ tr_  := tr_ shifted (0,-240);
 
 enddefchar;
 defchar(noonshape.expa,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/noon.taweel.jpg,-15.828,-1062.14,1,0,0,1
+%%backgroundimage:images/noon.taweel.jpg,-15.828,-1062.14,1,0,0,1
 %%beginbody
 
 
@@ -9012,7 +9012,7 @@ y1:= y1000;
 
 enddefchar;
 defchar(feh.isol.expa,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/beh.isol.expa.jpg,-103.142,-1056.74,1,0,0,1
+%%backgroundimage:images/beh.isol.expa.jpg,-103.142,-1056.74,1,0,0,1
 %%beginbody
 
 lefttatweel := lefttatweel - 2;
@@ -9122,7 +9122,7 @@ draw pic; % shifted shift;
 
 enddefchar;
 defchar(behshape.isol.expa,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/beh.isol.expa.jpg,-423.44,-1130.56,1,0,0,1
+%%backgroundimage:images/beh.isol.expa.jpg,-423.44,-1130.56,1,0,0,1
 %%beginbody
 
 lefttatweel := lefttatweel - 2;
@@ -9144,7 +9144,7 @@ draw sinna shifted (z35 - z2behsinna);
 
 enddefchar;
 defchar(kaf.fina.expa,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kaf_fina_expa_3.jpg,-588.333,-1270.33,1,0,0,1
+%%backgroundimage:images/kaf_fina_expa_3.jpg,-588.333,-1270.33,1,0,0,1
 %%beginparams
 d1 := -25; % numeric
 t1 := 1.6; % numeric
@@ -9219,7 +9219,7 @@ drawcomp(minikaf,identity shifted (z0.1 + z101/2));
 
 enddefchar;
 defchar(kaf.fina.afterlam.expa,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/kaf.fina.afterlam.expa.jpg,-1213,-1921,1,0,0,1
+%%backgroundimage:images/kaf.fina.afterlam.expa.jpg,-1213,-1921,1,0,0,1
 %%beginparams
 d1 := -25; % numeric
 t1 := 1.6; % numeric
@@ -9296,7 +9296,7 @@ drawcomp(minikaf,identity shifted (z0.1 + z101/2));
 
 enddefchar;
 defchar(noon.isol.expa,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/noon.taweel.jpg,-12.828,-1062.14,1,0,0,1
+%%backgroundimage:images/noon.taweel.jpg,-12.828,-1062.14,1,0,0,1
 %%beginparams
 z11 = (696.824,159.666);
 %%beginbody
@@ -9350,7 +9350,7 @@ draw pic shifted (points1 - z10);
 
 enddefchar;
 defchar(noon.fina.expa,-1,-1,-1,-1);
-%%backgroundimage:D:/projects/Fonts/MPGUI/MPGUI/automedina/images/noon.fina.jpg,-81.196,-1162.59,1,0,0,1
+%%backgroundimage:images/noon.fina.jpg,-81.196,-1162.59,1,0,0,1
 %%beginparams
 z2b = (598.433,28.4592);
 z3b = (701.277,82.7086);
