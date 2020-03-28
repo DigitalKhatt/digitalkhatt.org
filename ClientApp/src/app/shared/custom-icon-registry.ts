@@ -1,3 +1,12 @@
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ * The piece of code below is taken from Angular (https://github.com/angular/angular/blob/master/aio/src/app/shared/custom-icon-registry.ts)
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
 import { InjectionToken, Inject, Injectable, Optional } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { of } from 'rxjs';

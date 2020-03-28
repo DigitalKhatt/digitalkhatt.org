@@ -65,7 +65,7 @@
 
         </mat-menu>-->
         <form style="color:black;display: flex;flex-direction: row;align-items: center;">
-          <button mat-icon-button [matMenuTriggerFor]="menu"  title="Format" >
+          <button mat-icon-button [matMenuTriggerFor]="menu" title="Format">
             <!--<mat-icon>more_vert</mat-icon>-->
             <mat-icon>text_format</mat-icon>
           </button>
@@ -93,12 +93,16 @@
 
             </div>
           </mat-menu>
-          <a mat-icon-button href="https://twitter.com/DigitalKhatt" title="Twitter" aria-label="DigitalKhatt on twitter">
-            <mat-icon svgIcon="logos:twitter"></mat-icon>
-          </a>
           <button mat-icon-button [routerLink]='["/about"]' title="About">
             <mat-icon>info</mat-icon>
           </button>
+          <a mat-icon-button href="https://twitter.com/DigitalKhatt" title="Twitter" aria-label="DigitalKhatt on twitter">
+            <mat-icon svgIcon="logos:twitter"></mat-icon>
+          </a>
+          <a mat-icon-button href="https://github.com/DigitalKhatt" title="GitHub" aria-label="DigitalKhatt on github">
+            <mat-icon svgIcon="logos:github"></mat-icon>
+          </a>
+
         </form>
 
       </div>
