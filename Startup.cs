@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace VisualMetaFontSite
+namespace DigitalKhatt
 {
     public class Startup
     {
