@@ -1,7 +1,39 @@
+/****************************************************************************
+**
+** Copyright (C) 2018 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
+**
+** Some code of this file is part of the plugins of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:GPL$
+** Commercial License Usage
+** Licensees holding valid commercial Qt licenses may use this file in
+** accordance with the commercial license agreement provided with the
+** Software or, alternatively, in accordance with the terms contained in
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
+**
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3 or (at your option) any later version
+** approved by the KDE Free Qt Foundation. The licenses are as published by
+** the Free Software Foundation and appearing in the file LICENSE.GPL3
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-3.0.html.
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
+
 /*
  * Copyright (c) 2019-2020 Amine Anane. http: //digitalkhatt/license
  * This file is part of DigitalKhatt.
  *
+ * Some code in this file was inspired from the file qtloader.js of the WebAssembly plugin of the Qt Toolkit 
+ * However it has been completely changed.
+ * 
  * DigitalKhatt is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -32,14 +64,13 @@ export class QuranService implements OnDestroy {
   public quranShaper: QuranShaper;
 
   public promise: Promise<any>;
-  private statusSubject = new BehaviorSubject({ error: null, message: "Initializing" });
+  private statusSubject = new BehaviorSubject({ error: null, message: "" });
   public statusObserver = this.statusSubject.asObservable();
 
   error;
-  loaderSubState;
   files;
 
-  public static CSS_UNITS : number = 96.0 / 72.0;
+  public static CSS_UNITS: number = 96.0 / 72.0;
 
   constructor() {
 
@@ -55,7 +86,7 @@ export class QuranService implements OnDestroy {
           module => module
         ));*/
 
-    
+
     /*this.promise = Promise.resolve({ getOutline: (data) => null });
 
     //alert(navigator.userAgent)
@@ -67,7 +98,7 @@ export class QuranService implements OnDestroy {
     var UA = navigator.userAgent;
 
     let nbav = window as any;
-    
+
     var isWebkit = /\b(iPad|iPhone|iPod)\b/.test(UA) && /WebKit/.test(UA) && !/Edge/.test(UA) && !nbav.MSStream;
 
     //Bug in Apple device : WebAssembly consumes a lot of memory which results in multiple reloads until crash (chrome, Safari, Mozilla due to webkit).
@@ -75,16 +106,13 @@ export class QuranService implements OnDestroy {
     // Short after this, iOS kills the process due to memory watermark limit (Yet, the Wasm memory does not exeed 32MB)
     // When using compiled JS (Wasm -> JS), there is no memory problem, however the performance drops slightly.
 
-    if (!isWebkit) {
-      this.promise = this.instantiateWasm2("assets/VisualMetaFontWasm.wasm")
-        .then(
-          module => module
-        );
+    if (!isWebkit && (typeof WebAssembly !== "undefined")) {
+      this.promise = this.instantiateWasm("assets/VisualMetaFontWasm.wasm");
     } else {
       this.promise = this.prepaeASMJS();
     }
   }
-  
+
 
   fetchAllfiles() {
     return Promise.all([
@@ -101,23 +129,47 @@ export class QuranService implements OnDestroy {
 
   }
 
-  private instantiateWasm2(url: string) {
+  private async instantiateWasm(url: string) {
 
-    var wasmModulePromise = this.fetchCompileWasm(url).then((module) => {
+    var compPromise;
+    if (typeof WebAssembly.compileStreaming !== "undefined") {
+      this.setStatus(null, "Fetching/Compiling");
+      compPromise = WebAssembly.compileStreaming(fetch(url));
+    } else {
+      this.setStatus(null, "Fetching");
+      let response = await fetch(url);
+
+      if (response.ok) {
+        compPromise = response.arrayBuffer().then((buffer) => {
+          this.setStatus(null, "Compiling")
+          return WebAssembly.compile(buffer);
+        });
+      } else {
+        if (!response.ok) {
+          var error = new Error(response.statusText)
+          this.setStatus(error, "Error during fetching WebAssembly.");
+          return Promise.reject(error)
+        } else {
+          return response;
+        }
+      }
+    }
+
+    return compPromise.then((module) => {
       let promise = new Promise((resolve, reject) => {
-        this.completeLoadEmscriptenModule(module, resolve, reject);
+        this.initilizeModule(module, resolve, reject);
       });
 
       return promise;
     });
 
-    return wasmModulePromise;
   }
 
   prepaeASMJS() {
+    this.setStatus(null, "Compiling")
     let promise = new Promise((resolve, reject) => {
       this.module = {
-        locateFile : (path, prefix) => {
+        locateFile: (path, prefix) => {
           // if it's a mem init file, use a custom dir
           if (path.endsWith(".mem")) {
             return "vmasm/" + path;
@@ -181,12 +233,12 @@ export class QuranService implements OnDestroy {
     });
 
     return promise;
-    
+
   }
 
 
 
-  completeLoadEmscriptenModule(wasmModule, resolve, reject) {
+  initilizeModule(wasmModule, resolve, reject) {
     this.module = {
       instantiateWasm: (imports, successCallback) => {
         WebAssembly.instantiate(wasmModule, imports).then((instance) => {
@@ -194,19 +246,19 @@ export class QuranService implements OnDestroy {
         }, (error) => {
           this.error = error;
           this.setStatus(error, "Error during instantiation");
-          console.log("Error during instantiation ",error);
+          console.log("Error during instantiation ", error);
 
           reject(error);
         });
         return {};
       },
       onRuntimeInitialized: () => {
-        
+
         let result = new this.module.QuranShaper(); //new QuranShaper(this.module.QuranShaper());
 
         if (result) {
           this.quranShaper = new QuranShaper(result, this.module);
-          
+
           this.module.FS.unlink("ayah.mp");
           this.module.FS.unlink("mfplain.mp");
           this.module.FS.unlink("mpguifont.mp");
@@ -222,7 +274,7 @@ export class QuranService implements OnDestroy {
 
           this.module.FS.unlink("texpages.dat");
           this.module.FS.unlink("medinapages.dat");
-          
+
 
           resolve(this.quranShaper);
         } else {
@@ -240,7 +292,7 @@ export class QuranService implements OnDestroy {
           this.module.FS.createPreloadedFile(".", "ayah.mp", "assets/ayah.mp", true, false);
           this.module.FS.createPreloadedFile(".", "mpguifont.mp", "assets/mpguifont.mp", true, false);
           this.module.FS.createPreloadedFile(".", "myfontbase.mp", "assets/myfontbase.mp", true, false);
-          this.module.FS.createPreloadedFile(".", "medinafont.mp", "assets/medinafont.mp", true, false);          
+          this.module.FS.createPreloadedFile(".", "medinafont.mp", "assets/medinafont.mp", true, false);
           this.module.FS.createPreloadedFile(".", "lookups.json", "assets/lookups.json", true, false);
           this.module.FS.createPreloadedFile(".", "parameters.json", "assets/parameters.json", true, false);
           this.module.FS.createPreloadedFile(".", "automedina.fea", "assets/automedina.fea", true, false);
@@ -291,57 +343,13 @@ export class QuranService implements OnDestroy {
     FS.mkdev('mpguifont.mp', fDevice);
 
 
-    
+
   }
 
   ngOnDestroy() {
     if (this.quranShaper) {
       this.quranShaper.quranShaper.delete();
     }
-  }
-
-  webAssemblySupported() {
-    return typeof WebAssembly !== "undefined"
-  }
-
-  fetchResource(fullPath) {
-    this.setStatus(null, "Downloading");
-    return fetch(fullPath).then((response) => {
-      if (!response.ok) {
-        this.error = response.status + " " + response.statusText + " " + response.url;
-        this.setStatus(this.error, "Error during fetch");
-        return Promise.reject(this.error)
-      } else {
-        return Promise.resolve(response);
-      }
-    });
-  }
-
-  fetchCompileWasm(filePath) {
-    return this.fetchResource(filePath).then((response) => {
-      if (typeof (WebAssembly as any).compileStreaming !== "undefined") {
-        this.loaderSubState = "Downloading/Compiling";
-        this.setStatus(null, "Downloading/Compiling");
-        return (WebAssembly as any).compileStreaming(response).catch(function (error) {
-          // compileStreaming may/will fail if the server does not set the correct
-          // mime type (application/wasm) for the wasm file. Fall back to fetch,
-          // then compile in this case.
-          return this.fetchThenCompileWasm(response);
-        });
-      } else {
-        // Fall back to fetch, then compile if compileStreaming is not supported
-        return this.fetchThenCompileWasm(response);
-      }
-    });
-  }
-
-  fetchThenCompileWasm(response: Response) {
-    this.setStatus(null, "Downloading");
-    return response.arrayBuffer().then((data) => {
-      this.loaderSubState = "Compiling";
-      this.setStatus(null, "Compiling") // trigger loaderSubState udpate
-      return WebAssembly.compile(data);
-    });
   }
 
   setStatus(error, message) {
