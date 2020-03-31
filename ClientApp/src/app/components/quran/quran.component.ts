@@ -34,7 +34,7 @@ import { QuranShaper } from '../../services/quranservice/quran_shaper';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG, Title } from '@angular/platform-browser';
 
-import * as Hammer from 'hammerjs';
+//import * as Hammer from 'hammerjs';
 import { CdkDrag } from '../../services/drag-drop';
 import { Point, DragRef } from '../../services/drag-drop/drag-ref';
 import { MatDialog } from '@angular/material/dialog';

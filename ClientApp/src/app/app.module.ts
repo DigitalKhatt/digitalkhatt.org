@@ -54,7 +54,7 @@ import { QuranComponent } from './components/quran/quran.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
-import * as Hammer from 'hammerjs';
+//import * as Hammer from 'hammerjs';
 import { QuranZoomDirective } from './components/quran/quranzoom.directive';
 import { DragDropModule } from './services/drag-drop/drag-drop-module';
 import { QuranZoomTouchDirective } from './components/quran/quranzoom.touch.directive';
@@ -130,11 +130,11 @@ export class MyHammerConfig extends HammerGestureConfig {
     touchAction: 'pan-y | pan-x',
     domEvents: true,
   }
-
+  /*
   public overrides = {
     pan: { direction: Hammer.DIRECTION_ALL },
     swipe: { direction: Hammer.DIRECTION_ALL },
-  };
+  };*/
 
   /*
   buildHammer(element: HTMLElement) {
