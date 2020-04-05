@@ -126,7 +126,7 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
   private CSS_UNITS = 96.0 / 72.0;
   private sideBySideWidth = 992;
   private maxCanvasPixels = 16777216;
-  private totalPageTex = 649;
+  private totalPageTex = 651;
 
 
 
