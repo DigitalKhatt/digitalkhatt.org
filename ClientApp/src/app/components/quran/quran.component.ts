@@ -403,7 +403,7 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
           } else {
             this.totalPages = 604;
             this.texFormat = false;
-            this.fontScale = 0.85;
+            this.fontScale = 0.80;
             this.quranService.quranShaper.setScalePoint(this.fontScale);
             this.outline = respone.getOutline(false);
           }
