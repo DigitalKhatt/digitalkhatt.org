@@ -21,7 +21,7 @@ import { BrowserModule, HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angu
 import { NgModule, Injectable } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule, RouteReuseStrategy } from '@angular/router';
+import { RouterModule, RouteReuseStrategy, ExtraOptions } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatIconModule } from '@angular/material/icon';
@@ -64,6 +64,8 @@ import { CacheRouteReuseStrategy } from './services/cache-route-reuse.strategy';
 import { DynamicTextComponent } from './components/dynamictext/dynamictext.component';
 import { JoinLettersComponent } from './components/joinletters/joinletters.component';
 import { EmptyComponent } from './components/empty/empty.component';
+import { QuranOTFComponent } from './components/quranotf/quranotf.component';
+import { QuranPagesComponent } from './components/quranotf/pages.component';
 //import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
@@ -146,6 +148,10 @@ export class MyHammerConfig extends HammerGestureConfig {
   }*/
 }
 
+const routerOptions: ExtraOptions = {    
+    anchorScrolling: 'enabled'
+};
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -158,6 +164,8 @@ export class MyHammerConfig extends HammerGestureConfig {
     DynamicTextComponent,
     JoinLettersComponent,
     EmptyComponent,
+    QuranOTFComponent,
+    QuranPagesComponent,
   ],
   entryComponents: [
   ],
@@ -188,9 +196,17 @@ export class MyHammerConfig extends HammerGestureConfig {
           {
             path: 'about',
             component: AboutComponent 
-          },
+          }         
         ]
-
+      },
+      {
+        path: 'otf',
+        children: [
+          {
+            path: 'digitalmushaf',
+            component: QuranOTFComponent
+          }
+        ]
       },
       {
         path: '**',
@@ -198,7 +214,7 @@ export class MyHammerConfig extends HammerGestureConfig {
       }
 
 
-    ]),
+    ],routerOptions),
     BrowserAnimationsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],

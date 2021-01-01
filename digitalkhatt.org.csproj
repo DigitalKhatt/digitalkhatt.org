@@ -33,6 +33,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\components\quranotf\page_view.ts" />
+    <None Remove="ClientApp\src\app\components\quranotf\qurangestures.directive.ts" />
+    <None Remove="ClientApp\src\app\components\quranotf\quranzoom.directive.ts" />
+    <None Remove="ClientApp\src\app\components\quranotf\quranzoom.touch.directive.ts" />
+    <None Remove="ClientApp\src\app\components\quranotf\rendering_queue.ts" />
+    <None Remove="ClientApp\src\app\components\quranotf\rendering_states.ts" />
     <None Remove="ClientApp\src\app\components\quran\page_view.ts" />
     <None Remove="ClientApp\src\app\components\quran\qurangestures.directive.ts" />
     <None Remove="ClientApp\src\app\components\quran\quranzoom.directive.ts" />
@@ -53,6 +59,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\components\quranotf\page_view.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\quranotf\qurangestures.directive.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\components\quranotf\quranzoom.directive.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\quranotf\quranzoom.touch.directive.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\components\quranotf\rendering_queue.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\quranotf\rendering_states.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\quran\page_view.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\quran\qurangestures.directive.ts">
       <SubType>Code</SubType>

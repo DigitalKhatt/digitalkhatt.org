@@ -21,6 +21,7 @@ import { Component, AfterViewInit, OnInit, HostListener } from '@angular/core';
 import { QuranService } from '../../services/quranservice/quranservice.service';
 import { QuranShaper } from '../../services/quranservice/quran_shaper';
 import { Title } from '@angular/platform-browser';
+import { NavigationEnd, Router } from '@angular/router';
 
 const CSS_UNITS = 96.0 / 72.0;
 
@@ -40,16 +41,30 @@ export class AboutComponent implements OnInit, AfterViewInit {
   pageSize = { width: 255, height: 410 };
 
   constructor(
-    private quranService: QuranService, private titleService: Title 
+    private quranService: QuranService, private titleService: Title, private router : Router
   ) {
 
     this.contexts = []
     this.tatweel = 0;
     this.titleService.setTitle("About DigitalKhatt");
+    this.router.events.subscribe(val => {
+      if (val instanceof NavigationEnd) {
+        let fragmentIdx = val.urlAfterRedirects.lastIndexOf('#');
+        if (fragmentIdx >= 0 && fragmentIdx < val.urlAfterRedirects.length - 1) {
+          let fragment = val.urlAfterRedirects.substring(fragmentIdx+1);
+          console.log('fragment: ' + fragment);
+          let element = document.getElementById(fragment);
+          if(element){
+            element.scrollIntoView();
+          }
+          
+        }
+      }
+    })
   }
 
   ngOnInit() {
-
+    
   }
 
   ngAfterViewInit() {

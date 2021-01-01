@@ -97,3 +97,17 @@
   justify-content: flex-end;
   align-items: center;
 }
+
+@font-face {
+  font-family: 'DigitalKhatt';
+  font-style:normal;  
+  src: url("../../../assets/fonts/digitalkhatt.woff") format("woff"),
+       url('../../../assets/fonts/digitalkhatt.otf') format("opentype");
+  font-feature-settings: normal;
+}
+
+.digitalkhatt{
+  font-family: "DigitalKhatt";
+  font-size: 16px;
+  line-height: normal;
+}
