@@ -1,0 +1,86 @@
+/*
+ * Copyright (c) 2019-2020 Amine Anane. http: //digitalkhatt/license
+ * This file is part of DigitalKhatt.
+ * 
+ * DigitalKhatt is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * DigitalKhatt is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+
+ * You should have received a copy of the GNU Affero General Public License
+ * along with DigitalKhatt. If not, see
+ * <https: //www.gnu.org/licenses />.
+*/
+
+
+$padding: 0.5em;
+
+
+@font-face {
+  font-family: 'DigitalKhatt';
+  font-style: normal;
+  src: url("../../../assets/fonts/digitalkhatt.woff") format("woff"), url('../../../assets/fonts/digitalkhatt.otf') format("opentype");
+  font-feature-settings: normal;
+  font-display: block;
+}
+
+:host {
+  font-family: "DigitalKhatt";  
+  line-height: normal;
+  direction: rtl;
+  white-space: nowrap;
+  text-align: justify;
+  text-justify: inter-word;
+  word-spacing:-0.3em;  
+}
+
+.justify {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.justify .line {
+  text-align: justify;
+  text-align-last: justify;
+  padding-left: $padding;
+  padding-right: $padding;
+}
+
+.justify .line:after {
+  content: "";
+}
+
+.linesuran {
+  text-align: center;
+  background: url(../../../assets/ayaframe.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: calc(100% - #{$padding * 2}) 100%;
+  background-origin: border-box;
+  line-height: normal;
+  box-sizing: border-box;
+}
+.linebism {
+  text-align: center;
+}
+
+.center {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction : column;
+}
+
+.center .linesuran {
+  width: 100%;
+}
+
+
+
