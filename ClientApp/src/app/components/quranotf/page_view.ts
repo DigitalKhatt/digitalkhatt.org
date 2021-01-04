@@ -66,12 +66,23 @@ class PageView {
   }
 
   async draw(canvasWidth, canvasHeight, texFormat, tajweedColor, hasRestrictedScaling) {
+      
 
     if (this.renderingState !== RenderingStates.INITIAL) {
       return Promise.resolve();
     }
 
+    const div = this.div;
+
     this.renderingState = RenderingStates.RUNNING;
+
+    const childNodes = div.childNodes;
+
+    for (let i = childNodes.length - 1; i >= 0; i--) {
+      const node = childNodes[i];
+      
+      node.style.display = "flex";
+    }
 
     return Promise.resolve();
 
@@ -107,8 +118,7 @@ class PageView {
     this.paintTask = token;
 
     //console.log("draw view " + this.index)
-
-    let div = this.div;
+    
     // Wrap the canvas so that if it has a CSS transform for high DPI the
     // overflow will be hidden in Firefox.
 
@@ -197,7 +207,7 @@ class PageView {
 
   reset(keepZoomLayer = false) {
 
-    let div = this.div;
+    const div = this.div;
     div.style.width = Math.floor(this.viewport.width) + 'px';
     div.style.height = Math.floor(this.viewport.height) + 'px';
 
@@ -217,17 +227,18 @@ class PageView {
     div.removeAttribute('data-loaded');
 
 
-    let childNodes = div.childNodes;
-    let currentZoomLayerNode = (keepZoomLayer && this.zoomLayer) || null;
+    const childNodes = div.childNodes;
+    const currentZoomLayerNode = (keepZoomLayer && this.zoomLayer) || null;
 
-    /*
+    
     for (let i = childNodes.length - 1; i >= 0; i--) {
-      let node = childNodes[i];
-      if (currentZoomLayerNode === node) {
-        continue;
-      }
-      div.removeChild(node);
-    }*/
+      const node = childNodes[i];
+      //if (currentZoomLayerNode === node) {
+      //  continue;
+      //}
+      //div.removeChild(node);
+      node.style.display = "none";
+    }
 
     //div.removeChild(this.canvas);
     if (!currentZoomLayerNode) {
