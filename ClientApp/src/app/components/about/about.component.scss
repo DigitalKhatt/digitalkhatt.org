@@ -106,8 +106,22 @@
   font-feature-settings: normal;
 }
 
-.digitalkhatt{
+@font-face {
+  font-family: 'DigitalKhattCff2';
+  font-style: normal;
+  src: url('../../../assets/fonts/digitalkhatt-cff2.otf') format("opentype");
+}
+
+.digitalkhatt {
   font-family: "DigitalKhatt";
   font-size: 16px;
   line-height: normal;
+}
+
+.digitalkhattvar {
+  font-family: "DigitalKhattCff2";
+  font-size: 20px;
+  line-height: normal;
+  direction: rtl;
+  font-feature-settings: 'jalt';
 }

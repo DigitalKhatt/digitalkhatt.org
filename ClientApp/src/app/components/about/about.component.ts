@@ -35,6 +35,8 @@ export class AboutComponent implements OnInit, AfterViewInit {
   contexts;
   tatweel;
   loaded;
+  ltat;
+  rtat;
   glyphNames = ['behshape.isol.expa', 'behshape.fina.expa', 'feh.isol.expa', 'feh.fina.expa', 'kaf.fina.expa', 'kaf.fina.afterlam.expa', 'noon.isol.expa', 'noon.fina.expa', 'alefmaksura.isol.expa', 'yehshape.fina.expa', 'qaf.isol.expa', 'qaf.fina.expa', 'seen.isol.expa', 'seen.fina.expa',
     'sad.isol.expa', 'sad.fina.expa'];
 
@@ -61,6 +63,8 @@ export class AboutComponent implements OnInit, AfterViewInit {
         }
       }
     })
+    this.ltat = 0;
+    this.rtat = 0;
   }
 
   ngOnInit() {
@@ -88,6 +92,16 @@ export class AboutComponent implements OnInit, AfterViewInit {
       this.drawGlyph(ctx, this.glyphNames[index], event.value, 0);
     });
   }
+
+  ltatChanged(event) {
+    this.ltat = event.value;
+  }
+  rtatChanged(event) {
+    this.rtat = event.value;
+  }
+
+
+  
 
   initCanavas() {
     this.contexts = [];
