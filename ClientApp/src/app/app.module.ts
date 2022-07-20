@@ -17,7 +17,7 @@
  * <https: //www.gnu.org/licenses />.
 */
 
-import { BrowserModule, HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { BrowserModule, HammerGestureConfig } from '@angular/platform-browser';
 import { NgModule, Injectable } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -38,13 +38,16 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { AppComponent } from './app.component';
 
 import { QuranService } from './services/quranservice/quranservice.service';
 
 //import { ScrollingModule, ScrollDispatchModule } from '@angular/cdk/scrolling';
-import { ScrollingModule } from './services/scrolling/scrolling-module';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { CustomIconRegistry, SVG_ICONS } from 'src/app/shared/custom-icon-registry';
@@ -56,7 +59,6 @@ import { environment } from '../environments/environment';
 
 //import * as Hammer from 'hammerjs';
 import { QuranZoomDirective } from './components/quran/quranzoom.directive';
-import { DragDropModule } from './services/drag-drop/drag-drop-module';
 import { QuranZoomTouchDirective } from './components/quran/quranzoom.touch.directive';
 import { QuranGesturesDirective } from './components/quran/qurangestures.directive';
 import { AboutComponent } from './components/about/about.component';
@@ -66,6 +68,9 @@ import { JoinLettersComponent } from './components/joinletters/joinletters.compo
 import { EmptyComponent } from './components/empty/empty.component';
 import { QuranOTFComponent } from './components/quranotf/quranotf.component';
 import { QuranPagesComponent } from './components/quranotf/pages.component';
+//import { QuranCanvasComponent } from './components/qurancanvas/qurancanvas.component';
+import { LayoutService } from './services/layoutservice/layoutservice.service';
+import { PWAService } from './services/PWA.service';
 //import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
@@ -148,8 +153,9 @@ export class MyHammerConfig extends HammerGestureConfig {
   }*/
 }
 
-const routerOptions: ExtraOptions = {    
-    anchorScrolling: 'enabled'
+const routerOptions: ExtraOptions = {
+  anchorScrolling: 'enabled',
+  relativeLinkResolution: 'legacy'
 };
 
 @NgModule({
@@ -166,25 +172,24 @@ const routerOptions: ExtraOptions = {
     EmptyComponent,
     QuranOTFComponent,
     QuranPagesComponent,
-  ],
-  entryComponents: [
+    //QuranCanvasComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule, ReactiveFormsModule,
     ScrollingModule,
+    DragDropModule,
     MatToolbarModule, MatButtonModule, MatSliderModule, MatCardModule, MatIconModule, MatSidenavModule, PortalModule,
     MatSlideToggleModule, MatInputModule, MatAutocompleteModule, MatDividerModule, MatSelectModule, MatRadioModule, MatCheckboxModule, MatDialogModule,
-    DragDropModule,
     MatMenuModule,
-
+    MatSnackBarModule,
     RouterModule.forRoot([
       {
         path: '',
         pathMatch: 'full',
         redirectTo: 'digitalmushaf'
-      },     
+      },
       {
         path: '',
         component: QuranComponent,
@@ -195,10 +200,14 @@ const routerOptions: ExtraOptions = {
           },
           {
             path: 'about',
-            component: AboutComponent 
-          }         
+            component: AboutComponent
+          }
         ]
       },
+      /*{
+        path: 'digitalmushaf',
+        component: QuranCanvasComponent,        
+      },*/
       {
         path: 'otf',
         children: [
@@ -212,21 +221,16 @@ const routerOptions: ExtraOptions = {
         path: '**',
         redirectTo: 'digitalmushaf'
       }
-
-
-    ],routerOptions),
+    ], routerOptions),
     BrowserAnimationsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     QuranService,
+    LayoutService,   
     { provide: MatIconRegistry, useClass: CustomIconRegistry },
     svgIconProviders,
-    SidebarContentsService,/*
-    {
-      provide: HAMMER_GESTURE_CONFIG,
-      useClass: MyHammerConfig
-    }*/
+    SidebarContentsService,
     {
       provide: RouteReuseStrategy,
       useClass: CacheRouteReuseStrategy

@@ -55,10 +55,7 @@ class PageView {
     this.div.style.height = Math.floor(this.viewport.height) + 'px';
     this.paintTask = null;
     this.resume = null;
-
-    this.loadingIconDiv = document.createElement('div');
-    this.loadingIconDiv.className = 'loadingIcon';
-    div.appendChild(this.loadingIconDiv);
+    
 
     this.zoomLayer = null;
 
@@ -67,7 +64,11 @@ class PageView {
 
   }
 
-  async draw(canvasWidth, canvasHeight, texFormat, tajweedColor, hasRestrictedScaling) {
+  toggleLoadingIconSpinner(viewVisible = false) {
+    this.loadingIconDiv?.classList.toggle("notVisible", !viewVisible);
+  }
+
+  async draw(canvasWidth, canvasHeight, texFormat, tajweedColor, changeSize, hasRestrictedScaling) {
 
     if (this.renderingState !== RenderingStates.INITIAL) {
       return Promise.resolve();
@@ -176,7 +177,7 @@ class PageView {
 
 
 
-    await this.quranShaper.printPage(this.index, ctx, token, texFormat, tajweedColor);
+    await this.quranShaper.printPage(this.index, ctx, token, texFormat, tajweedColor, changeSize);
     if (!token.isCancelled() && this.renderingState === RenderingStates.RUNNING) {
       this.renderingState = RenderingStates.FINISHED;
       showCanvas();
@@ -235,10 +236,9 @@ class PageView {
       }
       this.resetZoomLayer();
     }
-   
 
     this.loadingIconDiv = document.createElement('div');
-    this.loadingIconDiv.className = 'loadingIcon';
+    this.loadingIconDiv.className = 'loadingIcon notVisible';
     div.appendChild(this.loadingIconDiv);
   }
 

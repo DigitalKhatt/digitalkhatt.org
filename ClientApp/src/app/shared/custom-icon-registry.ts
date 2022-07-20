@@ -7,7 +7,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import { InjectionToken, Inject, Injectable, Optional } from '@angular/core';
+import { InjectionToken, Inject, Injectable, Optional, ErrorHandler } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { of } from 'rxjs';
 import { MatIconRegistry } from '@angular/material/icon';
@@ -30,15 +30,15 @@ import { DomSanitizer } from '@angular/platform-browser';
  */
 export const SVG_ICONS = new InjectionToken<Array<SvgIconInfo>>('SvgIcons');
 export interface SvgIconInfo {
-    namespace?: string;
-    name: string;
-    svgSource: string;
+  namespace?: string;
+  name: string;
+  svgSource: string;
 }
 
 interface SvgIconMap {
-    [namespace: string]: {
-        [iconName: string]: SVGElement;
-    };
+  [namespace: string]: {
+    [iconName: string]: SVGElement;
+  };
 }
 
 const DEFAULT_NS = '$$default';
@@ -49,33 +49,34 @@ const DEFAULT_NS = '$$default';
  */
 @Injectable()
 export class CustomIconRegistry extends MatIconRegistry {
-    private preloadedSvgElements: SvgIconMap = { [DEFAULT_NS]: {} };
+  private preloadedSvgElements: SvgIconMap = { [DEFAULT_NS]: {} };
 
-    constructor(http: HttpClient, sanitizer: DomSanitizer, @Optional() @Inject(DOCUMENT) document: Document,
-        @Inject(SVG_ICONS) svgIcons: SvgIconInfo[]) {
-        super(http, sanitizer, document);
-        this.loadSvgElements(svgIcons);
-    }
+  constructor(http: HttpClient, sanitizer: DomSanitizer, @Optional() @Inject(DOCUMENT) document: Document,
+    _errorHandler: ErrorHandler,
+    @Inject(SVG_ICONS) svgIcons: SvgIconInfo[]) {
+    super(http, sanitizer, document, _errorHandler);
+    this.loadSvgElements(svgIcons);
+  }
 
-    getNamedSvgIcon(iconName: string, namespace?: string) {
-        const nsIconMap = this.preloadedSvgElements[namespace || DEFAULT_NS];
-        const preloadedElement = nsIconMap && nsIconMap[iconName];
+  getNamedSvgIcon(iconName: string, namespace?: string) {
+    const nsIconMap = this.preloadedSvgElements[namespace || DEFAULT_NS];
+    const preloadedElement = nsIconMap && nsIconMap[iconName];
 
-        return preloadedElement
-            ? of(preloadedElement.cloneNode(true) as SVGElement)
-            : super.getNamedSvgIcon(iconName, namespace);
-    }
+    return preloadedElement
+      ? of(preloadedElement.cloneNode(true) as SVGElement)
+      : super.getNamedSvgIcon(iconName, namespace);
+  }
 
-    private loadSvgElements(svgIcons: SvgIconInfo[]) {
-        const div = document.createElement('DIV');
-        svgIcons.forEach(icon => {
-            const ns = icon.namespace || DEFAULT_NS;
-            const nsIconMap = this.preloadedSvgElements[ns] || (this.preloadedSvgElements[ns] = {});
+  private loadSvgElements(svgIcons: SvgIconInfo[]) {
+    const div = document.createElement('DIV');
+    svgIcons.forEach(icon => {
+      const ns = icon.namespace || DEFAULT_NS;
+      const nsIconMap = this.preloadedSvgElements[ns] || (this.preloadedSvgElements[ns] = {});
 
-            // SECURITY: the source for the SVG icons is provided in code by trusted developers
-            div.innerHTML = icon.svgSource;
+      // SECURITY: the source for the SVG icons is provided in code by trusted developers
+      div.innerHTML = icon.svgSource;
 
-            nsIconMap[icon.name] = div.querySelector('svg')!;
-        });
-    }
+      nsIconMap[icon.name] = div.querySelector('svg')!;
+    });
+  }
 }

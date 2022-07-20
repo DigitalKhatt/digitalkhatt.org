@@ -1,8 +1,8 @@
 {
   "name": "DigitalKhatt Mushaf",
-  "short_name": "Quran",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "short_name": "Mushaf",
+  "theme_color": "#FFFFFF",
+  "background_color": "#FFFFFF",
   "display": "fullscreen",
   "scope": "/",
   "start_url": "/",

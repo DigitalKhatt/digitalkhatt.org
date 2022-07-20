@@ -2,12 +2,12 @@
   <canvas #testcanvas style="display:none"></canvas>
   <div *ngIf="!loaded" style="height:100%">
     <img class="imgcenter"
-         src="assets/qurantypesettinglogo.svg"
+         src="assets/digitalkhatt-logo.svg"
          alt="Quran">
     <div style="margin: 0 auto;display: block;text-align:center;margin-top:10px;">
       <strong>{{wasmStatus}}</strong>
       <br />
-      <span><strong>Please wait, this might take a few minutes.</strong></span>
+      <span *ngIf="loading"><strong>Please wait, this might take a few minutes.</strong></span>
 
     </div>
   </div>
@@ -33,9 +33,6 @@
           </mat-form-field>
         </div>
         <form [formGroup]="form" style="color:black;display: flex;flex-direction: row;align-items: center;">
-
-
-          <!-- <span style="font-size:small;margin-left:10px;margin-bottom:5px;">/ {{totalPages}}</span>-->
 
 
           <button mat-icon-button color="accent" (click)="zoomOut()">
@@ -101,10 +98,10 @@
           <button mat-icon-button [routerLink]='["/about"]' title="About">
             <mat-icon>info</mat-icon>
           </button>
-          <a mat-icon-button href="https://twitter.com/DigitalKhatt" title="Twitter" aria-label="DigitalKhatt on twitter">
+          <a *ngIf="!fullscreen" mat-icon-button href="https://twitter.com/DigitalKhatt" title="Twitter" aria-label="DigitalKhatt on twitter">
             <mat-icon svgIcon="logos:twitter"></mat-icon>
           </a>
-          <a mat-icon-button href="https://github.com/DigitalKhatt" title="GitHub" aria-label="DigitalKhatt on github">
+          <a *ngIf="!fullscreen" mat-icon-button href="https://github.com/DigitalKhatt" title="GitHub" aria-label="DigitalKhatt on github">
             <mat-icon svgIcon="logos:github"></mat-icon>
           </a>
 
@@ -163,10 +160,10 @@
       </div>
     </mat-sidenav>
     <mat-sidenav-content>
-      <div id="pageNumberBoxBoundry" class="pageNumberBoxBoundry">
-        <div style="position:absolute;height:100%;width:100%;">
+      <div  class="pageNumberBoxBoundry">
+        <div id="pageNumberBoxBoundry" style="position:absolute;height:100%;width:100%;">
 
-          <div [hidden]="!loaded" #pageNumberBox class="pagenumber-box" cdkDragBoundary="div" cdkDrag cdkDragLockAxis="y"
+          <div [hidden]="!loaded" #pageNumberBox class="pagenumber-box" cdkDragBoundary="#pageNumberBoxBoundry" cdkDrag cdkDragLockAxis="y"
                [cdkDragFreeDragPosition]="dragPosition"
                (cdkDragMoved)="pageNumberBoxMoved($event)">
             {{currentPageNumber}}
@@ -180,7 +177,7 @@
         </div>
       </div>
 
-      <div id="viewerContainer" cdkScrollable [hidden]="!loaded" (toggleFullScreen)="toggleFullScreen()"
+      <div #viewerContainer id="viewerContainer" cdkScrollable [hidden]="!loaded" (toggleFullScreen)="toggleFullScreen()"
            appQuranGestures (zoom)="zoom($event)" (endzoom)="endzoom($event)">
         <div id="viewer" class="pdfViewer">
           <div #page *ngFor="let page of pages; let index = index" class="page"

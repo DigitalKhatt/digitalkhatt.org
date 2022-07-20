@@ -17,29 +17,31 @@
  * <https: //www.gnu.org/licenses />.
 */
 
-import { Component, AfterViewInit, OnInit, HostListener, OnDestroy, ViewChildren, QueryList, ElementRef, ContentChild, ViewChild, NgZone, TemplateRef, Injectable } from '@angular/core';
+import { Component, AfterViewInit, OnInit, HostListener, OnDestroy, ViewChildren, QueryList, ElementRef, ContentChild, ViewChild, NgZone, TemplateRef, Injectable, ChangeDetectorRef } from '@angular/core';
 import { QuranService } from '../../services/quranservice/quranservice.service';
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
 import { BehaviorSubject, Subscription, Observable, animationFrameScheduler, Subject } from 'rxjs';
-import { CdkScrollable, ScrollDispatcher } from '../../services/scrolling';
+
 import { startWith, auditTime, debounceTime, withLatestFrom, map } from 'rxjs/operators';
 import { SidebarContentsService } from '../../services/navigation/sidebarcontents';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormControl, Validators, UntypedFormGroup } from '@angular/forms';
 //import { ScrollDispatcher, CdkScrollable } from '@angular/cdk/scrolling';
 
 import { PageView } from './page_view';
 import { RenderingQueue } from './rendering_queue';
 import { QuranShaper } from '../../services/quranservice/quran_shaper';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { HammerGestureConfig, HAMMER_GESTURE_CONFIG, Title } from '@angular/platform-browser';
+import { HammerGestureConfig, Title } from '@angular/platform-browser';
 
 //import * as Hammer from 'hammerjs';
-import { CdkDrag } from '../../services/drag-drop';
-import { Point, DragRef } from '../../services/drag-drop/drag-ref';
+
+
 import { MatDialog } from '@angular/material/dialog';
 import { AboutComponent } from '../about/about.component';
 import { Router, NavigationEnd } from '@angular/router';
+import { CdkDrag, DragRef, Point } from '@angular/cdk/drag-drop';
+import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 //import { CdkDrag } from '@angular/cdk/drag-drop';
 
 const CSS_UNITS = 96.0 / 72.0;
@@ -103,6 +105,15 @@ class PDFPageViewBuffer {
       arr[write] = moved[read];
     }
   }
+
+  toggleLoadingIconSpinner(visibleIds) {
+    for (const pageView of this.data) {
+      if (visibleIds.has(pageView.id)) {
+        continue;
+      }
+      pageView.toggleLoadingIconSpinner(/* viewVisible = */ false);
+    }
+  }
 }
 
 const DEFAULT_CACHE_SIZE = 10;
@@ -126,14 +137,12 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
   private CSS_UNITS = 96.0 / 72.0;
   private sideBySideWidth = 992;
   private maxCanvasPixels = 16777216;
-  private totalPageTex = 651;
+  private totalPageTex;
+  private totalPageMadina = 604;
+  loading = true;
 
-
-
-  hasFloatingToc: boolean = false;
-  isOpened: boolean = false;
-
-
+  hasFloatingToc = false;
+  isOpened = false;
 
   scale;
   viewport;
@@ -149,15 +158,15 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
 
   pageSize = { width: 255, height: 410 };
 
-  totalPages: number;
-  maxPages: number;
+  totalPages;
+  maxPages = 648;
   currentPageNumber;
   scrollState;
   texFormat: boolean;
   pageNumberBoxIsMoved: boolean;
   dragPosition;
-  disableScroll: boolean = false;
-
+  disableScroll = false;
+  fullscreen;
 
 
   // @ViewChildren('canvas') canvas: QueryList<ElementRef>;
@@ -165,27 +174,28 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('testcanvas', { static: false }) testcanvasRef: ElementRef;
   @ViewChild(CdkDrag, { static: false }) pageNumberBoxRef: CdkDrag;
 
-  @ViewChild(CdkScrollable, { static: false }) firstMyCustomDirective: CdkScrollable;
+  @ViewChild('viewerContainer', { static: false, read: CdkScrollable }) firstMyCustomDirective: CdkScrollable;
 
   @ViewChild('myPortal', { static: true }) myPortal: TemplatePortal<any>;
   @ViewChild('myReference', { static: true }) myReference: TemplateRef<any>;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   renderingQueue: RenderingQueue;
   viewAreaElement: HTMLElement;
   private _isScrollModeHorizontal = false;
 
-  
+
   isSideBySide: boolean;
 
   get mode() { return this.isSideBySide ? 'side' : 'over'; }
 
   zooms;
-  zoomCtrl: FormControl;
-  formatCtrl: FormControl;
-  isJustifiedCtrl: FormControl;
-  tajweedColorCtrl: FormControl;
+  zoomCtrl: UntypedFormControl;
+  formatCtrl: UntypedFormControl;
+  isJustifiedCtrl: UntypedFormControl;
+  tajweedColorCtrl: UntypedFormControl;
+  changeSizeCtrl: UntypedFormControl;
   visibleViews;
   loaded: boolean = false;
   fontScale: number = 1;
@@ -202,7 +212,10 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
     private elRef: ElementRef,
     private breakpointObserver: BreakpointObserver,
     private matDialog: MatDialog,
-    private router: Router) {
+    private router: Router,
+    private cdr: ChangeDetectorRef) {
+
+    this.fullscreen = this.isRunningFullScreen();
 
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -216,18 +229,19 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.isSideBySide = breakpointObserver.isMatched('(min-width: ' + this.sideBySideWidth + 'px)');
 
-    this.currentPageNumber = new FormControl(1, [
+    this.currentPageNumber = new UntypedFormControl(1, [
       Validators.required
     ]);
 
-    this.form = new FormGroup({
+    this.form = new UntypedFormGroup({
       currentPageNumber: this.currentPageNumber,
     });
 
-    this.isJustifiedCtrl = new FormControl(true);
-    this.zoomCtrl = new FormControl('page-fit');
-    this.formatCtrl = new FormControl(1);
-    this.tajweedColorCtrl = new FormControl(true);
+    this.isJustifiedCtrl = new UntypedFormControl(true);
+    this.zoomCtrl = new UntypedFormControl('page-fit');
+    this.formatCtrl = new UntypedFormControl(1);
+    this.tajweedColorCtrl = new UntypedFormControl(true);
+    this.changeSizeCtrl = new UntypedFormControl(true);
 
     this.currentPageNumber = this.form.controls['currentPageNumber'].value;
 
@@ -263,20 +277,25 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.texFormat = true;
 
-    this.totalPages = this.totalPageTex;
-    this.maxPages = this.totalPages;
+
+
 
     this.pages = new Array(this.maxPages);
 
     this.quranService.statusObserver.subscribe((status) => {
-      this.wasmStatus = status.message + " ...";
+
       if (status.error) {
+        this.loading = false;
+        this.wasmStatus = status.message;
         console.log("Error : " + JSON.stringify(status.error));
+      } else {
+        this.wasmStatus = status.message + " ...";
       }
     })
 
     window.onerror = (msg, url, lineNo, columnNo, error) => {
       console.log("Error occured: " + msg + error.stack);
+      this.loading = false;
       this.wasmStatus = "Error";
       return false;
     }
@@ -297,9 +316,23 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.constrainPosition = this.adjustPageNumBoxPosition.bind(this);
 
+    /*
+    const relatedApps = await navigator.getInstalledRelatedApps();
+    relatedApps.forEach((app) => {
+      console.log(app.id, app.platform, app.url);
+    });*/
+
   }
 
-  ngOnInit() {   
+  ngOnInit() {
+  }
+
+  isRunningStandalone() {
+    return (window.matchMedia('(display-mode: standalone)').matches);
+  }
+
+  isRunningFullScreen() {
+    return (window.matchMedia('(display-mode: fullscreen)').matches);
   }
 
   adjustPageNumBoxPosition(point: Point, dragRef: DragRef): Point {
@@ -326,7 +359,7 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
       }
 
     }
-   
+
     return point;
   }
 
@@ -341,6 +374,12 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.quranService.promise.then((respone: QuranShaper) => {
       this.ngZone.runOutsideAngular(async () => {
+
+        //this.quranShaper = this.quranService.quranShaper;
+
+        this.totalPageTex = this.quranService.quranShaper.getTexNbPages();
+
+        this.totalPages = this.formatCtrl.value === 1 ? this.totalPageTex : this.totalPageMadina;
 
 
         this.pageElements.forEach((page, index) => {
@@ -383,27 +422,27 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
               this.disableScroll = false;
             }
 
-            
+
 
           });
 
         this.zoomCtrl.valueChanges.subscribe(value => {
           if (value !== 'custom') {
             this.setZoom(value);
-          }          
+          }
         });
 
         this.formatCtrl.valueChanges.subscribe(value => {
-          if (value == 1) {
+          if (value === 1) {
             this.totalPages = this.totalPageTex;
             this.texFormat = true;
             this.fontScale = 1;
             this.quranService.quranShaper.setScalePoint(this.fontScale);
             this.outline = respone.getOutline(true);
           } else {
-            this.totalPages = 604;
+            this.totalPages = this.totalPageMadina;
             this.texFormat = false;
-            this.fontScale = 0.80;
+            this.fontScale = 0.90;
             this.quranService.quranShaper.setScalePoint(this.fontScale);
             this.outline = respone.getOutline(false);
           }
@@ -448,10 +487,11 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
 
     }).catch((error) => {
       this.wasmStatus = "Error during compilation. Cannot proceede"
-      var message = this.wasmStatus;
+      const message = this.wasmStatus;
       if (error && error.message) {
         this.wasmStatus = "Error during compilation. Cannot proceede." + error.message;
       }
+      this.loading = false;
       console.log(message, error);
     });
 
@@ -549,7 +589,7 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }*/
 
-    
+
 
     const visible = this._getVisiblePages();
     const visiblePages = visible.views, numVisiblePages = visiblePages.length;
@@ -564,13 +604,13 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
 
     /*
     console.log('scroll2')
-
+  
     wait(10000)
-
+  
     console.log('end wait')*/
 
     this.renderingQueue.renderHighestPriority(visible);
-    
+
     if (visible.views && visible.views.length) {
       this.ngZone.run(() => {
         this.currentPageNumber = visible.views[0].id;
@@ -585,31 +625,31 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /*
   update_old() {
-
+  
     var scrollOffset = this.firstMyCustomDirective.measureScrollOffset('top');
     const firstVisibleIndex = Math.floor(scrollOffset / this.itemSize);
     let lastVisibleIndex = Math.floor((scrollOffset + this.firstMyCustomDirective.getElementRef().nativeElement.clientHeight) / this.itemSize);
     let promise = Promise.resolve();
     lastVisibleIndex = Math.min(this.pages.length - 1, lastVisibleIndex);
-
+  
     let numVisiblePages = lastVisibleIndex - firstVisibleIndex + 1;
-
+  
     const newCacheSize = Math.max(DEFAULT_CACHE_SIZE, 2 * numVisiblePages + 1);
-
+  
     let visiblePages = [];
     for (let currIndex = firstVisibleIndex; currIndex <= lastVisibleIndex; currIndex++) {
       visiblePages.push(this.views[currIndex]);
     }
     this.buffer.resize(newCacheSize, visiblePages);
-
+  
     for (let currIndex = firstVisibleIndex; currIndex <= lastVisibleIndex; currIndex++) {
-
+  
       let view = this.views[currIndex];
       this.buffer.push(view);
       promise = promise.then(() => view.draw(this.canvasWidth, this.canvasHeight, this.texFormat));
-
+  
     }
-
+  
     this.ngZone.run(() => {
       this.currentPageNumber = firstVisibleIndex + 1;
       this.form.controls['currentPageNumber'].setValue(this.currentPageNumber);
@@ -632,7 +672,7 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
         outputScale.sy = maxScale;
         outputScale.scaled = true;
         this.viewport.hasRestrictedScaling = true;
-      } 
+      }
     }
 
     //let sfx = this.approximateFraction(outputScale.sx);
@@ -642,12 +682,12 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
     let canvasHeight = Math.round(this.viewport.height * outputScale.sy); //this.roundToDivide(this.viewport.height * outputScale.sy, sfy[0]);
 
     //if (canvasWidth !== this.canvasWidth || canvasHeight !== this.canvasHeight) {
-      this.canvasWidth = canvasWidth;
-      this.canvasHeight = canvasHeight;
+    this.canvasWidth = canvasWidth;
+    this.canvasHeight = canvasHeight;
 
-      if (updateView) {
-        this.views.forEach(a => a.update(this.viewport, this.viewport.hasRestrictedScaling, duringZoom));
-      }
+    if (updateView) {
+      this.views.forEach(a => a.update(this.viewport, this.viewport.hasRestrictedScaling, duringZoom));
+    }
     //}
   }
 
@@ -660,7 +700,7 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
     this.firstMyCustomDirective.scrollTo({ top: offset });
   }
 
-  
+
 
   approximateFraction(x) {
     // Fast paths for int numbers or their inversions.
@@ -710,9 +750,9 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   zoom(event) {
-    
-    let newScale;    
-      
+
+    let newScale;
+
     newScale = this.scale;
 
     newScale = (newScale * event.scale).toFixed(3);
@@ -729,22 +769,22 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
     var displX = event.clientX;
 
     const top = this.firstMyCustomDirective.measureScrollOffset('top'), bottom = top + this.viewAreaElement.clientHeight;
-    const start = this.firstMyCustomDirective.measureScrollOffset('start'), right = start + this.viewAreaElement.clientWidth;    
+    const start = this.firstMyCustomDirective.measureScrollOffset('start'), right = start + this.viewAreaElement.clientWidth;
 
     //this.zoomCtrl.setValue('custom');
     this.ngZone.runOutsideAngular(() => {
 
       var nbpagesY = (top + displY) / this.itemSize;
       var nbpagesX = (start + displX) / this.viewport.width;
-      
+
       this.disableScroll = true;
       this.setViewport(newScale, true, true);
 
       var ytop = nbpagesY * this.itemSize - displY;
       var xstart = nbpagesX * this.viewport.width - displX;
 
-      this.firstMyCustomDirective.scrollTo({ top: ytop, start: xstart});
-      
+      this.firstMyCustomDirective.scrollTo({ top: ytop, start: xstart });
+
 
     });
 
@@ -809,7 +849,7 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
     const viewWidth = element.clientWidth, viewHeight = element.clientHeight;
     const viewRight = currentWidth + viewWidth;
     const viewBottom = currentHeight + viewHeight;
-
+  
     const hiddenHeight = Math.max(0, top - currentHeight) +    Math.max(0, viewBottom - bottom);
     const hiddenWidth = Math.max(0, left - currentWidth) + Math.max(0, viewRight - right);*/
 
@@ -825,6 +865,9 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
 
       this.update();
     });
+
+    this.cdr.detectChanges()
+
   }
 
   @HostListener('document:keydown.control.-', ['$event'])
@@ -854,20 +897,36 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
     let pageView = this.renderingQueue.getHighestPriority(visiblePages,
       this.views,
       scrollAhead, this.totalPages);
-    if (pageView) {      
+
+    this.toggleLoadingIconSpinner(visiblePages);
+
+    if (pageView) {
       //Promise.resolve().then(() => {
-        this.buffer.push(pageView);
-        this.renderingQueue.renderView(pageView,
-          this.canvasWidth, this.canvasHeight,
-          this.texFormat,
-          this.tajweedColorCtrl.value,
-          this.viewport.hasRestrictedScaling);
+      this.buffer.push(pageView);
+      this.renderingQueue.renderView(pageView,
+        this.canvasWidth, this.canvasHeight,
+        this.texFormat,
+        this.tajweedColorCtrl.value,
+        this.changeSizeCtrl.value,
+        this.viewport.hasRestrictedScaling);
       //})
-      
-      
+
+
       return true;
     }
     return false;
+  }
+
+  toggleLoadingIconSpinner(visiblePages) {
+    const visibleIds = new Set()
+    for (const visisbleView of visiblePages.views) {
+      const pageView = visisbleView.view;
+      pageView?.toggleLoadingIconSpinner(/* viewVisible = */ true);
+      visibleIds.add(visisbleView.id)
+    }
+
+    this.buffer.toggleLoadingIconSpinner(visibleIds);
+
   }
 
   _getVisiblePages() {
@@ -1115,11 +1174,11 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
       height: '98%',
       width: '100vw',
       panelClass: 'full-screen-modal',
-      data: { }
+      data: {}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');      
+      console.log('The dialog was closed');
     });
 
   }

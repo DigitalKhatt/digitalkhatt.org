@@ -21,6 +21,7 @@ import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { SidebarContentsService } from './services/navigation/sidebarcontents';
 import { CdkPortalOutlet } from '@angular/cdk/portal';
 import { QuranService } from './services/quranservice/quranservice.service';
+import { PWAService } from './services/PWA.service';
 
 @Component({
   selector: 'app-root',
@@ -40,7 +41,7 @@ export class AppComponent implements OnInit {
   @ViewChild('toolbarButtonsContainer', { read: ViewContainerRef, static: true }) _toolbarButtonsContainer: ViewContainerRef;
 
 
-  constructor(private sidebarContentsService: SidebarContentsService, private quranService: QuranService) {    
+  constructor(private sidebarContentsService: SidebarContentsService, private quranService: QuranService, private pwaService: PWAService) {    
   }
 
   ngOnInit() {

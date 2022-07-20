@@ -20,26 +20,27 @@
 import { Component, AfterViewInit, OnInit, HostListener, OnDestroy,  QueryList, ElementRef,  ViewChild, NgZone, TemplateRef,  ContentChildren, ViewChildren } from '@angular/core';
 import { QuranService } from '../../services/quranservice/quranservice.service';
 import { Subscription, animationFrameScheduler, Subject } from 'rxjs';
-import { CdkScrollable, ScrollDispatcher } from '../../services/scrolling';
+
 import { startWith, auditTime, debounceTime, withLatestFrom, map } from 'rxjs/operators';
 import { SidebarContentsService } from '../../services/navigation/sidebarcontents';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormControl, Validators, UntypedFormGroup } from '@angular/forms';
 //import { ScrollDispatcher, CdkScrollable } from '@angular/cdk/scrolling';
 
 import { PageView } from './page_view';
 import { RenderingQueue } from './rendering_queue';
 import { QuranShaper } from '../../services/quranservice/quran_shaper';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { HammerGestureConfig, HAMMER_GESTURE_CONFIG, Title } from '@angular/platform-browser';
+import { HammerGestureConfig, Title } from '@angular/platform-browser';
 
 //import * as Hammer from 'hammerjs';
-import { CdkDrag } from '../../services/drag-drop';
-import { Point, DragRef } from '../../services/drag-drop/drag-ref';
+
 import { MatDialog } from '@angular/material/dialog';
 import { AboutComponent } from '../about/about.component';
 import { Router, NavigationEnd } from '@angular/router';
 import { QuranPagesComponent } from './pages.component';
+import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
+import { CdkDrag, DragRef, Point } from '@angular/cdk/drag-drop';
 //import { CdkDrag } from '@angular/cdk/drag-drop';
 
 const CSS_UNITS = 96.0 / 72.0;
@@ -168,12 +169,13 @@ export class QuranOTFComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('testcanvas', { static: false }) testcanvasRef: ElementRef;
   @ViewChild(CdkDrag, { static: false }) pageNumberBoxRef: CdkDrag;
 
-  @ViewChild(CdkScrollable, { static: false }) firstMyCustomDirective: CdkScrollable;
+  //@ViewChild(CdkScrollable, { static: false }) firstMyCustomDirective: CdkScrollable;
+  @ViewChild('viewerContainer', { static: false, read: CdkScrollable }) firstMyCustomDirective: CdkScrollable;
 
   @ViewChild('myPortal', { static: true }) myPortal: TemplatePortal<any>;
   @ViewChild('myReference', { static: true }) myReference: TemplateRef<any>;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
 
   renderingQueue: RenderingQueue;
   viewAreaElement: HTMLElement;
@@ -185,10 +187,10 @@ export class QuranOTFComponent implements OnInit, AfterViewInit, OnDestroy {
   get mode() { return this.isSideBySide ? 'side' : 'over'; }
 
   zooms;
-  zoomCtrl: FormControl;
-  formatCtrl: FormControl;
-  isJustifiedCtrl: FormControl;
-  tajweedColorCtrl: FormControl;
+  zoomCtrl: UntypedFormControl;
+  formatCtrl: UntypedFormControl;
+  isJustifiedCtrl: UntypedFormControl;
+  tajweedColorCtrl: UntypedFormControl;
   visibleViews;
   loaded: boolean = false;
   fontScale: number = 1;
@@ -219,18 +221,18 @@ export class QuranOTFComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.isSideBySide = breakpointObserver.isMatched('(min-width: ' + this.sideBySideWidth + 'px)');
 
-    this.currentPageNumber = new FormControl(1, [
+    this.currentPageNumber = new UntypedFormControl(1, [
       Validators.required
     ]);
 
-    this.form = new FormGroup({
+    this.form = new UntypedFormGroup({
       currentPageNumber: this.currentPageNumber,
     });
 
-    this.isJustifiedCtrl = new FormControl(true);
-    this.zoomCtrl = new FormControl('page-fit');
-    this.formatCtrl = new FormControl(1);
-    this.tajweedColorCtrl = new FormControl(true);
+    this.isJustifiedCtrl = new UntypedFormControl(true);
+    this.zoomCtrl = new UntypedFormControl('page-fit');
+    this.formatCtrl = new UntypedFormControl(1);
+    this.tajweedColorCtrl = new UntypedFormControl(true);
 
     this.currentPageNumber = this.form.controls['currentPageNumber'].value;
 

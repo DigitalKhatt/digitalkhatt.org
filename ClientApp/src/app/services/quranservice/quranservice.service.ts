@@ -55,7 +55,7 @@ import VisualMetafontModule from "./VisualMetaFontWasm.js";
 import { QuranShaper } from './quran_shaper';
 import { BehaviorSubject } from "rxjs";
 
-declare var VMASM: any;
+//declare var VMASM: any;
 
 
 @Injectable()
@@ -93,7 +93,7 @@ export class QuranService implements OnDestroy {
 
     return;*/
 
-    var test = VMASM;
+    //var test = VMASM;
 
     var UA = navigator.userAgent;
 
@@ -106,11 +106,11 @@ export class QuranService implements OnDestroy {
     // Short after this, iOS kills the process due to memory watermark limit (Yet, the Wasm memory does not exeed 32MB)
     // When using compiled JS (Wasm -> JS), there is no memory problem, however the performance drops slightly.
 
-    if (!isWebkit && (typeof WebAssembly !== "undefined")) {
-      this.promise = this.instantiateWasm("assets/VisualMetaFontWasm.wasm");
-    } else {
-      this.promise = this.prepaeASMJS();
-    }
+    //if (!isWebkit && (typeof WebAssembly !== "undefined")) {
+    this.promise = this.instantiateWasm("assets/VisualMetaFontWasm.wasm");
+    //} else {
+    //  this.promise = this.prepaeASMJS();
+    //}
   }
 
 
@@ -131,13 +131,13 @@ export class QuranService implements OnDestroy {
 
   private async instantiateWasm(url: string) {
 
-    var compPromise;
+    let compPromise;
     if (typeof WebAssembly.compileStreaming !== "undefined") {
       this.setStatus(null, "Fetching/Compiling");
       compPromise = WebAssembly.compileStreaming(fetch(url));
     } else {
       this.setStatus(null, "Fetching");
-      let response = await fetch(url);
+      const response = await fetch(url);
 
       if (response.ok) {
         compPromise = response.arrayBuffer().then((buffer) => {
@@ -145,22 +145,15 @@ export class QuranService implements OnDestroy {
           return WebAssembly.compile(buffer);
         });
       } else {
-        if (!response.ok) {
-          var error = new Error(response.statusText)
-          this.setStatus(error, "Error during fetching WebAssembly.");
-          return Promise.reject(error)
-        } else {
-          return response;
-        }
+        const error = new Error(response.statusText)
+        this.setStatus(error, "Error during fetching WebAssembly.");
+        return Promise.reject(error)
       }
     }
 
     return compPromise.then((module) => {
-      let promise = new Promise((resolve, reject) => {
-        this.initilizeModule(module, resolve, reject);
-      });
 
-      return promise;
+      return this.initilizeModule(module);
     });
 
   }
@@ -189,7 +182,7 @@ export class QuranService implements OnDestroy {
             this.module.FS.unlink("mfplain.mp");
             this.module.FS.unlink("mpguifont.mp");
             this.module.FS.unlink("myfontbase.mp");
-            this.module.FS.unlink("medinafont.mp");
+            this.module.FS.unlink("digitalkhatt.mp");
             this.module.FS.unlink("lookups.json");
             this.module.FS.unlink("parameters.json");
             this.module.FS.unlink("automedina.fea");
@@ -218,7 +211,7 @@ export class QuranService implements OnDestroy {
             this.module.FS.createPreloadedFile(".", "ayah.mp", "assets/ayah.mp", true, false);
             this.module.FS.createPreloadedFile(".", "mpguifont.mp", "assets/mpguifont.mp", true, false);
             this.module.FS.createPreloadedFile(".", "myfontbase.mp", "assets/myfontbase.mp", true, false);
-            this.module.FS.createPreloadedFile(".", "medinafont.mp", "assets/medinafont.mp", true, false);
+            this.module.FS.createPreloadedFile(".", "digitalkhatt.mp", "assets/digitalkhatt.mp", true, false);
             this.module.FS.createPreloadedFile(".", "lookups.json", "assets/lookups.json", true, false);
             this.module.FS.createPreloadedFile(".", "parameters.json", "assets/parameters.json", true, false);
             this.module.FS.createPreloadedFile(".", "automedina.fea", "assets/automedina.fea", true, false);
@@ -229,7 +222,7 @@ export class QuranService implements OnDestroy {
         noInitialRun: true,
       };
 
-      this.module = VMASM(this.module);
+      //this.module = VMASM(this.module);
     });
 
     return promise;
@@ -238,7 +231,7 @@ export class QuranService implements OnDestroy {
 
 
 
-  initilizeModule(wasmModule, resolve, reject) {
+  initilizeModule(wasmModule) : Promise<any> {
     this.module = {
       instantiateWasm: (imports, successCallback) => {
         WebAssembly.instantiate(wasmModule, imports).then((instance) => {
@@ -247,14 +240,12 @@ export class QuranService implements OnDestroy {
           this.error = error;
           this.setStatus(error, "Error during instantiation");
           console.log("Error during instantiation ", error);
-
-          reject(error);
         });
         return {};
       },
       onRuntimeInitialized: () => {
 
-        let result = new this.module.QuranShaper(); //new QuranShaper(this.module.QuranShaper());
+        const result = new this.module.QuranShaper(); //new QuranShaper(this.module.QuranShaper());
 
         if (result) {
           this.quranShaper = new QuranShaper(result, this.module);
@@ -263,7 +254,7 @@ export class QuranService implements OnDestroy {
           this.module.FS.unlink("mfplain.mp");
           this.module.FS.unlink("mpguifont.mp");
           this.module.FS.unlink("myfontbase.mp");
-          this.module.FS.unlink("medinafont.mp");
+          this.module.FS.unlink("digitalkhatt.mp");
           this.module.FS.unlink("lookups.json");
           this.module.FS.unlink("parameters.json");
           this.module.FS.unlink("automedina.fea");
@@ -275,10 +266,8 @@ export class QuranService implements OnDestroy {
           this.module.FS.unlink("texpages.dat");
           this.module.FS.unlink("medinapages.dat");
 
-
-          resolve(this.quranShaper);
         } else {
-          reject(Error("Cannot initialize Visual metafont library"));
+          throw (Error("Cannot initialize Visual metafont library"));
         }
 
 
@@ -292,7 +281,7 @@ export class QuranService implements OnDestroy {
           this.module.FS.createPreloadedFile(".", "ayah.mp", "assets/ayah.mp", true, false);
           this.module.FS.createPreloadedFile(".", "mpguifont.mp", "assets/mpguifont.mp", true, false);
           this.module.FS.createPreloadedFile(".", "myfontbase.mp", "assets/myfontbase.mp", true, false);
-          this.module.FS.createPreloadedFile(".", "medinafont.mp", "assets/medinafont.mp", true, false);
+          this.module.FS.createPreloadedFile(".", "digitalkhatt.mp", "assets/digitalkhatt.mp", true, false);
           this.module.FS.createPreloadedFile(".", "lookups.json", "assets/lookups.json", true, false);
           this.module.FS.createPreloadedFile(".", "parameters.json", "assets/parameters.json", true, false);
           this.module.FS.createPreloadedFile(".", "automedina.fea", "assets/automedina.fea", true, false);
@@ -301,10 +290,18 @@ export class QuranService implements OnDestroy {
         }],
       postRun: [],
       noInitialRun: true,
-      wasmMemory: new WebAssembly.Memory({ initial: 310 })
+      wasmMemory: new WebAssembly.Memory({ initial: 310, maximum: 6400 })
     };
 
-    this.module = VisualMetafontModule(this.module);
+    const promise = VisualMetafontModule(this.module).then(() => {
+      console.log("Webassembly compiled and instantiated"); 
+      return this.quranShaper;           
+    }).catch((error) => {
+      this.setStatus(error, "Error during WebAssembly instantiation.");
+      throw error;
+    })
+
+    return promise;
   }
 
   initDevices() {

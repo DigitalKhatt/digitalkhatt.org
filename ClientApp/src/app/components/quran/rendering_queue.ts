@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+import { PageView } from './page_view';
 import { RenderingStates } from './rendering_states';
 
 const CLEANUP_TIMEOUT = 30000;
@@ -150,7 +151,7 @@ class RenderingQueue {
    *
    * @param {IRenderableView} view
    */
-  renderView(view, canvasWidth, canvasHeight, texFormat, tajweedColor, hasRestrictedScaling) {
+  renderView(view: PageView, canvasWidth, canvasHeight, texFormat, tajweedColor, changeSize, hasRestrictedScaling) {
     switch (view.renderingState) {
       case RenderingStates.FINISHED:
         return false;
@@ -163,7 +164,7 @@ class RenderingQueue {
         break;
       case RenderingStates.INITIAL:
         this.highestPriorityPage = view.renderingId;
-        view.draw(canvasWidth, canvasHeight, texFormat, tajweedColor, hasRestrictedScaling).finally(() => {
+        view.draw(canvasWidth, canvasHeight, texFormat, tajweedColor, changeSize, hasRestrictedScaling).finally(() => {
          // console.log("Finish rendering view " + view.id + " state=" + view.renderingState)          
           this.renderHighestPriority();
         });

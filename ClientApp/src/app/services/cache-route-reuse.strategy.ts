@@ -19,6 +19,8 @@
 
 import { RouteReuseStrategy } from '@angular/router/';
 import { ActivatedRouteSnapshot, DetachedRouteHandle } from '@angular/router';
+import { Injectable } from "@angular/core";
+@Injectable()
 export class CacheRouteReuseStrategy implements RouteReuseStrategy {
   storedRouteHandles = new Map<string, DetachedRouteHandle>();
   //storedRouteHandles: { [key: string]: DetachedRouteHandle } = {};

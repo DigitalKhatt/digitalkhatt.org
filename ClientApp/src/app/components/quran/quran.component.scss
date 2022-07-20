@@ -139,6 +139,10 @@ html[dir='rtl'] #viewerContainer {
   background: url('images/loading-icon.gif') center no-repeat;
 }
 
+:host ::ng-deep .loadingIcon.notVisible {
+  background: none;
+}
+
 .small-icon-button {
   width: 24px !important;
   height: 24px !important;
