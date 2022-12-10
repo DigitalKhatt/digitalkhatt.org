@@ -161,8 +161,7 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
   totalPages;
   maxPages = 648;
   currentPageNumber;
-  scrollState;
-  texFormat: boolean;
+  scrollState;  
   pageNumberBoxIsMoved: boolean;
   dragPosition;
   disableScroll = false;
@@ -239,7 +238,7 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.isJustifiedCtrl = new UntypedFormControl(true);
     this.zoomCtrl = new UntypedFormControl('page-fit');
-    this.formatCtrl = new UntypedFormControl(1);
+    this.formatCtrl = new UntypedFormControl(2); 
     this.tajweedColorCtrl = new UntypedFormControl(true);
     this.changeSizeCtrl = new UntypedFormControl(true);
 
@@ -274,11 +273,6 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
         value: '4'
       }
     ]
-
-    this.texFormat = true;
-
-
-
 
     this.pages = new Array(this.maxPages);
 
@@ -388,7 +382,7 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.quranShaper = respone; //respone.quranShaper;
 
-        this.outline = respone.getOutline(true);
+        this.outline = respone.getOutline(this.formatCtrl.value === 1);
 
         this.isJustifiedCtrl.valueChanges.subscribe(value => {
           this.ngZone.runOutsideAngular(() => {
@@ -434,14 +428,12 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.formatCtrl.valueChanges.subscribe(value => {
           if (value === 1) {
-            this.totalPages = this.totalPageTex;
-            this.texFormat = true;
+            this.totalPages = this.totalPageTex;            
             this.fontScale = 1;
             this.quranService.quranShaper.setScalePoint(this.fontScale);
             this.outline = respone.getOutline(true);
           } else {
-            this.totalPages = this.totalPageMadina;
-            this.texFormat = false;
+            this.totalPages = this.totalPageMadina;            
             this.fontScale = 0.90;
             this.quranService.quranShaper.setScalePoint(this.fontScale);
             this.outline = respone.getOutline(false);
@@ -905,7 +897,7 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
       this.buffer.push(pageView);
       this.renderingQueue.renderView(pageView,
         this.canvasWidth, this.canvasHeight,
-        this.texFormat,
+        this.formatCtrl.value === 1,
         this.tajweedColorCtrl.value,
         this.changeSizeCtrl.value,
         this.viewport.hasRestrictedScaling);

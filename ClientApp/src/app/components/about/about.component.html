@@ -76,7 +76,12 @@ along with DigitalKhatt.  If not, see
   <quran-dynamictext text="إِنَّ ٱلَّذِينَ كَفَرُوا۟ سَوَآءٌ عَلَيْهِمْ ءَأَنذَرْتَهُمْ أَمْ لَمْ تُنذِرْهُمْ" [min]="50" [max]="100"></quran-dynamictext>
   <p>Below is another example of the two first lines of page 205 of Medina Mushaf.</p>
   <quran-dynamictext text="ٱلتَّٰٓئِبُونَ ٱلْعَٰبِدُونَ ٱلْحَٰمِدُونَ ٱلسَّٰٓئِحُونَ" [min]="50" [max]="100"></quran-dynamictext>
-  <quran-dynamictext text="ٱلرَّٰكِعُونَ ٱلسَّٰجِدُونَ ٱلْأٓمِرُونَ بِٱلْمَعْرُوفِ" [min]="50" [max]="100"></quran-dynamictext>
+  <p>Here you can put free text and check the behavior of the justification algorithm. Not all Arabic characters are supported.</p>
+  <mat-form-field class="example-form-field" style="width: 500px; direction: rtl;text-align: right">
+    <mat-label>Free input</mat-label>
+    <input matInput type="text" dir="rtl" style="direction: rtl; font-size: 21px;" #freeText value="ٱللَّهَ لَا يَسْتَحْيِۦٓ أَن يَضْرِبَ مَثَلࣰا مَّا بَعُوضَةࣰ فَمَا فَوْقَهَا" >
+  </mat-form-field>
+  <quran-dynamictext [text]="freeText.value" [min]="50" [max]="100"></quran-dynamictext>
   <div id="opentype">
     <h1>OpenType</h1>
     <p>

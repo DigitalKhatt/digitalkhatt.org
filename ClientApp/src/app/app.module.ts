@@ -71,6 +71,7 @@ import { QuranPagesComponent } from './components/quranotf/pages.component';
 //import { QuranCanvasComponent } from './components/qurancanvas/qurancanvas.component';
 import { LayoutService } from './services/layoutservice/layoutservice.service';
 import { PWAService } from './services/PWA.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
 //import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
@@ -184,6 +185,8 @@ const routerOptions: ExtraOptions = {
     MatSlideToggleModule, MatInputModule, MatAutocompleteModule, MatDividerModule, MatSelectModule, MatRadioModule, MatCheckboxModule, MatDialogModule,
     MatMenuModule,
     MatSnackBarModule,
+    MatInputModule,
+    MatFormFieldModule,
     RouterModule.forRoot([
       {
         path: '',

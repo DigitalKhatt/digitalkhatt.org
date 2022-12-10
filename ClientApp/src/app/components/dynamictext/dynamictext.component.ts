@@ -17,7 +17,7 @@
  * <https: //www.gnu.org/licenses />.
 */
 
-import { Component, AfterViewInit, OnInit, HostListener, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, OnInit, HostListener, Input, ViewChild, ElementRef, OnChanges, SimpleChanges } from '@angular/core';
 import { QuranService } from '../../services/quranservice/quranservice.service';
 import { QuranShaper } from '../../services/quranservice/quran_shaper';
 
@@ -28,7 +28,7 @@ import { QuranShaper } from '../../services/quranservice/quran_shaper';
   templateUrl: './dynamictext.component.html',
   styleUrls: ['./dynamictext.component.scss'],
 })
-export class DynamicTextComponent implements OnInit, AfterViewInit {
+export class DynamicTextComponent implements OnInit, AfterViewInit, OnChanges {
   quranShaper: QuranShaper;
 
   @Input() text: string;
@@ -65,6 +65,12 @@ export class DynamicTextComponent implements OnInit, AfterViewInit {
 
     });
 
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.quranShaper) {
+      this.initCanavas();
+    }
   }
 
   ngAfterViewInit() {

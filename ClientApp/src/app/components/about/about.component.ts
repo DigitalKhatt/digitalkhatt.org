@@ -41,7 +41,7 @@ export class AboutComponent implements OnInit, AfterViewInit {
     'sad.isol.expa', 'sad.fina.expa'];
 
   pageSize = { width: 255, height: 410 };
-
+  
   constructor(
     private quranService: QuranService, private titleService: Title, private router : Router
   ) {
