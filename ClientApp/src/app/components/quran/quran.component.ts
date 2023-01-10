@@ -197,7 +197,7 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
   changeSizeCtrl: UntypedFormControl;
   visibleViews;
   loaded: boolean = false;
-  fontScale: number = 1;
+  fontScale: number;
 
   wasmStatus;
 
@@ -238,7 +238,8 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.isJustifiedCtrl = new UntypedFormControl(true);
     this.zoomCtrl = new UntypedFormControl('page-fit');
-    this.formatCtrl = new UntypedFormControl(2); 
+    this.formatCtrl = new UntypedFormControl(2);
+    this.fontScale = 0.9;
     this.tajweedColorCtrl = new UntypedFormControl(true);
     this.changeSizeCtrl = new UntypedFormControl(true);
 
@@ -370,6 +371,8 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
       this.ngZone.runOutsideAngular(async () => {
 
         //this.quranShaper = this.quranService.quranShaper;
+
+        this.quranService.quranShaper.setScalePoint(this.fontScale);
 
         this.totalPageTex = this.quranService.quranShaper.getTexNbPages();
 
