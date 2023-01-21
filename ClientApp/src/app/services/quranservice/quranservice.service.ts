@@ -182,8 +182,7 @@ export class QuranService implements OnDestroy {
             this.module.FS.unlink("mfplain.mp");
             this.module.FS.unlink("mpguifont.mp");
             this.module.FS.unlink("myfontbase.mp");
-            this.module.FS.unlink("digitalkhatt.mp");
-            this.module.FS.unlink("lookups.json");
+            this.module.FS.unlink("digitalkhatt.mp");            
             this.module.FS.unlink("parameters.json");
             this.module.FS.unlink("automedina.fea");
 
@@ -211,8 +210,7 @@ export class QuranService implements OnDestroy {
             this.module.FS.createPreloadedFile(".", "ayah.mp", "assets/ayah.mp", true, false);
             this.module.FS.createPreloadedFile(".", "mpguifont.mp", "assets/mpguifont.mp", true, false);
             this.module.FS.createPreloadedFile(".", "myfontbase.mp", "assets/myfontbase.mp", true, false);
-            this.module.FS.createPreloadedFile(".", "digitalkhatt.mp", "assets/digitalkhatt.mp", true, false);
-            this.module.FS.createPreloadedFile(".", "lookups.json", "assets/lookups.json", true, false);
+            this.module.FS.createPreloadedFile(".", "digitalkhatt.mp", "assets/digitalkhatt.mp", true, false);            
             this.module.FS.createPreloadedFile(".", "parameters.json", "assets/parameters.json", true, false);
             this.module.FS.createPreloadedFile(".", "automedina.fea", "assets/automedina.fea", true, false);
             this.module.FS.createPreloadedFile(".", "texpages.dat", "assets/texpages.dat", true, false);
@@ -254,8 +252,7 @@ export class QuranService implements OnDestroy {
           this.module.FS.unlink("mfplain.mp");
           this.module.FS.unlink("mpguifont.mp");
           this.module.FS.unlink("myfontbase.mp");
-          this.module.FS.unlink("digitalkhatt.mp");
-          this.module.FS.unlink("lookups.json");
+          this.module.FS.unlink("digitalkhatt.mp");          
           this.module.FS.unlink("parameters.json");
           this.module.FS.unlink("automedina.fea");
 
@@ -281,8 +278,7 @@ export class QuranService implements OnDestroy {
           this.module.FS.createPreloadedFile(".", "ayah.mp", "assets/ayah.mp", true, false);
           this.module.FS.createPreloadedFile(".", "mpguifont.mp", "assets/mpguifont.mp", true, false);
           this.module.FS.createPreloadedFile(".", "myfontbase.mp", "assets/myfontbase.mp", true, false);
-          this.module.FS.createPreloadedFile(".", "digitalkhatt.mp", "assets/digitalkhatt.mp", true, false);
-          this.module.FS.createPreloadedFile(".", "lookups.json", "assets/lookups.json", true, false);
+          this.module.FS.createPreloadedFile(".", "digitalkhatt.mp", "assets/digitalkhatt.mp", true, false);          
           this.module.FS.createPreloadedFile(".", "parameters.json", "assets/parameters.json", true, false);
           this.module.FS.createPreloadedFile(".", "automedina.fea", "assets/automedina.fea", true, false);
           this.module.FS.createPreloadedFile(".", "texpages.dat", "assets/texpages.dat", true, false);

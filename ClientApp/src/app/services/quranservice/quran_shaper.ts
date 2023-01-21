@@ -576,7 +576,7 @@ class QuranShaper {
     this.quranShaper.drawPathByName(name, ctx);
   }
   shapeText(text, lineWidth, fontScalePerc, applyJustification, tajweedColor, ctx) {
-    return this.quranShaper.shapeText(text, lineWidth, fontScalePerc, applyJustification, tajweedColor, ctx);
+    return this.quranShaper.shapeText(text, lineWidth, fontScalePerc, applyJustification, tajweedColor, false, ctx);
   }
 }
 
