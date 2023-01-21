@@ -4,8 +4,7 @@ import quranService from './quranservice.service.js'
 class TextComponent extends HTMLElement {
   quranShaper;
   quranService;
-  text;
-  CSS_UNITS = quranService.CSS_UNITS;
+  text;  
   ctx;
   outputScale;
   defaultSize = (1000 / 4600) * 72.0 // 15.65 pt = 20.869 px
@@ -64,7 +63,7 @@ class TextComponent extends HTMLElement {
     const computedStyle = window.getComputedStyle(this)
 
     const fontSizeStyle = computedStyle.fontSize
-    const fontSize = parseFloat(fontSizeStyle) /// this.CSS_UNITS; 
+    const fontSize = parseFloat(fontSizeStyle) 
     const scale = fontSize / this.defaultSize; // take into account the 96/72 difference
 
     const widthStyle = this.style.width
@@ -83,7 +82,7 @@ class TextComponent extends HTMLElement {
       width = this.offsetWidth;
     }
 
-    const height = fontSize * 1.8 //* this.CSS_UNITS; // line-height = 2 * font Size;
+    const height = fontSize * 1.8 
 
     this.style.width = width + "px";
     this.style.height = height + "px";

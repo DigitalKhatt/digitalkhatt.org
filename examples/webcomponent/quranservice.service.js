@@ -4,37 +4,11 @@ import VisualMetafontModule from "./VisualMetaFontWasm.js";
 class QuranService {
   module;
   quranShaper;
-
   promise;
-
-
   error;
-  files;
-
-  CSS_UNITS = 96.0 / 72.0;
 
   constructor() {
-
-    this.files = {};
-
     this.promise = this.instantiateWasm("VisualMetaFontWasm.wasm");
-
-  }
-
-
-  fetchAllfiles() {
-    return Promise.all([
-      fetch("assets/mfplain.mp").then((response) => response.arrayBuffer()),
-      fetch("assets/mpguifont.mp").then((response) => response.arrayBuffer())
-    ]).then(([mfplain, mpguifont]) => {
-      return {
-        mfplain: new Int8Array(mfplain),
-        mpguifont: new Int8Array(mpguifont)
-      }
-    }).catch((err) => {
-      console.log(err);
-    });
-
   }
 
   async instantiateWasm(url) {
