@@ -36,12 +36,7 @@ class QuranService {
     return compPromise.then((module) => {
       return this.initilizeModule(module);
     });
-
   }
-
-
-
-
 
   initilizeModule(wasmModule) {
     this.module = {
@@ -68,13 +63,11 @@ class QuranService {
           this.module.FS.unlink("myfontbase.mp");
           this.module.FS.unlink("digitalkhatt.mp");
           this.module.FS.unlink("parameters.json");
-          this.module.FS.unlink("automedina.fea");         
+          this.module.FS.unlink("automedina.fea");
 
         } else {
           throw (Error("Cannot initialize Visual metafont library"));
         }
-
-
       },
       preRun: [
         () => {
@@ -85,7 +78,7 @@ class QuranService {
           this.module.FS.createPreloadedFile(".", "myfontbase.mp", "myfontbase.mp", true, false);
           this.module.FS.createPreloadedFile(".", "digitalkhatt.mp", "digitalkhatt.mp", true, false);
           this.module.FS.createPreloadedFile(".", "parameters.json", "parameters.json", true, false);
-          this.module.FS.createPreloadedFile(".", "automedina.fea", "automedina.fea", true, false);          
+          this.module.FS.createPreloadedFile(".", "automedina.fea", "automedina.fea", true, false);
         }],
       postRun: [],
       noInitialRun: true,
@@ -101,7 +94,7 @@ class QuranService {
     })
 
     return promise;
-  }  
+  }
 
   clearCanvas(ctx) {
     ctx.save();
@@ -114,9 +107,6 @@ class QuranService {
   setStatus(error, message) {
     console.log(message);
   }
-
-
-
 }
 
 let quranService = new QuranService()

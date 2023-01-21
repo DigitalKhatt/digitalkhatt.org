@@ -1,7 +1,7 @@
 
 import quranService from './quranservice.service.js'
 
-class TextComponent extends HTMLElement {
+class DFTextComponent extends HTMLElement {
   quranShaper;
   quranService;
   text;  
@@ -23,17 +23,13 @@ class TextComponent extends HTMLElement {
           </style>
           <canvas></canvas>
         `;
-
     this.quranService = quranService;
     this.text = this.textContent;
-
-
   }
 
   connectedCallback() {
     this.canvas = this.shadow.querySelector('canvas');
     this.ctx = this.canvas.getContext('2d');
-
 
     this.just = this.hasAttribute("just")
       ? (this.getAttribute("just") === 'false' ? false : true)
@@ -120,6 +116,6 @@ class TextComponent extends HTMLElement {
   }
 }
 
-customElements.define('dk-text', TextComponent);
+customElements.define('dk-text', DFTextComponent);
 
-export default TextComponent 
+export default DFTextComponent 
