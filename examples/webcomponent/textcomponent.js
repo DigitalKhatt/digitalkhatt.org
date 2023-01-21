@@ -51,7 +51,7 @@ class TextComponent extends HTMLElement {
     this.quranService.promise.then((respone) => {
       this.quranShaper = respone;
 
-      this.outputScale = this.quranService.getOutputScale(this.ctx);
+      this.outputScale = window.devicePixelRatio;
 
       this.drawText();
 
@@ -101,11 +101,11 @@ class TextComponent extends HTMLElement {
     
     canvas.style.height = height + "px";
 
-    canvas.width = canvasWidth * this.outputScale.sx;
-    canvas.height = height * this.outputScale.sy;
+    canvas.width = canvasWidth * this.outputScale;
+    canvas.height = height * this.outputScale;
 
-    const totalscale = this.outputScale.sx * scale;
-    this.ctx.transform(totalscale, 0, 0, totalscale, canvas.width - (this.defaultSize * scale * this.outputScale.sx), canvas.height * 2 / 3);
+    const totalscale = this.outputScale * scale;
+    this.ctx.transform(totalscale, 0, 0, totalscale, canvas.width - (this.defaultSize * scale * this.outputScale), canvas.height * 2 / 3);
 
     this.quranService.clearCanvas(this.ctx);
 

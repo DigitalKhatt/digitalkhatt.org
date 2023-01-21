@@ -1,54 +1,3 @@
-/****************************************************************************
-**
-** Copyright (C) 2018 The Qt Company Ltd.
-** Contact: https://www.qt.io/licensing/
-**
-** Some code of this file is part of the plugins of the Qt Toolkit.
-**
-** $QT_BEGIN_LICENSE:GPL$
-** Commercial License Usage
-** Licensees holding valid commercial Qt licenses may use this file in
-** accordance with the commercial license agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company. For licensing terms
-** and conditions see https://www.qt.io/terms-conditions. For further
-** information use the contact form at https://www.qt.io/contact-us.
-**
-** GNU General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU
-** General Public License version 3 or (at your option) any later version
-** approved by the KDE Free Qt Foundation. The licenses are as published by
-** the Free Software Foundation and appearing in the file LICENSE.GPL3
-** included in the packaging of this file. Please review the following
-** information to ensure the GNU General Public License requirements will
-** be met: https://www.gnu.org/licenses/gpl-3.0.html.
-**
-** $QT_END_LICENSE$
-**
-****************************************************************************/
-
-/*
- * Copyright (c) 2019-2020 Amine Anane. http: //digitalkhatt/license
- * This file is part of DigitalKhatt.
- *
- * Some code in this file was inspired from the file qtloader.js of the WebAssembly plugin of the Qt Toolkit 
- * However it has been completely changed.
- * 
- * DigitalKhatt is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
-
- * DigitalKhatt is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
-
- * You should have received a copy of the GNU Affero General Public License
- * along with DigitalKhatt. If not, see
- * <https: //www.gnu.org/licenses />.
-*/
-
 
 import VisualMetafontModule from "./VisualMetaFontWasm.js";
 
@@ -111,7 +60,6 @@ class QuranService {
     }
 
     return compPromise.then((module) => {
-
       return this.initilizeModule(module);
     });
 
@@ -180,21 +128,6 @@ class QuranService {
 
     return promise;
   }  
-
-  getOutputScale(ctx) {
-    let devicePixelRatio = window.devicePixelRatio || 1;
-    let backingStoreRatio = ctx.webkitBackingStorePixelRatio ||
-      ctx.mozBackingStorePixelRatio ||
-      ctx.msBackingStorePixelRatio ||
-      ctx.oBackingStorePixelRatio ||
-      ctx.backingStorePixelRatio || 1;
-    let pixelRatio = devicePixelRatio / backingStoreRatio;
-    return {
-      sx: pixelRatio,
-      sy: pixelRatio,
-      scaled: pixelRatio !== 1,
-    };
-  }
 
   clearCanvas(ctx) {
     ctx.save();
