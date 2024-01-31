@@ -238,7 +238,8 @@ const routerOptions: ExtraOptions = {
     {
       provide: RouteReuseStrategy,
       useClass: CacheRouteReuseStrategy
-    }
+    },
+    MatSnackBarModule
   ],
   bootstrap: [AppComponent]
 })

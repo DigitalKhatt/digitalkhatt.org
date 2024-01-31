@@ -39,6 +39,7 @@ import { AboutComponent } from '../about/about.component';
 import { RenderingStates } from './rendering_states';
 import { TajweedService } from '../../services/tajweed.service';
 import { QuranTextService } from '../../services/qurantext.service';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 
 const CSS_UNITS = 96.0 / 72.0;
 const MIN_SCALE = 0.25;
@@ -203,7 +204,20 @@ export class OldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
     private matDialog: MatDialog,
     private router: Router,
     private tajweedService: TajweedService,
-    private quranTextService: QuranTextService) {
+    private quranTextService: QuranTextService,
+    private _snackBar: MatSnackBar
+  ) {
+
+    var UA = navigator.userAgent;
+
+    let nbav = window as any;
+
+    var isWebkit = /\b(iPad|iPhone|iPod)\b/.test(UA) && /WebKit/.test(UA) && !/Edge/.test(UA) && !nbav.MSStream;
+    if (isWebkit) {
+      this._snackBar.open("Unfortunately the demo is not yet available on the WebKit browser. You will be redirected to the DigitalKhatt demo.", "OK");
+      this.router.navigate(['/digitalmushaf']);
+      return;
+    }
 
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -437,7 +451,7 @@ export class OldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   ngOnDestroy() {
-    this.scrollingSubscription.unsubscribe();
+    this.scrollingSubscription?.unsubscribe();
   }
 
   navigateTo(page) {
