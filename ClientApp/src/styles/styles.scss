@@ -57,7 +57,7 @@ body {
 @font-face {
   font-family: oldmadina;
   font-style: normal;
-  src: /*url('../assets/fonts/oldmadina.woff2') format('woff2')*/ url(../assets/fonts/oldmadina.otf) format("opentype");
+  src: url('../assets/fonts/oldmadina.woff2') format('woff2'), url(../assets/fonts/oldmadina.otf) format("opentype");
   font-display: block;
 }
 
