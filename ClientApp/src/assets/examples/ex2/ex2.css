@@ -1,0 +1,73 @@
+
+@font-face {
+  font-family: oldmadina;
+  font-style: normal;
+  src: url('oldmadina.woff2') format('woff2'), url(oldmadina.otf) format("opentype");
+  font-display: block;
+}
+
+
+
+
+body {
+  font-family: oldmadina;
+}
+
+#calculatewidth {
+  position: absolute;
+  visibility: hidden;
+  height: auto;
+  width: auto;
+  white-space: pre;
+}
+.om {
+  font-family: oldmadina;
+  font-size: 80px;
+  width: 1000px;
+}
+
+
+.page {
+  line-height: 1.7;
+  font-family: oldmadina;
+  font-size: 40px;
+  white-space: nowrap;
+}
+
+.line {
+  width: 648px; /* 40px * 16.2 ((17000 - (2 * 400)) / 1000) */
+  margin: 0 auto;
+}
+
+
+.green {
+  color: rgb(0 166 80);
+}
+
+.tafkim {
+  color: rgb(0 102 148);
+}
+
+.lgray {
+  color: rgb(156 154 155);
+}
+
+.lkalkala {
+  color: rgb(0 173 239);
+}
+
+.red1 {
+  color: rgb(195 138 8);
+}
+
+.red2 {
+  color: rgb(244 114 22);
+}
+
+.red3 {
+  color: rgb(236 0 140);
+}
+
+.red4 {
+  color: rgb(140 0 0);
+}

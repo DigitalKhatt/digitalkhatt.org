@@ -35,7 +35,7 @@ import { HammerGestureConfig, Title } from '@angular/platform-browser';
 
 //import * as Hammer from 'hammerjs';
 
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { AboutComponent } from '../about/about.component';
 import { Router, NavigationEnd } from '@angular/router';
 import { QuranPagesComponent } from './pages.component';

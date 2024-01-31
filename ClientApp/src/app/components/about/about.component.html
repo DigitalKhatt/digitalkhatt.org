@@ -79,7 +79,7 @@ along with DigitalKhatt.  If not, see
   <p>Here you can put free text and check the behavior of the justification algorithm. Not all Arabic characters are supported.</p>
   <mat-form-field class="example-form-field" style="width: 500px; direction: rtl;text-align: right">
     <mat-label>Free input</mat-label>
-    <input matInput type="text" dir="rtl" style="direction: rtl; font-size: 21px;" #freeText value="ٱللَّهَ لَا يَسْتَحْيِۦٓ أَن يَضْرِبَ مَثَلࣰا مَّا بَعُوضَةࣰ فَمَا فَوْقَهَا" >
+    <input matInput type="text" dir="rtl" style="direction: rtl; font-size: 21px;" #freeText value="ٱللَّهَ لَا يَسْتَحْيِۦٓ أَن يَضْرِبَ مَثَلࣰا مَّا بَعُوضَةࣰ فَمَا فَوْقَهَا">
   </mat-form-field>
   <quran-dynamictext [text]="freeText.value" [min]="50" [max]="100"></quran-dynamictext>
   <div id="opentype">
@@ -88,7 +88,7 @@ along with DigitalKhatt.  If not, see
       In case someone wants to write some verses of the Quran using this font, an OpenType version named <b>DigitalKhatt Madina</b>
       is available for <a href="../../../assets/fonts/digitalkhatt.otf">download</a>.
       The font has been initially designed to typeset the Quran, so for the moment only the Unicode characters appearing in the Quran have been defined.
-      To use the font on the Web, a <a href="../../../assets/fonts/digitalkhatt.woff">Web Open Font Format</a> is also available.
+      <!--To use the font on the Web, a <a href="../../../assets/fonts/digitalkhatt.woff">Web Open Font Format</a> is also available.-->
     </p>
     <p>As an example, below Surat An-Nas using this font.</p>
     <div class="digitalkhatt" style="text-align: center;width:300px;">
@@ -111,6 +111,7 @@ along with DigitalKhatt.  If not, see
     </div>
 
   </div>
+  <!--
   <div id="opentypevar" style="margin-top:10px">
     <h1>OpenType Variable Font</h1>
     <p>
@@ -127,7 +128,6 @@ along with DigitalKhatt.  If not, see
       <span style="font-feature-settings: normal">&zwj;بِّ</span>&nbsp;
       <span style="font-feature-settings: normal">&zwj;أَ</span>
       <br />
-      <!--<div style="font-feature-settings: normal">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>-->
       <div data-line-number='11' class='line'>
         ٱلَّذِينَ هُمْ يُرَآءُونَ ۝٦ وَيَمْنَعُونَ ٱلْمَاعُونَ ۝٧
       </div>
@@ -140,6 +140,7 @@ along with DigitalKhatt.  If not, see
       Right elongation:<mat-slider id="rtat" name="rtat" min="-3" max="8" step="0.1" value="0" (input)="rtatChanged($event)"></mat-slider>
     </div>
   </div>
+    -->
 </div>
 
 

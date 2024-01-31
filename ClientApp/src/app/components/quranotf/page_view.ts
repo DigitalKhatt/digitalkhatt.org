@@ -84,6 +84,8 @@ class PageView {
       node.style.display = "flex";
     }
 
+    this.renderingState = RenderingStates.FINISHED;
+
     return Promise.resolve();
 
 

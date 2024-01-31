@@ -12,9 +12,8 @@
     <BuildServerSideRenderer>false</BuildServerSideRenderer>
   </PropertyGroup>
 
-  <ItemGroup>        
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="3.1.2" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.2" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.25" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,8 +32,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="ClientApp\src\app\components\qurancanvas\page_view.ts" />
-    <None Remove="ClientApp\src\app\components\qurancanvas\rendering_states.ts" />
+    <None Remove="ClientApp\src\app\components\oldmedina\page_view.ts" />
+    <None Remove="ClientApp\src\app\components\oldmedina\qurangestures.directive.ts" />
+    <None Remove="ClientApp\src\app\components\oldmedina\quranzoom.directive.ts" />
+    <None Remove="ClientApp\src\app\components\oldmedina\quranzoom.touch.directive.ts" />
+    <None Remove="ClientApp\src\app\components\oldmedina\rendering_states.ts" />
     <None Remove="ClientApp\src\app\components\quranotf\page_view.ts" />
     <None Remove="ClientApp\src\app\components\quranotf\qurangestures.directive.ts" />
     <None Remove="ClientApp\src\app\components\quranotf\quranzoom.directive.ts" />
@@ -51,6 +53,8 @@
     <None Remove="ClientApp\src\app\services\navigation\sidebarcontents.ts" />
     <None Remove="ClientApp\src\app\services\PWA.service.ts" />
     <None Remove="ClientApp\src\app\services\quranservice\quran_shaper.ts" />
+    <None Remove="ClientApp\src\app\services\qurantext.service.ts" />
+    <None Remove="ClientApp\src\app\services\tajweed.service.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -62,8 +66,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\components\qurancanvas\page_view.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\components\qurancanvas\rendering_states.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\oldmedina\page_view.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\oldmedina\qurangestures.directive.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\components\oldmedina\quranzoom.directive.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\oldmedina\quranzoom.touch.directive.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\components\oldmedina\rendering_states.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\quranotf\page_view.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\quranotf\qurangestures.directive.ts">
       <SubType>Code</SubType>
@@ -86,6 +97,12 @@
     <TypeScriptCompile Include="ClientApp\src\app\components\quran\quranzoom.directive.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\cache-route-reuse.strategy.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\navigation\sidebarcontents.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\qurantext.service.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\services\tajweed.service.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="ClientApp\src\app\services\PWA.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\quranservice\quran_shaper.ts" />
   </ItemGroup>

@@ -11,17 +11,16 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
-
+ * 
  * You should have received a copy of the GNU Affero General Public License
  * along with DigitalKhatt. If not, see
  * <https: //www.gnu.org/licenses />.
 */
 
-import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { SidebarContentsService } from './services/navigation/sidebarcontents';
 import { CdkPortalOutlet } from '@angular/cdk/portal';
-import { QuranService } from './services/quranservice/quranservice.service';
+import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { PWAService } from './services/PWA.service';
+import { SidebarContentsService } from './services/navigation/sidebarcontents';
 
 @Component({
   selector: 'app-root',
@@ -41,7 +40,7 @@ export class AppComponent implements OnInit {
   @ViewChild('toolbarButtonsContainer', { read: ViewContainerRef, static: true }) _toolbarButtonsContainer: ViewContainerRef;
 
 
-  constructor(private sidebarContentsService: SidebarContentsService, private quranService: QuranService, private pwaService: PWAService) {    
+  constructor(private sidebarContentsService: SidebarContentsService, private pwaService: PWAService) {    
   }
 
   ngOnInit() {

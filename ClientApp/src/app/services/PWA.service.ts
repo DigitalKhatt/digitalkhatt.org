@@ -1,10 +1,10 @@
 import { ApplicationRef, Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 
 
-import { SwUpdate } from '@angular/service-worker';
+import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { concat, interval } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { filter, first, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -22,19 +22,23 @@ export class PWAService {
       everySixHoursOnceAppIsStable$.subscribe(() => swUpdate.checkForUpdate());
     }
 
-
-
-    this.swUpdate.available.subscribe(evt => {
-      const snack = this.snackbar.open('A new update is available.', 'Reload', {
-        duration: 5 * 1000,
-      });
-      snack
-        .onAction()
-        .subscribe(() => {
-          swUpdate.activateUpdate().then(() => document.location.reload());
+    const updatesAvailable = swUpdate.versionUpdates.pipe(
+      filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY'),
+      map(evt => ({
+        type: 'UPDATE_AVAILABLE',
+        current: evt.currentVersion,
+        available: evt.latestVersion,
+      }))).subscribe(evt => {
+        const snack = this.snackbar.open('A new update is available.', 'Reload', {
+          duration: 5 * 1000,
         });
+        snack
+          .onAction()
+          .subscribe(() => {
+            swUpdate.activateUpdate().then(() => document.location.reload());
+          });
 
-    });
+      });
 
     this.swUpdate.unrecoverable.subscribe(event => {
       this.snackbar.open('An error occurred that we cannot recover from:\n' +

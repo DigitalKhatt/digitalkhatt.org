@@ -20,22 +20,14 @@
 
 $padding: 0.5em;
 
-
-@font-face {
-  font-family: 'DigitalKhatt';
-  font-style: normal;
-  src: url("../../../assets/fonts/digitalkhatt.woff") format("woff"), url('../../../assets/fonts/digitalkhatt.otf') format("opentype");  
-  font-display: block;
-}
-
-:host {
-  font-family: "DigitalKhatt";  
+::ng-deep .digitalkhatt {
+  font-family: digitalkhatt;
   line-height: normal;
   direction: rtl;
   white-space: nowrap;
   text-align: justify;
   text-justify: inter-word;
-  word-spacing:-0.3em;  
+  //word-spacing: -0.3em;
 }
 
 .innerpage {

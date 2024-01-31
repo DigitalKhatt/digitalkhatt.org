@@ -17,33 +17,34 @@
  * <https: //www.gnu.org/licenses />.
 */
 
-import { Component, AfterViewInit, OnInit, HostListener, OnDestroy, ViewChildren, QueryList, ElementRef, ViewChild, NgZone, TemplateRef, ChangeDetectorRef } from '@angular/core';
-
+import { AfterViewInit, Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { Subscription, animationFrameScheduler } from 'rxjs';
 
-import { startWith, auditTime, debounceTime } from 'rxjs/operators';
-
 import { TemplatePortal } from '@angular/cdk/portal';
-import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { auditTime, startWith } from 'rxjs/operators';
+import { SidebarContentsService } from '../../services/navigation/sidebarcontents';
+//import { ScrollDispatcher, CdkScrollable } from '@angular/cdk/scrolling';
 
-import { PageView } from './page_view';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { PageView } from './page_view';
 
 //import * as Hammer from 'hammerjs';
 
-import { MatDialog } from '@angular/material/dialog';
-import { AboutComponent } from '../about/about.component';
-import { Router, NavigationEnd } from '@angular/router';
 import { CdkDrag, DragRef, Point } from '@angular/cdk/drag-drop';
 import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
-import { LayoutService } from '../../services/layoutservice/layoutservice.service';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { NavigationEnd, Router } from '@angular/router';
+import { AboutComponent } from '../about/about.component';
 import { RenderingStates } from './rendering_states';
+import { TajweedService } from '../../services/tajweed.service';
+import { QuranTextService } from '../../services/qurantext.service';
 
-
-
+const CSS_UNITS = 96.0 / 72.0;
 const MIN_SCALE = 0.25;
 const MAX_SCALE = 10.0;
 const DEFAULT_SCALE_DELTA = 1.1;
+const MAX_AUTO_SCALE = 1.25;
 
 
 
@@ -100,23 +101,14 @@ class PDFPageViewBuffer {
       arr[write] = moved[read];
     }
   }
-
-  toggleLoadingIconSpinner(visibleIds) {
-    for (const pageView of this.data) {
-      if (visibleIds.has(pageView.id)) {
-        continue;
-      }
-      pageView.toggleLoadingIconSpinner(/* viewVisible = */ false);
-    }
-  }
 }
 
-const DEFAULT_CACHE_SIZE = 20;
+const DEFAULT_CACHE_SIZE = 10;
 
 @Component({
-  selector: 'app-qurancanvas-component',
-  templateUrl: './qurancanvas.component.html',
-  styleUrls: ['./qurancanvas.component.scss'],
+  selector: 'app-oldmedina-component',
+  templateUrl: './oldmedina.component.ts.html',
+  styleUrls: ['./oldmedina.component.ts.scss'],
   /*
   providers: [
     {
@@ -125,25 +117,22 @@ const DEFAULT_CACHE_SIZE = 20;
     }
   ],*/
 })
-export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
+export class OldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
-
-
+  private module: any;
   private CSS_UNITS = 96.0 / 72.0;
   private sideBySideWidth = 992;
   private maxCanvasPixels = 16777216;
-  private totalPageTex = 651;
-  private totalPageMadina = 604;
+  
+  fontsize;
+  highestPriorityPage: PageView;
 
-
-
-  hasFloatingToc = false;
-  isOpened = false;
+  hasFloatingToc: boolean = false;
+  isOpened: boolean = false;
 
 
 
   scale;
-  customScale;
   viewport;
 
   canvasWidth;
@@ -153,9 +142,13 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
   itemSize;
   buffer: PDFPageViewBuffer = new PDFPageViewBuffer(DEFAULT_CACHE_SIZE);
   views: PageView[] = [];
-  outline;
+  outline : any = [];
 
+  static DEFAULT_PAGE_SIZE = { width: 255, height: 410, marginWidth : 15 * 400 / 1000 };
+  static DFAULT_FONT_SIZE = OldMedinaComponent.DEFAULT_PAGE_SIZE.width / (17000 / 1000);
 
+  pageSize = OldMedinaComponent.DEFAULT_PAGE_SIZE
+  defaultFontSize = OldMedinaComponent.DFAULT_FONT_SIZE
 
   totalPages: number;
   maxPages: number;
@@ -164,22 +157,22 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
   texFormat: boolean;
   pageNumberBoxIsMoved: boolean;
   dragPosition;
-  disableScroll = false;
-  highestPriorityPage;
+  disableScroll: boolean = false;
 
-
-
-  // @ViewChildren('canvas') canvas: QueryList<ElementRef>;
   @ViewChildren('page') pageElements: QueryList<ElementRef>;
   @ViewChild('testcanvas', { static: false }) testcanvasRef: ElementRef;
+  @ViewChild('calculatewidthElem', { static: false }) calculatewidthElem: ElementRef;
+  @ViewChild('lineJustify', { static: false }) lineJustify: ElementRef;
   @ViewChild(CdkDrag, { static: false }) pageNumberBoxRef: CdkDrag;
 
+  //@ViewChild(CdkScrollable, { static: false }) firstMyCustomDirective: CdkScrollable;
   @ViewChild('viewerContainer', { static: false, read: CdkScrollable }) firstMyCustomDirective: CdkScrollable;
 
   @ViewChild('myPortal', { static: true }) myPortal: TemplatePortal<any>;
   @ViewChild('myReference', { static: true }) myReference: TemplateRef<any>;
 
-  form: FormGroup;
+  form: UntypedFormGroup;
+
 
   viewAreaElement: HTMLElement;
   private _isScrollModeHorizontal = false;
@@ -190,31 +183,27 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
   get mode() { return this.isSideBySide ? 'side' : 'over'; }
 
   zooms;
-  zoomCtrl: FormControl;
-  formatCtrl: FormControl;
-  isJustifiedCtrl: FormControl;
-  tajweedColorCtrl: FormControl;
+  zoomCtrl: UntypedFormControl;  
+  isJustifiedCtrl: UntypedFormControl;
+  tajweedColorCtrl: UntypedFormControl;
   visibleViews;
-  loaded = false;
-  fontScale = 1;
+  loaded: boolean = false;
+  fontScale: number = 1;
 
   wasmStatus;
 
   constrainPosition: (point: Point, dragRef: DragRef) => Point;
 
-  hideElement = false;
+  hideElement: boolean = false;
 
-  quranData: any = {};
-
-  threadedScrolling = true;
-
-  constructor(public scrollDispatcher: ScrollDispatcher, private ngZone: NgZone,
+  constructor(private sidebarContentsService: SidebarContentsService,
+    public scrollDispatcher: ScrollDispatcher, private ngZone: NgZone,
     private elRef: ElementRef,
     private breakpointObserver: BreakpointObserver,
     private matDialog: MatDialog,
     private router: Router,
-    private layoutService: LayoutService,
-    private cdr: ChangeDetectorRef) {
+    private tajweedService: TajweedService,
+    private quranTextService: QuranTextService) {
 
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -228,20 +217,20 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.isSideBySide = breakpointObserver.isMatched('(min-width: ' + this.sideBySideWidth + 'px)');
 
-    this.currentPageNumber = new FormControl(1, [
+    this.currentPageNumber = new UntypedFormControl(1, [
       Validators.required
     ]);
 
-    this.form = new FormGroup({
+    this.form = new UntypedFormGroup({
       currentPageNumber: this.currentPageNumber,
     });
 
-    this.isJustifiedCtrl = new FormControl(true);
-    this.zoomCtrl = new FormControl('page-fit');
-    this.formatCtrl = new FormControl(2);
-    this.tajweedColorCtrl = new FormControl(true);
+    this.isJustifiedCtrl = new UntypedFormControl(true);
+    this.zoomCtrl = new UntypedFormControl('page-fit');    
+    this.tajweedColorCtrl = new UntypedFormControl(true);
 
     this.currentPageNumber = this.form.controls['currentPageNumber'].value;
+
 
     this.zooms = [
       {
@@ -272,17 +261,10 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.texFormat = true;
 
-    this.totalPages = this.totalPageMadina;
+    this.totalPages = quranTextService.nbPages;
     this.maxPages = this.totalPages;
 
     this.pages = new Array(this.maxPages);
-
-    this.layoutService.statusObserver.subscribe((status) => {
-      this.wasmStatus = status.message + " ...";
-      if (status.error) {
-        console.log("Error : " + JSON.stringify(status.error));
-      }
-    })
 
     window.onerror = (msg, url, lineNo, columnNo, error) => {
       console.log("Error occured: " + msg + error.stack);
@@ -290,21 +272,23 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
       return false;
     }
 
-    this.itemSize = LayoutService.pageHeight;
+    this.itemSize = this.pageSize.height;
 
     this.pageNumberBoxIsMoved = false;
 
     this.dragPosition = { x: 0, y: 0 }
 
-    const userAgent = (typeof navigator !== 'undefined' && navigator.userAgent) || '';
-    const isAndroid = /Android/.test(userAgent);
-    const isIOS = /\b(iPad|iPhone|iPod)(?=;)/.test(userAgent);
+    let userAgent = (typeof navigator !== 'undefined' && navigator.userAgent) || '';
+    let isAndroid = /Android/.test(userAgent);
+    let isIOS = /\b(iPad|iPhone|iPod)(?=;)/.test(userAgent);
 
     if (isIOS || isAndroid) {
       this.maxCanvasPixels = 5242880;
     }
 
     this.constrainPosition = this.adjustPageNumBoxPosition.bind(this);
+
+    this.fontsize = this.defaultFontSize;
 
   }
 
@@ -315,15 +299,20 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (this.pageNumberBoxRef) {
 
-      const box = this.pageNumberBoxRef.element.nativeElement;
+      var box = this.pageNumberBoxRef.element.nativeElement;
 
-      const min = 60; //toolbarHeight + box.offsetHeight;
+      var pos: any = this.pageNumberBoxRef.getFreeDragPosition();
+      console.log("Pos=", pos);
+
+      var toolbarHeight = 48;
+
+      var min = 60; //toolbarHeight + box.offsetHeight;
 
       if (point.y < min) {
         point.y = min;
       }
 
-      const max = box.parentElement.clientHeight - box.offsetHeight + min;
+      var max = box.parentElement.clientHeight - box.offsetHeight + min;
 
       if (point.y > max) {
         point.y = max;
@@ -339,135 +328,88 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.viewAreaElement = this.firstMyCustomDirective.getElementRef().nativeElement;
 
-    this.viewAreaElement.focus();
+    //this.loaded = true;
+    setTimeout(() => {
 
-    this.setViewport(this.getScale(this.zoomCtrl.value), false);
+      this.ngZone.runOutsideAngular(() => {
 
-    this.layoutService.promise.then(result => {
-      this.quranData = result;
-    })
-      .catch(error => {
-        console.error(error)
-      });
+        document.fonts.load("12px oldmadina").then(() => {
 
-    this.layoutService.promise.then(() => {
-      this.ngZone.runOutsideAngular(async () => {
+          this.setViewport(this.getScale(this.zoomCtrl.value), false);
 
-
-        this.pageElements.forEach((page, index) => {
-          this.views[index] = new PageView(page.nativeElement, index, this.layoutService, this.viewport, this);
-        });
-
-
-
-        this.outline = this.layoutService.getOutline(true);
-
-        this.isJustifiedCtrl.valueChanges.subscribe(value => {
-          this.ngZone.runOutsideAngular(() => {
-            //respone.useJustification = value;
-            this.buffer.reset();
-            this.update();
+          this.pageElements.forEach((page, index) => {
+            //this.views[index] = new PageView(page.nativeElement, index, this.quranService, this.viewport, this.renderingQueue);
+            this.views[index] = new PageView(page.nativeElement, index,
+              this.calculatewidthElem.nativeElement, this.lineJustify.nativeElement,
+              this.viewport, this.tajweedService, this.quranTextService);
           });
-        });
 
-        this.scrollState = {
-          right: true,
-          down: true,
-          lastX: this.viewAreaElement.scrollLeft,
-          lastY: this.viewAreaElement.scrollTop
-        };
+          this.scrollState = {
+            right: true,
+            down: true,
+            lastX: this.viewAreaElement.scrollLeft,
+            lastY: this.viewAreaElement.scrollTop
+          };
 
 
-        this.scrollingSubscription = this.firstMyCustomDirective.elementScrolled()
-          .pipe(
-            // Start off with a fake scroll event so we properly detect our initial position.
-            startWith(null!),
-            // Collect multiple events into one until the next animation frame. This way if
-            // there are multiple scroll events in the same frame we only need to recheck
-            // our layout once.           
-            auditTime(0, animationFrameScheduler),
-            //debounceTime(50, animationFrameScheduler)
-          ).subscribe((data) => {
-            this.ngZone.runOutsideAngular(() => {
+          this.scrollingSubscription = this.firstMyCustomDirective.elementScrolled()
+            .pipe(
+              // Start off with a fake scroll event so we properly detect our initial position.
+              startWith(null!),
+              // Collect multiple events into one until the next animation frame. This way if
+              // there are multiple scroll events in the same frame we only need to recheck
+              // our layout once.           
+              auditTime(0, animationFrameScheduler),
+              //debounceTime(0, animationFrameScheduler)
+            ).subscribe((data) => {
               if (!this.disableScroll) {
                 this.scrollUpdated()
               } else {
                 this.disableScroll = false;
               }
+
+
+
             });
 
-          });
-
-        this.zoomCtrl.valueChanges.subscribe(value => {
-          if (value !== 'custom') {
-            this.setScale(this.getScale(value))
-          } else {
-            this.setScale(this.customScale)
-          }
-        });
-
-        this.formatCtrl.valueChanges.subscribe(value => {
-          if (value == 1) {
-            this.totalPages = this.totalPageTex;
-            this.texFormat = true;
-            this.fontScale = 1;
-            //this.quranService.quranShaper.setScalePoint(this.fontScale);
-            this.outline = this.layoutService.getOutline(true);
-          } else {
-            this.totalPages = 604;
-            this.texFormat = false;
-            this.fontScale = 0.80;
-            //this.quranService.quranShaper.setScalePoint(this.fontScale);
-            this.outline = this.layoutService.getOutline(false);
-          }
-
-          this.ngZone.runOutsideAngular(() => {
-            this.buffer.reset();
-            this.update();
-          });
-        });
-
-        this.tajweedColorCtrl.valueChanges.subscribe(value => {
-
-          this.ngZone.runOutsideAngular(() => {
-            this.buffer.reset();
-            this.update();
-          });
-        });
-
-        const layoutChanges = this.breakpointObserver.observe([
-          '(orientation: portrait)',
-          '(orientation: landscape)',
-          '(hover: none)',
-        ]);
-
-        layoutChanges.subscribe(result => {
-          if (result.breakpoints['(hover: none)']) {
-            if (result.breakpoints['(orientation: portrait)']) {
-              this.zoomCtrl.setValue('page-width');
-            } else {
-              this.zoomCtrl.setValue('page-width');
+          this.zoomCtrl.valueChanges.subscribe(value => {
+            if (value !== 'custom') {
+              this.setZoom(value);
             }
-          } else {
-            this.zoomCtrl.setValue('page-fit');
-          }
+          });
 
-        });
+          this.outline = this.quranTextService.outline;
 
-        //let scroll = this.watchScroll(this.viewAreaElement, this.scrollUpdated.bind(this));
+          this.tajweedColorCtrl.valueChanges.subscribe(value => {
+
+            this.ngZone.runOutsideAngular(() => {
+              this.buffer.reset();
+              this.update();
+            });
+          });
+
+          const layoutChanges = this.breakpointObserver.observe([
+            '(orientation: portrait)',
+            '(orientation: landscape)',
+            '(hover: none)',
+          ]);
+
+          layoutChanges.subscribe(result => {
+            if (result.breakpoints['(hover: none)']) {
+              if (result.breakpoints['(orientation: portrait)']) {
+                this.zoomCtrl.setValue('page-width');
+              } else {
+                this.zoomCtrl.setValue('page-width');
+              }
+            } else {
+              this.zoomCtrl.setValue('page-fit');
+            }
+
+          });
+        })
 
       });
-
-
-    }).catch((error) => {
-      this.wasmStatus = "Error during compilation. Cannot proceede"
-      const message = this.wasmStatus;
-      if (error && error.message) {
-        this.wasmStatus = "Error during compilation. Cannot proceede." + error.message;
-      }
-      console.log(message, error);
     });
-
   }
 
   formatLabel(value: number) {
@@ -476,22 +418,20 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   fontScaleChanged(event) {
-    /*
-    this.quranService.quranShaper.setScalePoint(event.value);
     this.ngZone.runOutsideAngular(() => {
       this.buffer.reset();
       this.update();
-    });*/
+    });
   }
 
   updatePageNumber(event) {
-    const value = this.form.controls['currentPageNumber'].value;
+    let value = this.form.controls['currentPageNumber'].value;
 
     if (value < 1 || value > this.totalPages) {
       this.form.controls['currentPageNumber'].setValue(this.currentPageNumber);
     }
     else if (value !== this.currentPageNumber) {
-      const offset = (value - 1) * this.itemSize;
+      let offset = (value - 1) * this.itemSize;
       this.currentPageNumber = value;
       this.firstMyCustomDirective.scrollTo({ top: offset });
     }
@@ -514,32 +454,38 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
 
   setPage(pageNumber) {
 
-    const offset = (pageNumber - 1) * this.itemSize;
+    let offset = (pageNumber - 1) * this.itemSize;
     this.currentPageNumber = pageNumber;
     this.form.controls['currentPageNumber'].setValue(this.currentPageNumber);
     this.firstMyCustomDirective.scrollTo({ top: offset });
 
   }
-
-  private setViewport(scale, updateView: boolean, duringZoom = false) {
-
+  private setViewport(scale, updateView: boolean, duringZoom: boolean = false) {
+    const borderWidth = 2;
     this.scale = scale;
-
+    this.fontsize = this.defaultFontSize * scale;
     this.viewport = {
-      width: Math.floor(LayoutService.pageWidth * this.scale * LayoutService.CSS_UNITS),
-      height: Math.floor(LayoutService.pageHeight * this.scale * LayoutService.CSS_UNITS),
+      width: Math.floor(this.pageSize.width * this.scale),
+      height: Math.floor(this.pageSize.height * this.scale + borderWidth),
+      fontSize: this.fontsize,
+      scale : this.scale
     }
 
-    this.itemSize = this.viewport.height + 2;
+
+
+    this.itemSize = this.viewport.height // + 2 /* border height */;
 
     this.updateWidth(updateView, duringZoom);
-
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
+    //if (this.container) {
+    //    this.container.innerHTML = '';
+    //    this.drawCanvas();
+    //}
 
-    const width = event.target.innerWidth;
+    let width = event.target.innerWidth;
 
     this.isSideBySide = width >= this.sideBySideWidth;
 
@@ -556,8 +502,7 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
   update() {
 
     const visible = this._getVisiblePages();
-    const visiblePages = visible.views
-    const numVisiblePages = visiblePages.length;
+    const visiblePages = visible.views, numVisiblePages = visiblePages.length;
 
     if (numVisiblePages === 0) {
       return;
@@ -566,7 +511,7 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
     const newCacheSize = Math.max(DEFAULT_CACHE_SIZE, 2 * numVisiblePages + 1);
     this.buffer.resize(newCacheSize, visiblePages);
 
-    this.forceRendering(visible);
+    this.forceRendering(visible)
 
     if (visible.views && visible.views.length) {
       this.ngZone.run(() => {
@@ -580,60 +525,8 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  renderView(view: PageView, canvasWidth, canvasHeight, texFormat, tajweedColor, hasRestrictedScaling) {
-    switch (view.renderingState) {
-      case RenderingStates.FINISHED:
-        return false;
-      case RenderingStates.PAUSED:
-        this.highestPriorityPage = view.renderingId;
-        view.resume();
-        break;
-      case RenderingStates.RUNNING:
-        this.highestPriorityPage = view.renderingId;
-        break;
-      case RenderingStates.INITIAL:
-        this.highestPriorityPage = view.renderingId;
-        view.draw(canvasWidth, canvasHeight, texFormat, hasRestrictedScaling).finally(() => {
-          //console.log(`Finish draw page ${view.id} with state ${view.renderingState}`);
-          this.update()
-        });
-        break;
-    }
-    return true;
-  }
+  updateWidth(updateView: boolean, duringZoom: boolean = false) {
 
-  isHighestPriority(view) {
-    return this.highestPriorityPage === view.renderingId;
-  }
-
-  updateWidth(updateView: boolean, duringZoom = false) {
-    const ctx = this.testcanvasRef.nativeElement.getContext('2d', { alpha: true, });
-
-    const outputScale = this.layoutService.getOutputScale(ctx);
-
-    this.viewport.hasRestrictedScaling = false;
-
-    if (this.maxCanvasPixels > 0) {
-
-      const pixelsInViewport = this.viewport.width * this.viewport.height;
-      const maxScale = Math.sqrt(this.maxCanvasPixels / pixelsInViewport);
-      if (outputScale.sx > maxScale || outputScale.sy > maxScale) {
-        outputScale.sx = maxScale;
-        outputScale.sy = maxScale;
-        outputScale.scaled = true;
-        this.viewport.hasRestrictedScaling = true;
-      }
-    }
-
-    //let sfx = this.approximateFraction(outputScale.sx);
-    //let sfy = this.approximateFraction(outputScale.sy);
-
-    const canvasWidth = Math.round(this.viewport.width * outputScale.sx); // this.roundToDivide(this.viewport.width * outputScale.sx, sfx[0]);
-    const canvasHeight = Math.round(this.viewport.height * outputScale.sy); //this.roundToDivide(this.viewport.height * outputScale.sy, sfy[0]);
-
-    //if (canvasWidth !== this.canvasWidth || canvasHeight !== this.canvasHeight) {
-    this.canvasWidth = canvasWidth;
-    this.canvasHeight = canvasHeight;
 
     if (updateView) {
       this.views.forEach(a => a.update(this.viewport, this.viewport.hasRestrictedScaling, duringZoom));
@@ -642,61 +535,16 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   setOutline(outline) {
-    //let offset = outline.dest[0].num * this.itemSize + (this.pageSize.height - outline.dest[3]) * this.scale * CSS_UNITS;
-    const offset = outline.pageNumber * this.itemSize + outline.y * this.scale * LayoutService.CSS_UNITS;
-    this.currentPageNumber = outline.pageNumber + 1;
+
+    const paddingTop = 0.2 * this.viewport.fontSize;
+    const lineHeight = 1.77;
+    const y = paddingTop +  1.77 * this.viewport.fontSize * outline.lineIndex;
+    
+    let offset = outline.pageIndex * this.itemSize + y;
+    this.currentPageNumber = outline.pageIndex + 1;
     this.form.controls['currentPageNumber'].setValue(this.currentPageNumber);
 
     this.firstMyCustomDirective.scrollTo({ top: offset });
-  }
-
-
-
-  approximateFraction(x) {
-    // Fast paths for int numbers or their inversions.
-    if (Math.floor(x) === x) {
-      return [x, 1];
-    }
-    let xinv = 1 / x;
-    let limit = 8;
-    if (xinv > limit) {
-      return [1, limit];
-    }
-    else if (Math.floor(xinv) === xinv) {
-      return [1, xinv];
-    }
-    let x_ = x > 1 ? xinv : x;
-    // a/b and c/d are neighbours in Farey sequence.
-    let a = 0, b = 1, c = 1, d = 1;
-    // Limiting search to order 8.
-    while (true) {
-      // Generating next term in sequence (order of q).
-      let p = a + c, q = b + d;
-      if (q > limit) {
-        break;
-      }
-      if (x_ <= p / q) {
-        c = p;
-        d = q;
-      }
-      else {
-        a = p;
-        b = q;
-      }
-    }
-    let result;
-    // Select closest of the neighbours to x.
-    if (x_ - a / b < c / d - x_) {
-      result = x_ === x ? [a, b] : [b, a];
-    }
-    else {
-      result = x_ === x ? [c, d] : [d, c];
-    }
-    return result;
-  }
-  roundToDivide(x, div) {
-    let r = x % div;
-    return r === 0 ? x : Math.round(x - r + div);
   }
 
   zoom(event) {
@@ -759,9 +607,9 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
     newScale = Math.ceil(newScale * 10) / 10;
     newScale = Math.min(MAX_SCALE, newScale);
 
-    this.customScale = newScale;
-
     this.zoomCtrl.setValue('custom');
+
+    this.setScale(newScale);
 
   }
   //@HostListener('keydown.control')
@@ -780,16 +628,32 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    const oldScale = this.scale;
+    let oldScale = this.scale;
 
-    const pageIndex = (this.visibleViews.first.id - 1) || 0;
 
-    const element = this.views[pageIndex].div;
 
-    const top = this.firstMyCustomDirective.measureScrollOffset('top') //bottom = top + this.viewAreaElement.clientHeight;
-    //const left = this.firstMyCustomDirective.measureScrollOffset('start') //right = left + this.viewAreaElement.clientWidth;   
+    //let pageIndex = this.currentPageNumber - 1;
 
-    const offset = ((Math.max(0, top - element.offsetTop) / oldScale) * newScale); // + 1;
+    let pageIndex = (this.visibleViews.first.id - 1) || 0;
+
+    var element = this.views[pageIndex].div;
+
+    const top = this.firstMyCustomDirective.measureScrollOffset('top'), bottom = top + this.viewAreaElement.clientHeight;
+    const left = this.firstMyCustomDirective.measureScrollOffset('start'), right = left + this.viewAreaElement.clientWidth;
+
+    /*
+    const currentWidth = element.offsetLeft + element.clientLeft;
+    const currentHeight = element.offsetTop + element.clientTop;
+    const viewWidth = element.clientWidth, viewHeight = element.clientHeight;
+    const viewRight = currentWidth + viewWidth;
+    const viewBottom = currentHeight + viewHeight;
+
+    const hiddenHeight = Math.max(0, top - currentHeight) +    Math.max(0, viewBottom - bottom);
+    const hiddenWidth = Math.max(0, left - currentWidth) + Math.max(0, viewRight - right);*/
+
+    let offset = ((Math.max(0, top - element.offsetTop) / oldScale) * newScale); // + 1;
+
+
 
     this.ngZone.runOutsideAngular(() => {
 
@@ -799,8 +663,6 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
 
       this.update();
     });
-
-    this.cdr.detectChanges()
   }
 
   @HostListener('document:keydown.control.-', ['$event'])
@@ -816,23 +678,53 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
     newScale = Math.floor(newScale * 10) / 10;
     newScale = Math.max(MIN_SCALE, newScale);
 
-    this.customScale = newScale;
-
     this.zoomCtrl.setValue('custom');
+
+    this.setScale(newScale);
+  }
+
+  isViewFinished(view) {
+    return view.renderingState === RenderingStates.FINISHED;
+  }
+
+  getHighestPriority(visible, views, scrolledDown, totalPages) {
+
+    let visibleViews = visible.views;
+
+    let numVisible = visibleViews.length;
+    if (numVisible === 0) {
+      return null;
+    }
+    for (let i = 0; i < numVisible; ++i) {
+      let view = visibleViews[i].view;
+      if (!this.isViewFinished(view)) {
+        return view;
+      }
+    }
+
+    // All the visible views have rendered; try to render next/previous pages.
+    if (scrolledDown) {
+      let nextPageIndex = visible.last.id;
+      // IDs start at 1, so no need to add 1.
+      if (views[nextPageIndex] && !this.isViewFinished(views[nextPageIndex]) && nextPageIndex < totalPages) {
+        return views[nextPageIndex];
+      }
+    } else {
+      let previousPageIndex = visible.first.id - 2;
+      if (views[previousPageIndex] &&
+        !this.isViewFinished(views[previousPageIndex])) {
+        return views[previousPageIndex];
+      }
+    }
+    // Everything that needs to be rendered has been.
+    return null;
   }
 
   forceRendering(currentlyVisiblePages) {
-    const visiblePages = currentlyVisiblePages || this._getVisiblePages();
+    let visiblePages = currentlyVisiblePages || this._getVisiblePages();
 
-
-
-    const scrollAhead = (this._isScrollModeHorizontal ? this.scrollState.right : this.scrollState.down);
-    const pageView = this.getHighestPriority(visiblePages,
-      this.views,
-      scrollAhead, this.totalPages);
-
-    this.toggleLoadingIconSpinner(visiblePages);
-
+    let scrollAhead = (this._isScrollModeHorizontal ? this.scrollState.right : this.scrollState.down);
+    let pageView = this.getHighestPriority(visiblePages, this.views, scrollAhead, this.totalPages);
     if (pageView) {
       this.buffer.push(pageView);
       this.renderView(pageView,
@@ -845,27 +737,44 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
     return false;
   }
 
-  toggleLoadingIconSpinner(visiblePages) {
-    const visibleIds = new Set()
-    for (const visisbleView of visiblePages.views) {
-      const pageView = visisbleView.view;
-      pageView?.toggleLoadingIconSpinner(/* viewVisible = */ true);
-      visibleIds.add(visisbleView.id)
+  renderView(view: PageView, canvasWidth, canvasHeight, texFormat, tajweedColor, hasRestrictedScaling) {
+    const oldHigh = this.highestPriorityPage;
+    switch (view.renderingState) {
+      case RenderingStates.FINISHED:
+        return false;
+      case RenderingStates.PAUSED:
+        this.highestPriorityPage = view;
+        view.resume();
+        break;
+      case RenderingStates.RUNNING:
+        this.highestPriorityPage = view;
+        break;
+      case RenderingStates.INITIAL:
+        this.highestPriorityPage = view;
+        view.draw(canvasWidth, canvasHeight, texFormat, tajweedColor, hasRestrictedScaling)
+          .catch(error => {
+            console.log(error)
+          })
+          .finally(() => {
+            // console.log("Finish rendering view " + view.id + " state=" + view.renderingState)          
+            this.forceRendering(null)
+          });
+        break;
     }
-
-    this.buffer.toggleLoadingIconSpinner(visibleIds);
-
+    if (oldHigh != null && oldHigh != this.highestPriorityPage) {
+      oldHigh.pause()
+    }
+    return true;
   }
 
   _getVisiblePages() {
 
-    const scrollEl = this.firstMyCustomDirective.getElementRef().nativeElement;
+    let scrollEl = this.firstMyCustomDirective.getElementRef().nativeElement;
 
     let top = this.firstMyCustomDirective.measureScrollOffset('top')
     if (top < 0) top = 0;
     const bottom = top + scrollEl.clientHeight;
-    const left = this.firstMyCustomDirective.measureScrollOffset('start')
-    const right = left + scrollEl.clientWidth;
+    const left = this.firstMyCustomDirective.measureScrollOffset('start'), right = left + scrollEl.clientWidth;
 
     const firstVisibleIndex = Math.floor(top / this.itemSize);
 
@@ -874,7 +783,7 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
     lastVisibleIndex = Math.min(this.totalPages - 1, lastVisibleIndex);
     //lastVisibleIndex = firstVisibleIndex + 1;
 
-    const visible = [];
+    let visible = [];
     for (let currIndex = firstVisibleIndex; currIndex <= lastVisibleIndex; currIndex++) {
       const view = this.views[currIndex], element = view.div;
       const currentWidth = element.offsetLeft + element.clientLeft;
@@ -902,7 +811,7 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
     const first = visible[0], last = visible[visible.length - 1];
 
     visible.sort(function (a, b) {
-      const pc = a.percent - b.percent;
+      let pc = a.percent - b.percent;
       if (Math.abs(pc) > 0.001) {
         return -pc;
       }
@@ -912,49 +821,6 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
 
     return { first, last, views: visible, };
   }
-  isViewFinished(view) {
-    return view.renderingState === RenderingStates.FINISHED;
-  }
-  getHighestPriority(visible, views, scrolledDown, totalPages) {
-    /**
-     * The state has changed. Figure out which page has the highest priority to
-     * render next (if any).
-     *
-     * Priority:
-     * 1. visible pages
-     * 2. if last scrolled down, the page after the visible pages, or
-     *    if last scrolled up, the page before the visible pages
-     */
-    const visibleViews = visible.views;
-
-    const numVisible = visibleViews.length;
-    if (numVisible === 0) {
-      return null;
-    }
-    for (let i = 0; i < numVisible; ++i) {
-      const view = visibleViews[i].view;
-      if (!this.isViewFinished(view)) {
-        return view;
-      }
-    }
-
-    // All the visible views have rendered; try to render next/previous pages.
-    if (scrolledDown) {
-      const nextPageIndex = visible.last.id;
-      // IDs start at 1, so no need to add 1.
-      if (views[nextPageIndex] && !this.isViewFinished(views[nextPageIndex]) && nextPageIndex < totalPages) {
-        return views[nextPageIndex];
-      }
-    } else {
-      const previousPageIndex = visible.first.id - 2;
-      if (views[previousPageIndex] &&
-        !this.isViewFinished(views[previousPageIndex])) {
-        return views[previousPageIndex];
-      }
-    }
-    // Everything that needs to be rendered has been.
-    return null;
-  }
 
   updateHostClasses() {
 
@@ -962,7 +828,7 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getScale(value) {
 
-    const container = this.elRef.nativeElement;
+    let container = this.elRef.nativeElement;
 
     let scale = parseFloat(value);
     if (scale > 0) {
@@ -980,8 +846,8 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
       if (!noPadding && this._isScrollModeHorizontal) {
         [hPadding, vPadding] = [vPadding, hPadding]; // Swap the padding values.
       }
-      const pageWidthScale = (container.clientWidth) / (LayoutService.pageWidth * LayoutService.CSS_UNITS);
-      const pageHeightScale = (container.clientHeight - vPadding) / (LayoutService.pageHeight * LayoutService.CSS_UNITS);
+      let pageWidthScale = (container.clientWidth) / (this.pageSize.width);
+      let pageHeightScale = (container.clientHeight - vPadding) / (this.pageSize.height);
 
       switch (value) {
         case 'page-actual':
@@ -999,12 +865,27 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
         case 'custom':
           scale = this.scale;
           break;
+        /*
+        case 'auto':
+          // For pages in landscape mode, fit the page height to the viewer
+          // *unless* the page would thus become too wide to fit horizontally.
+          let horizontalScale = pageWidthScale;
+          scale = Math.min(MAX_AUTO_SCALE, horizontalScale);
+          break;*/
         default:
           return 1;
       }
     }
 
     return scale;
+  }
+
+  setZoom(value) {
+
+    let scale = this.getScale(value);
+
+    this.setScale(scale);
+
   }
 
   toggleFullScreen() {
@@ -1047,14 +928,14 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
 
   movePageNumberBox() {
 
-    const offset = this.firstMyCustomDirective.measureScrollOffset('top');
+    var offset = this.firstMyCustomDirective.measureScrollOffset('top');
 
     if (this.viewAreaElement.scrollHeight) {
-      const perc = offset / (this.viewAreaElement.scrollHeight);
+      var perc = offset / (this.viewAreaElement.scrollHeight);
 
-      const box = this.pageNumberBoxRef.element.nativeElement;
+      var box = this.pageNumberBoxRef.element.nativeElement;
 
-      const top = Math.floor((box.parentElement.clientHeight - box.offsetHeight) * perc);
+      var top = Math.floor((box.parentElement.clientHeight - box.offsetHeight) * perc);
 
       this.dragPosition = { x: 0, y: top };
     }
@@ -1063,14 +944,14 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private scrollUpdated() {
 
-    const currentX = this.viewAreaElement.scrollLeft;
-    const lastX = this.scrollState.lastX;
+    let currentX = this.viewAreaElement.scrollLeft;
+    let lastX = this.scrollState.lastX;
     if (currentX !== lastX) {
       this.scrollState.right = currentX > lastX;
     }
     this.scrollState.lastX = currentX;
-    const currentY = this.viewAreaElement.scrollTop;
-    const lastY = this.scrollState.lastY;
+    let currentY = this.viewAreaElement.scrollTop;
+    let lastY = this.scrollState.lastY;
     if (currentY !== lastY) {
       this.scrollState.down = currentY > lastY;
     }
@@ -1082,7 +963,9 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
       this.pageNumberBoxIsMoved = false;
     }
 
-    this.update();
+    this.ngZone.runOutsideAngular(() => {
+      this.update();
+    });
   }
 
   watchScroll(viewAreaElement, callback) {
@@ -1132,10 +1015,18 @@ export class QuranCanvasComponent implements OnInit, AfterViewInit, OnDestroy {
       data: {}
     });
 
-    dialogRef.afterClosed().subscribe(() => {
+    dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
 
   }
+  /*
+  @HostListener('window:reload')
+  doSomething() {
+    debugger;
+  }*/
+
+
+
 }
 

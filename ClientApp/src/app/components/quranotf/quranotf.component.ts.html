@@ -174,7 +174,7 @@
       <div #viewerContainer id="viewerContainer" cdkScrollable (toggleFullScreen)="toggleFullScreen()"
            appQuranGestures (zoom)="zoom($event)" (endzoom)="endzoom($event)">
         <div id="viewer" class="pdfViewer">
-          <quran-pages [style.font-size.px]="fontsize" ></quran-pages>
+          <quran-pages [style.font-size.px]="fontsize"></quran-pages>
           <!--
   <div #page *ngFor="let page of pages; let index = index" class="page"
        attr.data-page-number="{{index}}" data-loaded="false" [hidden]="index >= totalPages">

@@ -1,19 +1,12 @@
 <div [hidden]="hideElement" style="height:100%" class="qurancontainer">
   <canvas #testcanvas style="display:none"></canvas>
-  <div *ngIf="!loaded" style="height:100%">
-    <img class="imgcenter"
-         src="assets/digitalkhatt-logo.svg"
-         alt="Quran">
-    <div style="margin: 0 auto;display: block;text-align:center;margin-top:10px;">
-      <strong>{{wasmStatus}}</strong>
-      <br />
-      <span><strong>Please wait, this might take a few minutes.</strong></span>
-
-    </div>
-  </div>
-  <div class="quran-toolbar" *ngIf="loaded">
+  <div #calculatewidthElem id="calculatewidthElem"></div>
+  <div #lineJustify class="page" id="lineJustify"></div>
+  <div class="quran-toolbar">
     <div class="quran-toolbar-row">
+
       <div class="leftnav">
+        
         <button mat-button class="hamburger" (click)="sidenav.toggle()" title="Surahs menu">
           <mat-icon svgIcon="menu" style="color:darkblue;"></mat-icon>
         </button>
@@ -28,7 +21,7 @@
             <button type="button" [disabled]="currentPageNumber === totalPages" (click)="navigateTo('last')" mat-mini-fab class="small-icon-button"><mat-icon>last_page</mat-icon></button>
           </div>
           <mat-form-field style="width:57px;font-size:small;margin-right:20px;">
-            <input matInput [type]="number" [formControl]="form.controls['currentPageNumber']" (blur)="updatePageNumber($event)" (keydown.enter)="updatePageNumber($event)" style="color:black">
+            <input matInput [formControl]="form.controls['currentPageNumber']" (blur)="updatePageNumber($event)" (keydown.enter)="updatePageNumber($event)" style="color:black">
             <span matSuffix>/ {{totalPages}}</span>
           </mat-form-field>
         </div>
@@ -43,10 +36,10 @@
           </button>
           <button mat-icon-button color="accent" (click)="zoomIn()">
             <mat-icon>add_circle</mat-icon>
-          </button>          
+          </button>
           <mat-form-field class="hiddenSmallView" style="width:150px;margin-left:20px;font-size:small;">
             <mat-select disableOptionCentering panelClass="mypanelclass" [formControl]="zoomCtrl">
-              <mat-option  value="custom">{{(scale * 100) | number:'1.0-0'  }} %</mat-option>
+              <mat-option style="display:none;" value="custom">{{(scale * 100) | number:'1.0-0'  }} %</mat-option>
               <!--<mat-option value="auto" style="line-height:2em;height:2em;"><span>Automatic Zoom</span></mat-option>-->
               <mat-option value="page-actual" style="line-height:2em;height:2em;"><span>Actual Size</span></mat-option>
               <mat-option value="page-fit" style="line-height:2em;height:2em;"><span>Page Fit</span></mat-option>
@@ -70,34 +63,34 @@
 
         </mat-menu>-->
         <form style="color:black;display: flex;flex-direction: row;align-items: center;">
+          <!--
           <button mat-icon-button [matMenuTriggerFor]="menu" title="Format">
-            <!--<mat-icon>more_vert</mat-icon>-->
             <mat-icon>text_format</mat-icon>
           </button>
-          <mat-menu #menu="matMenu" class="panelClass">
-            <div mat-menu-item>
-              <mat-icon>crop_portrait</mat-icon>
-              <mat-radio-group [formControl]="formatCtrl">
-                <mat-radio-button [value]="1" style="margin-right:10px;">Tex</mat-radio-button>
-                <mat-radio-button [value]="2">Medina</mat-radio-button>
-              </mat-radio-group>
-            </div>
+                  <mat-menu #menu="matMenu" class="panelClass">
+                    <div mat-menu-item>
+                      <mat-icon>crop_portrait</mat-icon>
+                      <mat-radio-group [formControl]="formatCtrl">
+                        <mat-radio-button [value]="1" style="margin-right:10px;">Tex</mat-radio-button>
+                        <mat-radio-button [value]="2">Medina</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
 
-            <div mat-menu-item>
-              <mat-icon>format_align_justify</mat-icon>
-              <mat-slide-toggle [formControl]="isJustifiedCtrl">Justification?</mat-slide-toggle>
-            </div>
-            <div mat-menu-item>
-              <mat-icon>invert_colors</mat-icon>
-              <mat-slide-toggle [formControl]="tajweedColorCtrl">Tajweed Color</mat-slide-toggle>
-            </div>
-            <div mat-menu-item style="overflow:visible">
-              <mat-icon>format_size</mat-icon>
-              <mat-slider name="fontScale" min="0.5" max="1" step="0.01" value="1" [(ngModel)]="fontScale" (input)="fontScaleChanged($event)"
-                          thumbLabel [displayWith]="formatLabel"></mat-slider>
+                    <div mat-menu-item>
+                      <mat-icon>format_align_justify</mat-icon>
+                      <mat-slide-toggle [formControl]="isJustifiedCtrl">Justification?</mat-slide-toggle>
+                    </div>
+                    <div mat-menu-item>
+                      <mat-icon>invert_colors</mat-icon>
+                      <mat-slide-toggle [formControl]="tajweedColorCtrl">Tajweed Color</mat-slide-toggle>
+                    </div>
+                    <div mat-menu-item style="overflow:visible">
+                      <mat-icon>format_size</mat-icon>
+                      <mat-slider name="fontScale" min="0.5" max="1" step="0.01" value="1" [(ngModel)]="fontScale" (input)="fontScaleChanged($event)"
+                                  thumbLabel [displayWith]="formatLabel"></mat-slider>
 
-            </div>
-          </mat-menu>
+                    </div>
+                  </mat-menu>-->
           <button mat-icon-button [routerLink]='["/about"]' title="About">
             <mat-icon>info</mat-icon>
           </button>
@@ -121,40 +114,14 @@
 
   </div>
   <mat-sidenav-container class="sidenav-container" [class.has-floating-toc]="hasFloatingToc"
-                         role="main" style="height:100% !important;background-color:white;" >
+                         role="main" style="height:100% !important;background-color:white;">
 
     <mat-sidenav [ngClass]="{'collapsed': !isSideBySide}" #sidenav class="sidenav" [mode]="mode" [opened]="isOpened" (openedChange)="updateHostClasses()">
-      <div style="width:100%;padding:0px;box-sizing:border-box;display: flex;flex-direction: column;height: 100%;">
-        <!--
-              <div style="    width: 100%;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-        ">
-                <button type="button" [disabled]="currentPageNumber === 1" (click)="navigateTo('first')" mat-mini-fab style="margin-right:8px"><mat-icon>first_page</mat-icon></button>
-                <button type="button" [disabled]="currentPageNumber === 1" (click)="navigateTo('prev')" mat-mini-fab style="margin-right:8px"><mat-icon>chevron_left</mat-icon></button>
-                <button type="button" [disabled]="currentPageNumber === totalPages" (click)="navigateTo('next')" mat-mini-fab style="margin-right:8px"><mat-icon>chevron_right</mat-icon></button>
-                <button type="button" [disabled]="currentPageNumber === totalPages" (click)="navigateTo('last')" mat-mini-fab><mat-icon>last_page</mat-icon></button>
-              </div>-->
-        <!--
-        <mat-form-field style="width:100px;">
-          <input matInput [type]="number" formControlName="currentPageNumber" (blur)="updatePageNumber($event)" (keydown.enter)="updatePageNumber($event)">
-          <span matSuffix>of {{totalPages}}</span>
-        </mat-form-field>-->
-        <!--
-        <mat-form-field>
-          <input matInput [type]="number">
-          <button mat-icon-button matPrefix><mat-icon>chevron_left</mat-icon></button>
-          <button mat-icon-button matPrefix><mat-icon>first_page</mat-icon></button>
-          <span matSuffix>of {{pageNumber}}</span>
-          <button mat-icon-button matSuffix><mat-icon>chevron_right</mat-icon></button>
-          <button mat-icon-button matSuffix><mat-icon>last_page</mat-icon></button>
-        </mat-form-field>-->
-        <mat-card style="overflow:auto" mat-elevation-z8>
+      <div style="width: 100%; padding: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%;">       
+        <mat-card style="overflow: auto; " mat-elevation-z8 >
 
           <div *ngFor="let item of outline">
-            <button mat-button type="button" (click)="setOutline(item)" style="direction:rtl;width:100%;text-align:left;">{{item.name}}</button>
+            <button mat-button type="button" (click)="setOutline(item)" style="direction: rtl; width: 100%; text-align: right; font-family: digitalkhatt;font-size:larger">{{item.name}}</button>
           </div>
 
 
@@ -164,7 +131,7 @@
     </mat-sidenav>
     <mat-sidenav-content>
       <div class="pageNumberBoxBoundry">
-        <div id="pageNumberBoxBoundry"  style="position:absolute;height:100%;width:100%;">
+        <div id="pageNumberBoxBoundry" style="position:absolute;height:100%;width:100%;">
 
           <div [hidden]="!loaded" #pageNumberBox class="pagenumber-box" cdkDragBoundary="#pageNumberBoxBoundry" cdkDrag cdkDragLockAxis="y"
                [cdkDragFreeDragPosition]="dragPosition"
@@ -180,21 +147,13 @@
         </div>
       </div>
 
-      <div #viewerContainer id="viewerContainer" cdkScrollable [hidden]="!loaded" (toggleFullScreen)="toggleFullScreen()"
+      <div #viewerContainer id="viewerContainer" cdkScrollable (toggleFullScreen)="toggleFullScreen()"
            appQuranGestures (zoom)="zoom($event)" (endzoom)="endzoom($event)">
         <div id="viewer" class="pdfViewer">
-          <div #page *ngFor="let page of pages; let index = index" class="page"
-               attr.data-page-number="{{index}}" data-loaded="false" [hidden]="index >= totalPages">
-          </div>
+          <div #page *ngFor="let page of pages; let index = index" class="page" data-loaded="false" [hidden]="index >= totalPages"></div>
         </div>
-
       </div>
-      <!--
-      <cdk-virtual-scroll-viewport [itemSize]="itemSize" id="viewerContainer"  (click)="toggleFullScreen()" style="height:1000px;">
-        <div #page *cdkVirtualFor="let page of pages; let index = index" class="page"
-             attr.data-page-number="{{index}}" data-loaded="false" [hidden]="index >= totalPages">
-        </div>
-      </cdk-virtual-scroll-viewport>-->
+
     </mat-sidenav-content>
 
 

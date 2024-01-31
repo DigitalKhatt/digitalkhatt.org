@@ -47,4 +47,17 @@ body {
   padding: 0;
 }
 
+@font-face {
+  font-family: digitalkhatt;
+  font-style: normal;
+  src: url('../assets/fonts/digitalkhatt.otf') format("opentype");
+  font-display: block;
+}
+
+@font-face {
+  font-family: oldmadina;
+  font-style: normal;
+  src: /*url('../assets/fonts/oldmadina.woff2') format('woff2')*/ url(../assets/fonts/oldmadina.otf) format("opentype");
+  font-display: block;
+}
 
