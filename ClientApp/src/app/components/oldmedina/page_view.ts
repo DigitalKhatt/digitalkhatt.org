@@ -19,7 +19,6 @@
 */
 
 import { RenderingStates } from './rendering_states';
-import { quranText } from '../../services/quran_text.js'
 import { BooleanLiteral } from 'typescript';
 import { TajweedService } from '../../services/tajweed.service';
 import { QuranTextService } from '../../services/qurantext.service';
@@ -42,6 +41,7 @@ class PageView {
   private maxIterTime = 8000
   private pausePromise: Promise<Boolean>;
   private spaceWidth;
+  private quranText;
   constructor(public div, private index, calculatewidthElem, lineJustify, viewport,
     private tajweedService: TajweedService, private quranTextService: QuranTextService) {
     this.renderingState = RenderingStates.INITIAL;
@@ -65,6 +65,8 @@ class PageView {
     this.zoomLayer = null;
 
     this.hasRestrictedScaling = false;
+
+    this.quranText = quranTextService.quranText;
 
 
   }
@@ -111,7 +113,7 @@ class PageView {
     this.lineJustify.style.width = pageElem.style.width;
     this.lineJustify.style.fontSize = pageElem.style.fontSize
 
-    const lineCount = quranText[this.index].length;
+    const lineCount = this.quranText[this.index].length;
 
     let temp = document.createElement('div');
 
@@ -148,7 +150,7 @@ class PageView {
         lineElem.style.textAlign = "center"
         lineElem.style.marginLeft = margin + "px";
         lineElem.style.marginRight = lineElem.style.marginLeft
-        const lineText = quranText[this.index][lineIndex]
+        const lineText = this.quranText[this.index][lineIndex]
         
         lineElem.classList.add("linesuran")
         if (this.index === 0 || this.index === 1) {
@@ -163,7 +165,7 @@ class PageView {
         lineElem.style.textAlign = "center"
         lineElem.style.marginLeft = margin + "px";
         lineElem.style.marginRight = lineElem.style.marginLeft
-        const lineText = quranText[this.index][lineIndex]
+        const lineText = this.quranText[this.index][lineIndex]
         lineElem.style.fontFeatureSettings = "'basm'"
         //lineElem.textContent = lineText;
         /*
@@ -208,7 +210,7 @@ class PageView {
 
   applyTajweed(tajweedColor, lineElem: HTMLElement, lineIndex) {
 
-    const lineText = quranText[this.index][lineIndex]
+    const lineText = this.quranText[this.index][lineIndex]
 
     if (!tajweedColor) {
 
