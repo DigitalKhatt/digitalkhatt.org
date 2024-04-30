@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { quranText as quranNewMadinah } from './quran_text'
-
-//import { quranText as quranTextOldMadinah } from './quran_text_old_madinah'
+import { quranText as quranTextOldMadinah } from './quran_text_old_madinah'
 
 @Injectable({
   providedIn: 'root',
@@ -15,38 +13,19 @@ export class QuranTextService {
   private _sajsdas: any[] = [];
 
   private madinaLineWidths = new Map([
-    [586 * 15 + 1, 0.81],
-    [593 * 15 + 2, 0.81],
-    [594 * 15 + 5, 0.63],
-    [600 * 15 + 10, 0.63],
-    [601 * 15 + 3, 1],
-    [601 * 15 + 4, 1],
-    [601 * 15 + 7, 1],
-    [601 * 15 + 8, 1],
-    [601 * 15 + 9, 1],
-    [601 * 15 + 10, 1],
-    [601 * 15 + 13, 1],
-    [601 * 15 + 14, 1],
-    [601 * 15 + 15, 1],
-    [602 * 15 + 5, 0.63],
-    [602 * 15 + 11, 0.9],
-    [602 * 15 + 15, 0.53],
-    [603 * 15 + 10, 0.66],
-    [603 * 15 + 13, 1],
-    [603 * 15 + 15, 0.60],
-    [604 * 15 + 3, 1],
-    [604 * 15 + 4, 0.55],
-    [604 * 15 + 7, 1],
-    [604 * 15 + 8, 1],
-    [604 * 15 + 9, 0.55],
-    [604 * 15 + 12, 1],
-    [604 * 15 + 13, 1],
-    [604 * 15 + 14, 0.675],
-    [604 * 15 + 15, 0.5],
+    [600 * 15 + 9, 0.84],
+    [602 * 15 + 5, 0.61],
+    [602 * 15 + 15, 0.59],
+    [603 * 15 + 10, 0.68],
+    [604 * 15 + 4, 0.836],
+    [604 * 15 + 9, 0.836],
+    [604 * 15 + 14, 0.717],
+    [604 * 15 + 15, 0.54],
   ]);
+
   constructor() {
 
-    this._quranText = quranNewMadinah;
+    this._quranText = quranTextOldMadinah;
 
     const start = performance.now();
 
@@ -159,3 +138,5 @@ export class QuranTextService {
     return this._quranText
   }
 }
+
+export const quranTextService = new QuranTextService();

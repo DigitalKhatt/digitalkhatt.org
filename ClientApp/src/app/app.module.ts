@@ -17,30 +17,29 @@
  * <https: //www.gnu.org/licenses />.
 */
 
-import { BrowserModule, HammerGestureConfig } from '@angular/platform-browser';
-import { NgModule, Injectable } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { RouterModule, RouteReuseStrategy, ExtraOptions } from '@angular/router';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatLegacySliderModule as MatSliderModule } from '@angular/material/legacy-slider';
-import { MatIconModule } from '@angular/material/icon';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
-import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatIconRegistry } from '@angular/material/icon';
-import { MatLegacySlideToggleModule as MatSlideToggleModule } from '@angular/material/legacy-slide-toggle';
-import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
-import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/material/legacy-autocomplete';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
-import { MatLegacyRadioModule as MatRadioModule } from '@angular/material/legacy-radio';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
-import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
-import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
-import { MatLegacySnackBarModule as MatSnackBarModule } from '@angular/material/legacy-snack-bar';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { HttpClientModule } from '@angular/common/http';
+import { Injectable, NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/material/legacy-autocomplete';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
+import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
+import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
+import { MatLegacyRadioModule as MatRadioModule } from '@angular/material/legacy-radio';
+import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
+import { MatLegacySlideToggleModule as MatSlideToggleModule } from '@angular/material/legacy-slide-toggle';
+import { MatLegacySliderModule as MatSliderModule } from '@angular/material/legacy-slider';
+import { MatLegacySnackBarModule as MatSnackBarModule } from '@angular/material/legacy-snack-bar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { BrowserModule, HammerGestureConfig } from '@angular/platform-browser';
+import { ExtraOptions, RouteReuseStrategy, RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 
@@ -50,30 +49,30 @@ import { QuranService } from './services/quranservice/quranservice.service';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { CustomIconRegistry, SVG_ICONS } from 'src/app/shared/custom-icon-registry';
 import { PortalModule } from '@angular/cdk/portal';
-import { SidebarContentsService } from './services/navigation/sidebarcontents';
+import { CustomIconRegistry, SVG_ICONS } from 'src/app/shared/custom-icon-registry';
 import { QuranComponent } from './components/quran/quran.component';
+import { SidebarContentsService } from './services/navigation/sidebarcontents';
 
 import { environment } from '../environments/environment';
 
 //import * as Hammer from 'hammerjs';
+import { AboutComponent } from './components/about/about.component';
+import { DynamicTextComponent } from './components/dynamictext/dynamictext.component';
+import { EmptyComponent } from './components/empty/empty.component';
+import { JoinLettersComponent } from './components/joinletters/joinletters.component';
+import { QuranGesturesDirective } from './components/quran/qurangestures.directive';
 import { QuranZoomDirective } from './components/quran/quranzoom.directive';
 import { QuranZoomTouchDirective } from './components/quran/quranzoom.touch.directive';
-import { QuranGesturesDirective } from './components/quran/qurangestures.directive';
-import { AboutComponent } from './components/about/about.component';
-import { CacheRouteReuseStrategy } from './services/cache-route-reuse.strategy';
-import { DynamicTextComponent } from './components/dynamictext/dynamictext.component';
-import { JoinLettersComponent } from './components/joinletters/joinletters.component';
-import { EmptyComponent } from './components/empty/empty.component';
-import { QuranOTFComponent } from './components/quranotf/quranotf.component';
 import { QuranPagesComponent } from './components/quranotf/pages.component';
+import { QuranOTFComponent } from './components/quranotf/quranotf.component';
+import { CacheRouteReuseStrategy } from './services/cache-route-reuse.strategy';
 //import { QuranCanvasComponent } from './components/qurancanvas/qurancanvas.component';
-import { LayoutService } from './services/layoutservice/layoutservice.service';
-import { PWAService } from './services/PWA.service';
 import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
-import { OldMedinaComponent } from './components/oldmedina/oldmedina.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { HBOldMedinaComponent } from './components/hboldmedina/hboldmedina.component';
+import { OldMedinaComponent } from './components/oldmedina/oldmedina.component';
+import { LayoutService } from './services/layoutservice/layoutservice.service';
 //import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
@@ -174,7 +173,8 @@ const routerOptions: ExtraOptions = {
     EmptyComponent,
     QuranOTFComponent,
     QuranPagesComponent,
-    OldMedinaComponent
+    OldMedinaComponent,
+    HBOldMedinaComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -218,6 +218,15 @@ const routerOptions: ExtraOptions = {
           {
             path: 'oldmedina',
             component: OldMedinaComponent
+          }
+        ]
+      },
+      {
+        path: 'hb',
+        children: [          
+          {
+            path: 'oldmedina',
+            component: HBOldMedinaComponent
           }
         ]
       },

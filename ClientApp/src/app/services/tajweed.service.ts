@@ -7,13 +7,10 @@ import { QuranTextService } from './qurantext.service';
   providedIn: 'root',
 })
 export class TajweedService {
-
-  private quranText: any[];
+  
   private TafkhimRE: RegExp
   private OthersRE: RegExp
-  constructor(private quranTextService: QuranTextService) {
-
-    this.quranText = this.quranTextService.quranText;
+  constructor() {
 
     // Tafkhim
     let pattern = "(?<tafkhim1>[طقصخغضظ]\u0651?[\u0652\u064B\u064E\u08F0\u064D\u0650\u08F2\u064C\u064F\u08F1])"
@@ -71,9 +68,9 @@ export class TajweedService {
     this.OthersRE = new RegExp(pattern, "gdu");
   }
 
-  applyTajweed(pageIndex, lineIndex) {
+  applyTajweed(quranText : string[][], pageIndex, lineIndex) {
 
-    const lineText = this.quranText[pageIndex][lineIndex]
+    const lineText = quranText[pageIndex][lineIndex]
 
     // TODO
     const preText = ""

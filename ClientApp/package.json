@@ -27,7 +27,9 @@
     "@angular/cdk": "16.2.13",
     "@angular/material": "16.2.13",
     "@angular/service-worker": "17.1.0",
-    "cbor-web": "8.1.0"
+    "cbor-web": "8.1.0",
+    "harfbuzzjs": "0.3.5",
+    "lz-string": "1.5.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.1.0",

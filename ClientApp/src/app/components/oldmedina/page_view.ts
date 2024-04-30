@@ -120,8 +120,8 @@ class PageView {
     for (let lineIndex = 0; lineIndex < lineCount; lineIndex++) {
       const lineInfo = this.quranTextService.getLineInfo(this.index, lineIndex)
       const lineElem = document.createElement('div');
-      let margin = OldMedinaComponent.DEFAULT_PAGE_SIZE.marginWidth * this.viewport.scale     
-      
+      let margin = OldMedinaComponent.DEFAULT_PAGE_SIZE.marginWidth * this.viewport.scale
+
       lineElem.classList.add('line');
       if (lineInfo.lineType === 0 || (lineInfo.lineType == 2 && (this.index == 0 || this.index == 1))) {
         if (lineInfo.lineWidthRatio !== 1) {
@@ -141,7 +141,7 @@ class PageView {
           const starNode = lineInfo.sajda.startWordIndex + (lineInfo.sajda.startWordIndex)
           const endNode = lineInfo.sajda.endWordIndex + (lineInfo.sajda.endWordIndex)
           const div = lineElem.firstElementChild
-          for (let childIndex = starNode; childIndex <= endNode; childIndex++) {            
+          for (let childIndex = starNode; childIndex <= endNode; childIndex++) {
             div.children[childIndex].classList.add("sajda")
           }
         }
@@ -151,7 +151,7 @@ class PageView {
         lineElem.style.marginLeft = margin + "px";
         lineElem.style.marginRight = lineElem.style.marginLeft
         const lineText = this.quranText[this.index][lineIndex]
-        
+
         lineElem.classList.add("linesuran")
         if (this.index === 0 || this.index === 1) {
           lineElem.style.paddingBottom = ((1.77 * 2) + 0.2) + "em"
@@ -160,7 +160,7 @@ class PageView {
         innerSpan.textContent = lineText;
         innerSpan.classList.add("innersura")
         lineElem.appendChild(innerSpan);
-      } else if (lineInfo.lineType === 2) /* basmala */ {       
+      } else if (lineInfo.lineType === 2) /* basmala */ {
         this.applyTajweed(tajweedColor, lineElem, lineIndex)
         lineElem.style.textAlign = "center"
         lineElem.style.marginLeft = margin + "px";
@@ -218,7 +218,7 @@ class PageView {
       return;
     }
 
-    const result = this.tajweedService.applyTajweed(this.index, lineIndex)
+    const result = this.tajweedService.applyTajweed(this.quranText, this.index, lineIndex)
 
     for (let i = 0; i < lineText.length; i++) {
       const char = lineText.charAt(i)
@@ -532,29 +532,29 @@ class PageView {
         stop = this.applyExpa(div, wordElements, desiredWidth, i, i, 'jt')
         if (!stop) {
           stop = this.applyExpa(div, wordElements, desiredWidth, i, i, 'dc')
-        } 
+        }
         if (!stop) {
           stop = this.applyExpa(div, wordElements, desiredWidth, i, i, 'kt')
         }
-        
+
       }
       if (desiredWidth > div.clientWidth) {
         const underfull = desiredWidth - div.clientWidth;
         const addedStretch = nbSimpleSpaces !== 0 ? underfull / nbSimpleSpaces : 0;
         //rootElem.style.wordSpacing = ((addedStretch + stretchBySpace) / fontSize) + "em";
         rootElem.style.wordSpacing = (addedStretch + stretchBySpace) + "px";
-      } 
+      }
     } else {
       const ratio = desiredWidth / div.clientWidth;
       // TODO : add shrinking features to the font
       //shrink by changing font size for now 
       rootElem.style.fontSize = this.viewport.fontSize * ratio + "px";
-      
+
     }
-    
 
 
-    
+
+
   }
 
   private getCssStyle(element, prop) {

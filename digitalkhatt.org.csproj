@@ -36,6 +36,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\components\hboldmedina\page_view.ts" />
+    <None Remove="ClientApp\src\app\components\hboldmedina\qurantext.service.ts" />
+    <None Remove="ClientApp\src\app\components\hboldmedina\rendering_states.ts" />
     <None Remove="ClientApp\src\app\components\oldmedina\page_view.ts" />
     <None Remove="ClientApp\src\app\components\oldmedina\qurangestures.directive.ts" />
     <None Remove="ClientApp\src\app\components\oldmedina\quranzoom.directive.ts" />
@@ -59,6 +62,13 @@
     <None Remove="ClientApp\src\app\services\quranservice\quran_shaper.ts" />
     <None Remove="ClientApp\src\app\services\qurantext.service.ts" />
     <None Remove="ClientApp\src\app\services\tajweed.service.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Remove="ClientApp\src\app\components\hboldmedina\hboldmedina.component.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\components\hboldmedina\quran_text_old_madinah.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\services\quran_text.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\services\quran_text_old_madinah.ts" />
   </ItemGroup>
 
   <ItemGroup>

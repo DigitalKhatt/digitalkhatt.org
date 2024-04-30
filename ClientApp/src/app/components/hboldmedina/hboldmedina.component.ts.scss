@@ -1,0 +1,278 @@
+@import './layout';
+
+$mediumgray: #6E6E6E;
+$darkgray: #444444;
+$padding: 0.2em;
+
+#calculatewidthElem {
+  position: absolute;
+  visibility: hidden;
+  height: auto;
+  width: auto;
+  white-space: pre;
+}
+
+#lineJustify {
+  position: absolute;
+  visibility: hidden;
+  height: auto;
+  width: auto;
+  white-space: pre;
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 0 1 auto;
+  touch-action: pan-x pan-y;
+  font-family: oldmadina;
+  font-weight: normal;
+}
+
+.qurancontainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 0 1 auto;
+  touch-action: pan-x pan-y;
+  position: relative;
+}
+
+#viewerContainer {
+  height: 100%;
+  flex: 0 0 auto;
+  position: absolute;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0;
+  margin: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  top: 0;
+  outline: none;
+  background-color: #999999; /*#999999;*/ /*#eee ;*/
+  -webkit-transition-duration: 200ms;
+  -webkit-transition-timing-function: ease;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+  touch-action: pan-x pan-y;
+}
+
+@media (hover : hover) {
+  #viewerContainer::-webkit-scrollbar {
+    height: 6px;
+    width: 8px;
+  }
+
+  #viewerContainer::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: white;
+  }
+
+  #viewerContainer::-webkit-scrollbar-thumb {
+    background-color: $mediumgray;
+    outline: 1px solid slategrey;
+  }
+
+  #viewerContainer {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  #viewerContainer::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/*
+@media (hover: none) {
+  #viewerContainer {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  #viewerContainer::-webkit-scrollbar {
+    display: none;
+  }
+}*/
+
+html[dir='ltr'] #viewerContainer {
+  box-shadow: inset 1px 0 0 hsla(0,0%,100%,.05);
+}
+
+html[dir='rtl'] #viewerContainer {
+  box-shadow: inset -1px 0 0 hsla(0,0%,100%,.05);
+}
+
+
+:host ::ng-deep .page {
+  line-height: 1.77em;
+  margin: 0 auto 0 auto;
+  position: relative;
+  overflow: visible;
+  border-bottom: 2px solid transparent;
+  background-clip: content-box;
+  background-color: white;
+  white-space: nowrap;
+  box-sizing: border-box;
+
+
+  .linesuran {
+    /*font-family: digitalkhatt;
+    /*font-size:0.95em;*/
+    text-align: center;
+    background: url(../../../assets/ayaframe.svg);
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-origin: content-box;
+    background-clip: content-box;
+    box-sizing: content-box;
+
+    .innersura {
+      position: relative;
+      top: -0.15em;
+    }
+  }
+
+  .line {
+    position: relative;
+
+    .sajda {
+      position: relative;
+      /*box-shadow: inset 0 7px 9px -7px rgba(0,0,0,0.4);*/
+      //text-decoration: line-through;
+    }
+
+    .sajda::before {
+      content: '';
+      width: 100%;
+      position: absolute;
+      right: 0;
+      top: 14%;
+      border-bottom: 0.08em solid rgba(0,0,0,0.8);
+    }
+  }
+
+  .line:first-child {
+    padding-top: 0.4em;
+  }
+
+  direction: rtl;
+}
+
+:host .page canvas[hidden] {
+  display: none !important;
+}
+
+:host .hidden {
+  display: none !important;
+}
+
+:host [hidden] {
+  display: none !important;
+}
+
+
+
+:host ::ng-deep .loadingIcon {
+  position: absolute;
+  display: block;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: url('images/loading-icon.gif') center no-repeat;
+}
+
+.small-icon-button {
+  width: 24px !important;
+  height: 24px !important;
+  line-height: 24px !important;
+
+  ::ng-deep .mat-button-wrapper {
+    padding: 0px 0 !important;
+  }
+
+  .mat-icon {
+    width: 16px !important;
+    height: 16px !important;
+    line-height: 16px !important;
+  }
+
+  .material-icons {
+    font-size: 16px !important;
+  }
+}
+
+.mat-toolbar .mat-input-element {
+  color: black !important;
+}
+
+.leftnav {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.centernav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rightnav {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+::ng-deep .mypanelclass {
+  margin-top: 25px !important;
+  max-height: 350px !important;
+}
+
+.imgcenter {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 100px;
+  width: 10%;
+}
+
+:host ::ng-deep .green {
+  fill: rgb(0 166 80);
+}
+
+:host ::ng-deep .tafkim {
+  fill: rgb(0 102 148);
+}
+
+:host ::ng-deep .lgray {
+  fill: rgb(156 154 155);
+}
+
+:host ::ng-deep .lkalkala {
+  fill: rgb(0 173 239);
+}
+
+:host ::ng-deep .red1 {
+  fill: rgb(195 138 8);
+}
+
+:host ::ng-deep .red2 {
+  fill: rgb(244 114 22);
+}
+
+:host ::ng-deep .red3 {
+  fill: rgb(236 0 140);
+}
+
+:host ::ng-deep .red4 {
+  fill: rgb(140 0 0);
+}
