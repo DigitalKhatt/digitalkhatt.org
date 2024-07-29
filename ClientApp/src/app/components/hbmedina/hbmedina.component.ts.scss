@@ -20,13 +20,21 @@ $padding: 0.2em;
   white-space: pre;
 }
 
+
+:host.oldmadina {
+  font-family: oldmadina;
+}
+
+:host.newmadina {
+  font-family: digitalkhatt;
+}
+
 :host {
   display: flex;
   flex-direction: column;
   height: 100%;
   flex: 0 1 auto;
-  touch-action: pan-x pan-y;
-  font-family: oldmadina;
+  touch-action: pan-x pan-y;  
   font-weight: normal;
 }
 

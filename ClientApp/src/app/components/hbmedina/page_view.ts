@@ -3,13 +3,12 @@
  * Copyright (c) 2019-2020 Amine Anane. http: //digitalkhatt/license  
 */
 
-import { RenderingStates } from './rendering_states';
-import { BooleanLiteral } from 'typescript';
 import { TajweedService } from '../../services/tajweed.service';
-import { HBOldMedinaComponent, PageFormat } from './hboldmedina.component';
-import { loadAndCacheFont, loadHarfbuzz, harfbuzzFonts, HarfBuzzFont, HarfBuzzBuffer, hb as HarfBuzz, HBFeature, getWidth } from "./harfbuzz"
-import { FONTSIZE, INTERLINE, JustInfo, JustResultByLine, LineTextInfo, MARGIN, PAGE_WIDTH, SpaceType, analyzeLineForJust, justifyLine } from './just.service'
+import { HBFeature, hb as HarfBuzz, HarfBuzzBuffer, HarfBuzzFont, getWidth, harfbuzzFonts } from "./harfbuzz";
+import { PageFormat } from './hbmedina.component';
+import { FONTSIZE, INTERLINE, JustResultByLine, LineTextInfo, MARGIN, PAGE_WIDTH, SPACEWIDTH, SpaceType, analyzeLineForJust, justifyLine } from './just.service';
 import { QuranTextService } from './qurantext.service';
+import { RenderingStates } from './rendering_states';
 
 
 class PageView {
@@ -116,6 +115,8 @@ class PageView {
 
     let maxFontSizeRatioWithoutOverFull = 1
 
+    const glyphScale = this.viewport.fontSize / FONTSIZE
+
     for (let lineIndex = 0; lineIndex < lineCount; lineIndex++) {
       const lineInfo = this.quranTextService.getLineInfo(this.pageIndex, lineIndex)
       if (lineInfo.lineType === 0 || (lineInfo.lineType == 2 && (this.pageIndex == 0 || this.pageIndex == 1))) {
@@ -153,11 +154,15 @@ class PageView {
         this.lineJustify.appendChild(lineElem);
 
         const lineTextInfo = analyzeLineForJust(this.quranTextService, this.pageIndex, lineIndex)
-        
+
         const justResult = justifyLine(lineTextInfo, this.oldMedinaFont, fontSizeLineWidthRatio * maxFontSizeRatioWithoutOverFull / lineInfo.lineWidthRatio)
         justResult.fontSizeRatio = justResult.fontSizeRatio * maxFontSizeRatioWithoutOverFull
 
-        this.renderLine(lineElem, lineIndex, lineTextInfo, justResult, tajweedColor)
+        /*if (lineInfo.lineType === 2) {
+          justResult.globalFeatures = [{ name: 'basm', value: 1 }]
+        }*/
+
+        this.renderLine(lineElem, lineIndex, lineTextInfo, justResult, tajweedColor, glyphScale, defaultMargin)
 
       } else if (lineInfo.lineType === 1) {
         lineElem.style.textAlign = "center"
@@ -174,15 +179,23 @@ class PageView {
         innerSpan.textContent = lineText;
         innerSpan.classList.add("innersura")
         innerSpan.style.lineHeight = lineElem.style.height
+        innerSpan.style.fontSize = this.viewport.fontSize * 0.9 + "px"
         lineElem.appendChild(innerSpan);
       } else if (lineInfo.lineType === 2) /* basmala */ {
-        this.applyTajweed(tajweedColor, lineElem, lineIndex)
         lineElem.style.textAlign = "center"
         lineElem.style.marginLeft = margin + "px";
         lineElem.style.marginRight = lineElem.style.marginLeft
         lineElem.style.height = INTERLINE * scale + "px";
-        const lineText = this.quranText[this.pageIndex][lineIndex]
-        lineElem.style.fontFeatureSettings = "'basm'"
+        this.lineJustify.appendChild(lineElem);
+        const lineTextInfo = analyzeLineForJust(this.quranTextService, this.pageIndex, lineIndex)
+        let justResult: JustResultByLine = {
+          globalFeatures: [{ name: 'basm', value: 1 }],
+          fontFeatures: new Map(),
+          simpleSpacing: SPACEWIDTH,
+          ayaSpacing: SPACEWIDTH,
+          fontSizeRatio: 0.9
+        }
+        this.renderLine(lineElem, lineIndex, lineTextInfo, justResult, tajweedColor, glyphScale, defaultMargin,true)
       }
 
       temp.appendChild(lineElem);
@@ -214,11 +227,20 @@ class PageView {
 
   }
 
-  renderLine(lineElem: HTMLDivElement, lineIndex, lineTextInfo: LineTextInfo, justResult: JustResultByLine, tajweedColor: boolean) {
+  renderLine(lineElem: HTMLDivElement, lineIndex, lineTextInfo: LineTextInfo, justResult: JustResultByLine, tajweedColor: boolean, glyphScale: number, margin: number, center : boolean = false) {
 
     const lineText = this.quranText[this.pageIndex][lineIndex]
 
     const features: HBFeature[] = []
+
+    for (const feat of justResult.globalFeatures || []) {
+      features.push({
+        tag: feat.name,
+        value: feat.value,
+        start: 0,
+        end: -1
+      })
+    }
 
     if (justResult.fontFeatures?.size > 0) {
       for (let wordIndex = 0; wordIndex < lineTextInfo.wordInfos.length; wordIndex++) {
@@ -272,8 +294,6 @@ class PageView {
     svg.appendChild(lineGroup);
 
     let currentxPos = 0
-
-    const glyphScale = this.viewport.fontSize / FONTSIZE
 
     let startSajdaPos;
     let endSajdaPos;
@@ -358,17 +378,24 @@ class PageView {
 
     //lineGroup.transform.baseVal.getItem(0).setScale(this.viewport.scale, this.viewport.scale);
 
-    const x = glyphScale * currentxPos * 2
-    const margin = 400 * glyphScale
-    const width = -x + margin
+    const lineWidth = -glyphScale * currentxPos
+    const x = lineWidth * 2
+    let width = x + margin
+    
 
     const height = lineElem.clientHeight * 2
 
-    svg.setAttribute('viewBox', `${x} ${-height / 2} ${width} ${height}`)
+    svg.setAttribute('viewBox', `${-x} ${-height / 2} ${width} ${height}`)
     svg.setAttribute('width', width.toString());
     svg.setAttribute('height', height.toString());
     svg.style.position = "relative"
-    svg.style.right = -margin + "px";
+    if (center) {
+      const rightMargin = (lineElem.clientWidth - lineWidth ) / 2 + margin
+      svg.style.right = rightMargin + "px";
+    } else {
+      svg.style.right = -margin + "px";
+    }
+    
     svg.style.top = -lineElem.clientHeight / 2 + "px";
 
     lineElem.appendChild(svg);

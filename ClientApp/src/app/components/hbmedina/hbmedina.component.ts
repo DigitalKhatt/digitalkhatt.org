@@ -34,13 +34,13 @@ import { PageView } from './page_view';
 import { CdkDrag, DragRef, Point } from '@angular/cdk/drag-drop';
 import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { AboutComponent } from '../about/about.component';
 import { RenderingStates } from './rendering_states';
 import { TajweedService } from '../../services/tajweed.service';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { loadAndCacheFont, loadHarfbuzz, harfbuzzFonts, HarfBuzzFont } from "./harfbuzz"
-import { quranTextService } from './qurantext.service'
+import { OldMadinahQuranTextService, NewMadinahQuranTextService, QuranTextService } from './qurantext.service'
 
 const CSS_UNITS = 96.0 / 72.0;
 const MIN_SCALE = 0.25;
@@ -112,16 +112,18 @@ class PDFPageViewBuffer {
 const DEFAULT_CACHE_SIZE = 10;
 
 @Component({
-  selector: 'app-hboldmedina-component',
-  templateUrl: './hboldmedina.component.ts.html',
-  styleUrls: ['./hboldmedina.component.ts.scss'],
+  selector: 'app-medina-component',
+  templateUrl: './hbmedina.component.ts.html',
+  styleUrls: ['./hbmedina.component.ts.scss'],
+  host: {
+    '[class.oldmadina]': 'isOldMadina',
+    '[class.newmadina]': '!isOldMadina'
+  },
 })
-export class HBOldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
-
-  private module: any;
-  private CSS_UNITS = 96.0 / 72.0;
-  private sideBySideWidth = 992;
-  private oldMEdinaFont: HarfBuzzFont
+export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
+  
+  private sideBySideWidth = 992;  
+  isOldMadina = false
 
 
   fontsize;
@@ -129,7 +131,7 @@ export class HBOldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   hasFloatingToc: boolean = false;
   isOpened: boolean = false;
-
+  private quranTextService : QuranTextService
 
 
   scale;
@@ -145,11 +147,11 @@ export class HBOldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
   outline: any = [];
 
   static DEFAULT_SCALE = 15 / 1000
-  static DEFAULT_PAGE_SIZE = { width: 255, height: 410, marginWidth: HBOldMedinaComponent.DEFAULT_SCALE * 400 };
-  static DFAULT_FONT_SIZE = HBOldMedinaComponent.DEFAULT_PAGE_SIZE.width / (17000 / 1000);
+  static DEFAULT_PAGE_SIZE = { width: 255, height: 410, marginWidth: HBMedinaComponent.DEFAULT_SCALE * 400 };
+  static DFAULT_FONT_SIZE = HBMedinaComponent.DEFAULT_PAGE_SIZE.width / (17000 / 1000);
 
-  pageSize = HBOldMedinaComponent.DEFAULT_PAGE_SIZE
-  defaultFontSize = HBOldMedinaComponent.DFAULT_FONT_SIZE
+  pageSize = HBMedinaComponent.DEFAULT_PAGE_SIZE
+  defaultFontSize = HBMedinaComponent.DFAULT_FONT_SIZE
 
   totalPages: number;
   maxPages: number;
@@ -206,8 +208,17 @@ export class HBOldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
     private matDialog: MatDialog,
     private router: Router,
     private tajweedService: TajweedService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private route: ActivatedRoute,
   ) {
+
+    this.isOldMadina = route.snapshot.data.type === "oldmedina";
+
+    if (this.isOldMadina) {
+      this.quranTextService = OldMadinahQuranTextService
+    } else {
+      this.quranTextService = NewMadinahQuranTextService
+    }
 
     let nbav = window as any;
 
@@ -268,7 +279,7 @@ export class HBOldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.texFormat = true;
 
-    this.totalPages = quranTextService.nbPages;
+    this.totalPages = this.quranTextService.nbPages;
     this.maxPages = this.totalPages;
 
     this.pages = new Array(this.maxPages);
@@ -306,9 +317,11 @@ export class HBOldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
         await loadHarfbuzz("assets/hb.wasm")
 
-        await loadAndCacheFont("oldmadina", "assets/fonts/hb/oldmadina.otf")
-
-        this.oldMEdinaFont = harfbuzzFonts.get("oldmadina")
+        if (this.isOldMadina) {
+          await loadAndCacheFont("oldmadina", "assets/fonts/hb/oldmadina.otf")
+        } else {
+          await loadAndCacheFont("oldmadina", "assets/fonts/hb/digitalkhatt.otf")
+        }
 
         document.fonts.load("12px oldmadina").then(() => {
 
@@ -318,7 +331,7 @@ export class HBOldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
             //this.views[index] = new PageView(page.nativeElement, index, this.quranService, this.viewport, this.renderingQueue);
             this.views[index] = new PageView(page.nativeElement, index,
               this.calculatewidthElem.nativeElement, this.lineJustify.nativeElement,
-              this.viewport, this.tajweedService, quranTextService);
+              this.viewport, this.tajweedService, this.quranTextService);
           });
 
           this.scrollState = {
@@ -355,7 +368,7 @@ export class HBOldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
             }
           });
 
-          this.outline = quranTextService.outline;
+          this.outline = this.quranTextService.outline;
 
           this.tajweedColorCtrl.valueChanges.subscribe(value => {
 

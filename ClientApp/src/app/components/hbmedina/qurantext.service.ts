@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { quranText as quranTextOldMadinah } from './quran_text_old_madinah'
+import { quranText } from './quran_text_old_madinah'
 
 @Injectable({
   providedIn: 'root',
@@ -21,11 +22,11 @@ export class QuranTextService {
     [604 * 15 + 9, 0.836],
     [604 * 15 + 14, 0.717],
     [604 * 15 + 15, 0.54],
-  ]);
+  ]);  
 
-  constructor() {
+  constructor(qt : string[][] ) {
 
-    this._quranText = quranTextOldMadinah;
+    this._quranText = qt;
 
     const start = performance.now();
 
@@ -139,4 +140,5 @@ export class QuranTextService {
   }
 }
 
-export const quranTextService = new QuranTextService();
+export const OldMadinahQuranTextService = new QuranTextService(quranTextOldMadinah);
+export const NewMadinahQuranTextService = new QuranTextService(quranText);

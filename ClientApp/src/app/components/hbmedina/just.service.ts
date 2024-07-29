@@ -50,6 +50,7 @@ export interface JustInfo {
 }
 
 export interface JustResultByLine {
+  globalFeatures?: TextFontFeatures[];
   fontFeatures: Map<number, TextFontFeatures[]>; /* FontFeatures by character index in the line */
   simpleSpacing: number;
   ayaSpacing: number;
@@ -342,7 +343,7 @@ function stretchLine(lineTextInfo: LineTextInfo, justInfo: JustInfo): JustInfo {
   applyAlternatesSubWords(lineTextInfo, justInfo, "ىصضسشفقيئبتثكن", 2)
   applyKashidasSubWords(lineTextInfo, justInfo, StretchType.SecondKashidaNotSameSubWord, 2)
   applyKashidasSubWords(lineTextInfo, justInfo, StretchType.SecondKashidaSameSubWord, 2)
-  applyKashidasSubWords(lineTextInfo, justInfo, StretchType.Kaf, 6)
+  //applyKashidasSubWords(lineTextInfo, justInfo, StretchType.Kaf, 6)
   /*
   this.applyKashidasSubWords(justInfo, StretchType.Beh, 1)
   this.applyKashidasSubWords(justInfo, StretchType.FinaAscendant, 1)
@@ -482,12 +483,12 @@ function applyKashidasSubWords(lineTextInfo: LineTextInfo, justInfo: JustInfo, t
 
             let firstAppliedFeatures: Appliedfeature[] = [
               { feature: { name: 'cv03', value: 1 }, calcNewValue: (prev, curr) => 1 },
-              {
+              /*{
                 feature: { name: 'cv01', value: 1 }, calcNewValue: (prev, curr) => {
                   const cv01Value = Math.min((prev || 0) + curr, 6)
                   return cv01Value
                 }
-              }
+              }*/
             ]
 
             

@@ -70,7 +70,7 @@ import { CacheRouteReuseStrategy } from './services/cache-route-reuse.strategy';
 //import { QuranCanvasComponent } from './components/qurancanvas/qurancanvas.component';
 import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { HBOldMedinaComponent } from './components/hboldmedina/hboldmedina.component';
+import { HBMedinaComponent } from './components/hbmedina/hbmedina.component';
 import { OldMedinaComponent } from './components/oldmedina/oldmedina.component';
 import { LayoutService } from './services/layoutservice/layoutservice.service';
 //import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -174,7 +174,7 @@ const routerOptions: ExtraOptions = {
     QuranOTFComponent,
     QuranPagesComponent,
     OldMedinaComponent,
-    HBOldMedinaComponent
+    HBMedinaComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -226,7 +226,17 @@ const routerOptions: ExtraOptions = {
         children: [          
           {
             path: 'oldmedina',
-            component: HBOldMedinaComponent
+            component: HBMedinaComponent,
+            data: {
+              type: 'oldmedina'
+            },
+          },
+          {
+            path: 'newmedina',
+            component: HBMedinaComponent,
+            data: {
+              type: 'newmedina'
+            },
           }
         ]
       },
