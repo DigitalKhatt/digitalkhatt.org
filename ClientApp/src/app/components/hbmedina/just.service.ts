@@ -386,7 +386,7 @@ function mergeFeatures(prevFeatures: TextFontFeatures[] | undefined, newFeatures
 
 function applyKashidasSubWords(lineTextInfo: LineTextInfo, justInfo: JustInfo, type: StretchType, nbLevels: number) {
 
-  const right = "بتثنيئ" + "جحخ" + "سش" + "صض" + "طظ" + "عغ" + "فق" + "لم" + "ه"
+  const right = "بتثنيئ" + "جحخ" + "سش" + "صض" + "طظ" + "عغ" + "فق" + "م" + "ه"
   const left = "ئبتثني" + "جحخ" + "طظ" + "عغ" + "فق" + "ةلم" + "رز"
   const mediLeftAsendant = "ل"
 

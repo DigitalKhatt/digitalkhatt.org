@@ -28,6 +28,7 @@ class PageView {
   private quranText: string[][];
   private oldMedinaFont: HarfBuzzFont
   private ayaSvgGroup: SVGGElement
+  private ayaLength: number;
 
   constructor(public div, private pageIndex, calculatewidthElem, lineJustify, viewport,
     private tajweedService: TajweedService, private quranTextService: QuranTextService) {
@@ -45,7 +46,8 @@ class PageView {
     this.oldMedinaFont = harfbuzzFonts.get("oldmadina")
 
     const svgAyaElem: SVGSVGElement = document.getElementById("ayaGlyph") as any
-    this.ayaSvgGroup = svgAyaElem.firstElementChild as any
+    this.ayaSvgGroup = svgAyaElem.firstElementChild as SVGGElement;
+    this.ayaLength = quranTextService.isOld ? 3 : 14;
 
 
 
@@ -195,7 +197,7 @@ class PageView {
           ayaSpacing: SPACEWIDTH,
           fontSizeRatio: 0.9
         }
-        this.renderLine(lineElem, lineIndex, lineTextInfo, justResult, tajweedColor, glyphScale, defaultMargin,true)
+        this.renderLine(lineElem, lineIndex, lineTextInfo, justResult, tajweedColor, glyphScale, defaultMargin, true)
       }
 
       temp.appendChild(lineElem);
@@ -227,7 +229,7 @@ class PageView {
 
   }
 
-  renderLine(lineElem: HTMLDivElement, lineIndex, lineTextInfo: LineTextInfo, justResult: JustResultByLine, tajweedColor: boolean, glyphScale: number, margin: number, center : boolean = false) {
+  renderLine(lineElem: HTMLDivElement, lineIndex, lineTextInfo: LineTextInfo, justResult: JustResultByLine, tajweedColor: boolean, glyphScale: number, margin: number, center: boolean = false) {
 
     const lineText = this.quranText[this.pageIndex][lineIndex]
 
@@ -306,7 +308,7 @@ class PageView {
         pathString = this.oldMedinaFont.glyphToSvgPath(glyph.GlyphId)
 
         if (lineText.charCodeAt(glyph.Cluster) === 0x06DD) {
-          pathString = [pathString.split("Z").slice(14).filter(a => a.length).join('Z')];
+          pathString = [pathString.split("Z").slice(this.ayaLength).filter(a => a.length).join('Z')];
           glyphs.set(glyph.GlyphId, pathString)
         } else {
           glyphs.set(glyph.GlyphId, pathString)
@@ -338,7 +340,7 @@ class PageView {
 
           const ayaGroup: SVGGElement = this.ayaSvgGroup.cloneNode(true) as any
 
-          ayaGroup.setAttribute("transform", "scale (1,-1) translate(" + (currentxPos + glyph.XOffset) + " " + -885 + ")");
+          ayaGroup.setAttribute("transform", "scale (1,-1) translate(" + (currentxPos + glyph.XOffset) + " " + (this.quranTextService.isOld ? -800 : -885) + ")");
           lineGroup.appendChild(ayaGroup);
 
           pathString = pathString[0]
@@ -366,8 +368,8 @@ class PageView {
       let line = document.createElementNS('http://www.w3.org/2000/svg', "line");
       line.setAttribute('x1', startSajdaPos)
       line.setAttribute('x2', endSajdaPos)
-      line.setAttribute('y1', "1000")
-      line.setAttribute('y2', "1000")
+      line.setAttribute('y1', "1200")
+      line.setAttribute('y2', "1200")
       line.setAttribute('stroke', 'black')
       line.setAttribute('stroke-width', '60')
       lineGroup.appendChild(line)
@@ -381,7 +383,7 @@ class PageView {
     const lineWidth = -glyphScale * currentxPos
     const x = lineWidth * 2
     let width = x + margin
-    
+
 
     const height = lineElem.clientHeight * 2
 
@@ -390,12 +392,12 @@ class PageView {
     svg.setAttribute('height', height.toString());
     svg.style.position = "relative"
     if (center) {
-      const rightMargin = (lineElem.clientWidth - lineWidth ) / 2 + margin
+      const rightMargin = (lineElem.clientWidth - lineWidth) / 2 + margin
       svg.style.right = rightMargin + "px";
     } else {
       svg.style.right = -margin + "px";
     }
-    
+
     svg.style.top = -lineElem.clientHeight / 2 + "px";
 
     lineElem.appendChild(svg);

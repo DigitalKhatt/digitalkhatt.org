@@ -22,11 +22,15 @@ export class QuranTextService {
     [604 * 15 + 9, 0.836],
     [604 * 15 + 14, 0.717],
     [604 * 15 + 15, 0.54],
-  ]);  
+  ]);
 
-  constructor(qt : string[][] ) {
+  constructor(qt: string[][], public isOld: boolean) {
 
-    this._quranText = qt;
+    //const t0 = performance.now()
+    // Correct hamza reordering otherwise the feature applied to the base is also applied to the fatha
+    this._quranText = qt.map(page => page.map(line => line.replace("\u064A\u0654", "\u064A\u0654\u034F")));
+    this._quranText = this._quranText.map(page => page.map(line => line.replace("\u0626", "\u0626\u034F")));
+    //console.log(`quranreplace=${performance.now() - t0}`);
 
     const start = performance.now();
 
@@ -39,7 +43,10 @@ export class QuranTextService {
       + "|" + "بِّسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ"
       + ")$";
 
-    const sajdapatterns = "(وَٱسْجُدْ) وَٱقْتَرِب|(خَرُّوا۟ سُجَّدࣰا)|(وَلِلَّهِ يَسْجُدُ)|(يَسْجُدُونَ)۩|(فَٱسْجُدُوا۟ لِلَّهِ)|(وَٱسْجُدُوا۟ لِلَّهِ)|(أَلَّا يَسْجُدُوا۟ لِلَّهِ)|(وَخَرَّ رَاكِعࣰا)|(يَسْجُدُ لَهُ)|(يَخِرُّونَ لِلْأَذْقَانِ سُجَّدࣰا)|(ٱسْجُدُوا۟) لِلرَّحْمَٰنِ|ٱرْكَعُوا۟ (وَٱسْجُدُوا۟)"; // sajdapatterns.replace("\u0657", "\u08F0").replace("\u065E", "\u08F1").replace("\u0656", "\u08F2");
+    let sajdapatterns = "(وَٱسْجُدْ) وَٱقْتَرِب|(خَرُّوا۟ سُجَّدࣰا)|(وَلِلَّهِ يَسْجُدُ)|(يَسْجُدُونَ)۩|(فَٱسْجُدُوا۟ لِلَّهِ)|(وَٱسْجُدُوا۟ لِلَّهِ)|(أَلَّا يَسْجُدُوا۟ لِلَّهِ)|(وَخَرَّ رَاكِعࣰا)|(يَسْجُدُ لَهُ)|(يَخِرُّونَ لِلْأَذْقَانِ سُجَّدࣰا)|(ٱسْجُدُوا۟) لِلرَّحْمَٰنِ|ٱرْكَعُوا۟ (وَٱسْجُدُوا۟)"; // sajdapatterns.replace("\u0657", "\u08F0").replace("\u065E", "\u08F1").replace("\u0656", "\u08F2");
+    sajdapatterns = sajdapatterns.replace("\u064A\u0654", "\u064A\u0654\u034F");
+    sajdapatterns = sajdapatterns.replace("\u0626", "\u0626\u034F");
+
     const sajdaRegExpr = new RegExp(sajdapatterns, "du")
 
 
@@ -82,7 +89,7 @@ export class QuranTextService {
         }
 
         const sajdaMatch = line.match(sajdaRegExpr)
-        if (sajdaMatch) {          
+        if (sajdaMatch) {
           for (let i = 1; i < sajdaMatch.length; i++) {
             if (sajdaMatch[i]) {
               var pos = (sajdaMatch as any).indices[i]
@@ -93,7 +100,7 @@ export class QuranTextService {
                 const char = line.charAt(charIndex);
 
                 const isSpace = char === " "
-                
+
                 if (startWordIndex == null && charIndex >= pos[0]) {
                   startWordIndex = currentWordIndex;
                 }
@@ -140,5 +147,5 @@ export class QuranTextService {
   }
 }
 
-export const OldMadinahQuranTextService = new QuranTextService(quranTextOldMadinah);
-export const NewMadinahQuranTextService = new QuranTextService(quranText);
+export const OldMadinahQuranTextService = new QuranTextService(quranTextOldMadinah, true);
+export const NewMadinahQuranTextService = new QuranTextService(quranText, false);
