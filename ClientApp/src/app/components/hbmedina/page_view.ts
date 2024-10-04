@@ -2,12 +2,12 @@
  * Copyright 2012 Mozilla Foundation (Some code is derived from https://github.com/mozilla/pdf.js/blob/master/web/pdf_page_view.js)
  * Copyright (c) 2019-2020 Amine Anane. http: //digitalkhatt/license  
 */
-
-import { TajweedService } from '../../services/tajweed.service';
+import { QuranTextService } from "../../services/qurantext.service";
+import { TajweedService } from "../../services/tajweed.service";
 import { HBFeature, hb as HarfBuzz, HarfBuzzBuffer, HarfBuzzFont, getWidth, harfbuzzFonts } from "./harfbuzz";
 import { PageFormat } from './hbmedina.component';
 import { FONTSIZE, INTERLINE, JustResultByLine, LineTextInfo, MARGIN, PAGE_WIDTH, SPACEWIDTH, SpaceType, analyzeLineForJust, justifyLine } from './just.service';
-import { QuranTextService } from './qurantext.service';
+
 import { RenderingStates } from './rendering_states';
 
 
@@ -135,6 +135,13 @@ class PageView {
         }
       }
     }
+    let tajweedResult
+    if (tajweedColor) {
+      const startTime = performance.now();
+      tajweedResult = this.tajweedService.applyTajweedByPage(this.quranTextService, this.pageIndex)
+      const endTime = performance.now();
+      console.log(`applyTajweed in page ${this.pageIndex + 1} takes ${endTime - startTime} ms`)
+    }
 
     for (let lineIndex = 0; lineIndex < lineCount; lineIndex++) {
       const lineInfo = this.quranTextService.getLineInfo(this.pageIndex, lineIndex)
@@ -164,7 +171,7 @@ class PageView {
           justResult.globalFeatures = [{ name: 'basm', value: 1 }]
         }*/
 
-        this.renderLine(lineElem, lineIndex, lineTextInfo, justResult, tajweedColor, glyphScale, defaultMargin)
+        this.renderLine(lineElem, lineIndex, lineTextInfo, justResult, tajweedResult?.[lineIndex], glyphScale, defaultMargin)
 
       } else if (lineInfo.lineType === 1) {
         lineElem.style.textAlign = "center"
@@ -197,7 +204,7 @@ class PageView {
           ayaSpacing: SPACEWIDTH,
           fontSizeRatio: 0.9
         }
-        this.renderLine(lineElem, lineIndex, lineTextInfo, justResult, tajweedColor, glyphScale, defaultMargin, true)
+        this.renderLine(lineElem, lineIndex, lineTextInfo, justResult, tajweedResult?.[lineIndex], glyphScale, defaultMargin, true)
       }
 
       temp.appendChild(lineElem);
@@ -229,7 +236,7 @@ class PageView {
 
   }
 
-  renderLine(lineElem: HTMLDivElement, lineIndex, lineTextInfo: LineTextInfo, justResult: JustResultByLine, tajweedColor: boolean, glyphScale: number, margin: number, center: boolean = false) {
+  renderLine(lineElem: HTMLDivElement, lineIndex, lineTextInfo: LineTextInfo, justResult: JustResultByLine, tajweedResult: Map<number, string>, glyphScale: number, margin: number, center: boolean = false) {
 
     const lineText = this.quranText[this.pageIndex][lineIndex]
 
@@ -262,8 +269,6 @@ class PageView {
         }
       }
     }
-
-    const tajweedResult = tajweedColor ? this.tajweedService.applyTajweed(this.quranText, this.pageIndex, lineIndex) : new Map()
 
     const buffer = new HarfBuzzBuffer()
     buffer.setDirection('rtl')
@@ -352,9 +357,9 @@ class PageView {
 
         newpath.setAttribute("transform", "translate(" + (currentxPos + glyph.XOffset) + " " + glyph.YOffset + ")");
 
-        if (tajweedColor) {
+        if (tajweedResult) {
           const tajweedClass = tajweedResult.get(glyph.Cluster)
-          if (tajweedClass) {
+          if (tajweedClass) {          
             newpath.classList.add(tajweedClass)
           }
         }
@@ -401,46 +406,6 @@ class PageView {
     svg.style.top = -lineElem.clientHeight / 2 + "px";
 
     lineElem.appendChild(svg);
-
-  }
-
-  applyTajweed(tajweedColor, lineElem: HTMLElement, lineIndex) {
-
-    const lineText = this.quranText[this.pageIndex][lineIndex]
-
-    if (!tajweedColor) {
-
-      lineElem.textContent = lineText;
-      return;
-    }
-
-    const result = this.tajweedService.applyTajweed(this.quranText, this.pageIndex, lineIndex)
-
-    for (let i = 0; i < lineText.length; i++) {
-      const char = lineText.charAt(i)
-      const tajweed = result.get(i)
-      if (tajweed) {
-        if (lineElem.lastChild && lineElem.lastChild.nodeType == Node.ELEMENT_NODE) {
-          const node = lineElem.lastChild as HTMLElement
-          if (node.classList === tajweed) {
-            node.textContent = node.textContent + char
-            continue
-          }
-        }
-        const span = document.createElement('span');
-        span.classList.add(tajweed)
-        span.textContent = char
-        lineElem.appendChild(span)
-
-      } else {
-        if (lineElem.lastChild && lineElem.lastChild.nodeType == Node.TEXT_NODE) {
-          lineElem.lastChild.textContent = lineElem.lastChild.textContent + char
-        } else {
-          lineElem.appendChild(document.createTextNode(char))
-        }
-      }
-    }
-
 
   }
 

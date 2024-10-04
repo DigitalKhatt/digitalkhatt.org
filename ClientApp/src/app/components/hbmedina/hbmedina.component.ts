@@ -37,10 +37,11 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { AboutComponent } from '../about/about.component';
 import { RenderingStates } from './rendering_states';
-import { TajweedService } from '../../services/tajweed.service';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { loadAndCacheFont, loadHarfbuzz, harfbuzzFonts, HarfBuzzFont } from "./harfbuzz"
-import { OldMadinahQuranTextService, NewMadinahQuranTextService, QuranTextService } from './qurantext.service'
+import { NewMadinahQuranTextService, OldMadinahQuranTextService, QuranTextService } from '../../services/qurantext.service';
+import { TajweedService } from '../../services/tajweed.service';
+
 
 const CSS_UNITS = 96.0 / 72.0;
 const MIN_SCALE = 0.25;
@@ -121,8 +122,8 @@ const DEFAULT_CACHE_SIZE = 10;
   },
 })
 export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
-  
-  private sideBySideWidth = 992;  
+
+  private sideBySideWidth = 992;
   isOldMadina = false
 
 
@@ -131,7 +132,7 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   hasFloatingToc: boolean = false;
   isOpened: boolean = false;
-  private quranTextService : QuranTextService
+  private quranTextService: QuranTextService
 
 
   scale;
@@ -193,7 +194,7 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
   fontScale = 1;
   visibleViews;
   loaded: boolean = false;
-  
+
 
   wasmStatus;
 
@@ -234,12 +235,14 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.isSideBySide = breakpointObserver.isMatched('(min-width: ' + this.sideBySideWidth + 'px)');
 
-    this.currentPageNumber = new UntypedFormControl(1, [
+    const lastPageNumber = parseInt(localStorage.getItem("lastPageNumber")) || 1;
+
+    const currentPageNumber = new UntypedFormControl(lastPageNumber, [
       Validators.required
     ]);
 
     this.form = new UntypedFormGroup({
-      currentPageNumber: this.currentPageNumber,
+      currentPageNumber: currentPageNumber,
     });
 
     this.isJustifiedCtrl = new UntypedFormControl(true);
@@ -303,7 +306,32 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
+  replacer(key, value) {
+    if (value instanceof Map) {
+      return {
+        dataType: 'Map',
+        value: Array.from(value.entries()), // or with spread: value: [...value]
+      };
+    } else {
+      return value;
+    }
+  }
+
   ngOnInit() {
+    //TODO delete
+
+    const result = {}
+
+    for (let pageNumber = 1; pageNumber <= 8; pageNumber++) {
+      const tajweedResult = this.tajweedService.applyTajweedByPage(this.quranTextService, pageNumber - 1)
+      result[pageNumber] = tajweedResult
+    }
+    
+    for (let pageNumber = 434; pageNumber <= 440; pageNumber++) {
+      const tajweedResult = this.tajweedService.applyTajweedByPage(this.quranTextService, pageNumber - 1)
+      result[pageNumber] = tajweedResult
+    }
+    console.log(JSON.stringify(result, this.replacer, 2))
   }
 
   ngAfterViewInit() {
@@ -340,6 +368,8 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
             lastX: this.viewAreaElement.scrollLeft,
             lastY: this.viewAreaElement.scrollTop
           };
+
+          this.setPage(this.currentPageNumber);
 
 
           this.scrollingSubscription = this.firstMyCustomDirective.elementScrolled()
@@ -397,7 +427,7 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
           });
 
-          
+
           this.fontScaleCtrl.valueChanges.subscribe(value => {
             this.fontScale = this.fontScaleCtrl.value;
             this.ngZone.runOutsideAngular(() => {
@@ -466,9 +496,8 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
       this.form.controls['currentPageNumber'].setValue(this.currentPageNumber);
     }
     else if (value !== this.currentPageNumber) {
-      let offset = (value - 1) * this.itemSize;
-      this.currentPageNumber = value;
-      this.firstMyCustomDirective.scrollTo({ top: offset });
+
+      this.setPage(value)
     }
   }
   ngOnDestroy() {
@@ -492,6 +521,7 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
     let offset = (pageNumber - 1) * this.itemSize;
     this.currentPageNumber = pageNumber;
     this.form.controls['currentPageNumber'].setValue(this.currentPageNumber);
+    localStorage.setItem("lastPageNumber", this.currentPageNumber);
     this.firstMyCustomDirective.scrollTo({ top: offset });
 
   }
@@ -865,7 +895,7 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
 
       const SCROLLBAR_PADDING = 6;
-      const VERTICAL_PADDING = 0;
+      const VERTICAL_PADDING = 48 // task bar height;
 
       const noPadding = false;
 

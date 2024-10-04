@@ -117,6 +117,12 @@ class PageView {
 
     let temp = document.createElement('div');
 
+    let tajweedResult
+
+    if (tajweedColor) {
+      tajweedResult = this.tajweedService.applyTajweedByPage(this.quranTextService, this.index)
+    }
+
     for (let lineIndex = 0; lineIndex < lineCount; lineIndex++) {
       const lineInfo = this.quranTextService.getLineInfo(this.index, lineIndex)
       const lineElem = document.createElement('div');
@@ -132,9 +138,8 @@ class PageView {
         lineElem.style.marginLeft = margin + "px";
         lineElem.style.marginRight = lineElem.style.marginLeft
 
-        //const start = performance.now()
-        this.applyTajweed(tajweedColor, lineElem, lineIndex)
-        //console.log(`applyTajweed=${performance.now() - start}`)
+        this.applyTajweed(tajweedResult?.[lineIndex], lineElem, lineIndex)
+
         this.lineJustify.appendChild(lineElem);
         this.initElem(lineElem)
         if (lineInfo.sajda) {
@@ -161,7 +166,7 @@ class PageView {
         innerSpan.classList.add("innersura")
         lineElem.appendChild(innerSpan);
       } else if (lineInfo.lineType === 2) /* basmala */ {
-        this.applyTajweed(tajweedColor, lineElem, lineIndex)
+        this.applyTajweed(tajweedResult?.[lineIndex], lineElem, lineIndex)
         lineElem.style.textAlign = "center"
         lineElem.style.marginLeft = margin + "px";
         lineElem.style.marginRight = lineElem.style.marginLeft
@@ -208,21 +213,19 @@ class PageView {
 
   }
 
-  applyTajweed(tajweedColor, lineElem: HTMLElement, lineIndex) {
+  applyTajweed(tajweedResult, lineElem: HTMLElement, lineIndex) {
 
     const lineText = this.quranText[this.index][lineIndex]
 
-    if (!tajweedColor) {
+    if (!tajweedResult) {
 
       lineElem.textContent = lineText;
       return;
     }
 
-    const result = this.tajweedService.applyTajweed(this.quranText, this.index, lineIndex)
-
     for (let i = 0; i < lineText.length; i++) {
       const char = lineText.charAt(i)
-      const tajweed = result.get(i)
+      const tajweed = tajweedResult.get(i)
       if (tajweed) {
         if (lineElem.lastChild && lineElem.lastChild.nodeType == Node.ELEMENT_NODE) {
           const node = lineElem.lastChild as HTMLElement

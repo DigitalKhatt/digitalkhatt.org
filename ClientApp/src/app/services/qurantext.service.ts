@@ -1,8 +1,14 @@
 import { Injectable } from '@angular/core';
 
-import { quranText as quranNewMadinah } from './quran_text'
+import { quranText as quranTextOldMadinah } from './quran_text_old_madinah'
+import { quranText } from './quran_text'
 
-//import { quranText as quranTextOldMadinah } from './quran_text_old_madinah'
+
+export enum LineType {
+  Content = 0,
+  Sura,
+  Basmala,
+}
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +20,18 @@ export class QuranTextService {
   private _quranText: string[][];
   private _sajsdas: any[] = [];
 
-  private madinaLineWidths = new Map([
+  private oldMadinaLineWidths = new Map([
+    [600 * 15 + 9, 0.84],
+    [602 * 15 + 5, 0.61],
+    [602 * 15 + 15, 0.59],
+    [603 * 15 + 10, 0.68],
+    [604 * 15 + 4, 0.836],
+    [604 * 15 + 9, 0.836],
+    [604 * 15 + 14, 0.717],
+    [604 * 15 + 15, 0.54],
+  ]);
+
+  private newMadinaLineWidths = new Map([
     [586 * 15 + 1, 0.81],
     [593 * 15 + 2, 0.81],
     [594 * 15 + 5, 0.63],
@@ -44,9 +61,16 @@ export class QuranTextService {
     [604 * 15 + 14, 0.675],
     [604 * 15 + 15, 0.5],
   ]);
-  constructor() {
 
-    this._quranText = quranNewMadinah;
+  constructor(qt: string[][], public isOld: boolean) {
+
+    //const t0 = performance.now()
+    // Correct hamza reordering otherwise the feature applied to the base is also applied to the fatha    
+    let qurantext = qt.map(page => page.map(line => line.replaceAll("\u0654", "\u034F\u0654\u034F")));    
+    qurantext = qurantext.map(page => page.map(line => line.replaceAll("آ", "\u0627\u034F\u0653")));    
+    //console.log(`quranreplace=${performance.now() - t0}`);
+
+    this._quranText = qurantext;
 
     const start = performance.now();
 
@@ -59,22 +83,27 @@ export class QuranTextService {
       + "|" + "بِّسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ"
       + ")$";
 
-    const sajdapatterns = "(وَٱسْجُدْ) وَٱقْتَرِب|(خَرُّوا۟ سُجَّدࣰا)|(وَلِلَّهِ يَسْجُدُ)|(يَسْجُدُونَ)۩|(فَٱسْجُدُوا۟ لِلَّهِ)|(وَٱسْجُدُوا۟ لِلَّهِ)|(أَلَّا يَسْجُدُوا۟ لِلَّهِ)|(وَخَرَّ رَاكِعࣰا)|(يَسْجُدُ لَهُ)|(يَخِرُّونَ لِلْأَذْقَانِ سُجَّدࣰا)|(ٱسْجُدُوا۟) لِلرَّحْمَٰنِ|ٱرْكَعُوا۟ (وَٱسْجُدُوا۟)"; // sajdapatterns.replace("\u0657", "\u08F0").replace("\u065E", "\u08F1").replace("\u0656", "\u08F2");
+    let sajdapatterns = "(وَٱسْجُدْ) وَٱقْتَرِب|(خَرُّوا۟ سُجَّدࣰا)|(وَلِلَّهِ يَسْجُدُ)|(يَسْجُدُونَ)۩|(فَٱسْجُدُوا۟ لِلَّهِ)|(وَٱسْجُدُوا۟ لِلَّهِ)|(أَلَّا يَسْجُدُوا۟ لِلَّهِ)|(وَخَرَّ رَاكِعࣰا)|(يَسْجُدُ لَهُ)|(يَخِرُّونَ لِلْأَذْقَانِ سُجَّدࣰا)|(ٱسْجُدُوا۟) لِلرَّحْمَٰنِ|ٱرْكَعُوا۟ (وَٱسْجُدُوا۟)"; // sajdapatterns.replace("\u0657", "\u08F0").replace("\u065E", "\u08F1").replace("\u0656", "\u08F2");
+    sajdapatterns = sajdapatterns.replaceAll("\u0654", "\u034F\u0654\u034F");    
+    sajdapatterns = sajdapatterns.replaceAll("آ", "\u0627\u034F\u0653");  
+
     const sajdaRegExpr = new RegExp(sajdapatterns, "du")
 
 
     const regexpr = new RegExp(surabismpattern, "u")
 
+    const madinaLineWidths = isOld ? this.oldMadinaLineWidths : this.newMadinaLineWidths;
+
     const ratio = 0.9;
     for (let pageIndex = 0; pageIndex < 2; pageIndex++) {
       const pageNumber = pageIndex + 1
-      this.madinaLineWidths.set(pageNumber * 15 + 2, ratio * 0.5)
-      this.madinaLineWidths.set(pageNumber * 15 + 3, ratio * 0.7)
-      this.madinaLineWidths.set(pageNumber * 15 + 4, ratio * 0.9)
-      this.madinaLineWidths.set(pageNumber * 15 + 5, ratio)
-      this.madinaLineWidths.set(pageNumber * 15 + 6, ratio * 0.9)
-      this.madinaLineWidths.set(pageNumber * 15 + 7, ratio * 0.7)
-      this.madinaLineWidths.set(pageNumber * 15 + 8, ratio * 0.4)
+      madinaLineWidths.set(pageNumber * 15 + 2, ratio * 0.5)
+      madinaLineWidths.set(pageNumber * 15 + 3, ratio * 0.7)
+      madinaLineWidths.set(pageNumber * 15 + 4, ratio * 0.9)
+      madinaLineWidths.set(pageNumber * 15 + 5, ratio)
+      madinaLineWidths.set(pageNumber * 15 + 6, ratio * 0.9)
+      madinaLineWidths.set(pageNumber * 15 + 7, ratio * 0.7)
+      madinaLineWidths.set(pageNumber * 15 + 8, ratio * 0.4)
     }
 
     this.quranInfo = [];
@@ -86,11 +115,11 @@ export class QuranTextService {
         const line = page[lineIndex];
         const lineInfo: any = {}
         pageInfo.push(lineInfo)
-        lineInfo.lineWidthRatio = this.madinaLineWidths.get((pageIndex + 1) * 15 + lineIndex + 1) || 1
-        lineInfo.lineType = 0;
+        lineInfo.lineWidthRatio = madinaLineWidths.get((pageIndex + 1) * 15 + lineIndex + 1) || 1
+        lineInfo.lineType = LineType.Content;
         const match = line.match(regexpr)
         if (match?.groups.sura) {
-          lineInfo.lineType = 1
+          lineInfo.lineType = LineType.Sura
           this._outline.push({
             name: match?.groups.sura,
             pageIndex: pageIndex,
@@ -98,11 +127,11 @@ export class QuranTextService {
           })
 
         } else if (match?.groups.bism) {
-          lineInfo.lineType = 2
+          lineInfo.lineType = LineType.Basmala
         }
 
         const sajdaMatch = line.match(sajdaRegExpr)
-        if (sajdaMatch) {          
+        if (sajdaMatch) {
           for (let i = 1; i < sajdaMatch.length; i++) {
             if (sajdaMatch[i]) {
               var pos = (sajdaMatch as any).indices[i]
@@ -113,7 +142,7 @@ export class QuranTextService {
                 const char = line.charAt(charIndex);
 
                 const isSpace = char === " "
-                
+
                 if (startWordIndex == null && charIndex >= pos[0]) {
                   startWordIndex = currentWordIndex;
                 }
@@ -159,3 +188,6 @@ export class QuranTextService {
     return this._quranText
   }
 }
+
+export const OldMadinahQuranTextService = new QuranTextService(quranTextOldMadinah, true);
+export const NewMadinahQuranTextService = new QuranTextService(quranText, false);

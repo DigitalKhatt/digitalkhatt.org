@@ -1,8 +1,9 @@
 //import { quranTextService, PAGE_WIDTH, FONTSIZE, MARGIN, INTERLINE, TOP, SPACEWIDTH, SpaceType, LineTextInfo, WordInfo } from './qurantext.service'
 
+import { QuranTextService } from "../../services/qurantext.service";
 import { HarfBuzzFont, HarfBuzzBuffer, hb as HarfBuzz, getWidth, HBFeature } from "./harfbuzz"
 import { compress, decompress } from 'lz-string';
-import { QuranTextService } from "./qurantext.service";
+
 
 
 export const PAGE_WIDTH = 17000

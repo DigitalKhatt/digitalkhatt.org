@@ -38,7 +38,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { AboutComponent } from '../about/about.component';
 import { RenderingStates } from './rendering_states';
 import { TajweedService } from '../../services/tajweed.service';
-import { QuranTextService } from '../../services/qurantext.service';
+import { OldMadinahQuranTextService, QuranTextService } from '../../services/qurantext.service';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 
 const CSS_UNITS = 96.0 / 72.0;
@@ -190,6 +190,7 @@ export class OldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
   visibleViews;
   loaded: boolean = false;
   fontScale: number = 1;
+  quranTextService : QuranTextService
 
   wasmStatus;
 
@@ -203,10 +204,11 @@ export class OldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private matDialog: MatDialog,
     private router: Router,
-    private tajweedService: TajweedService,
-    private quranTextService: QuranTextService,
+    private tajweedService: TajweedService,    
     private _snackBar: MatSnackBar
   ) {
+
+    this.quranTextService = OldMadinahQuranTextService
 
     var UA = navigator.userAgent;
 
@@ -275,7 +277,7 @@ export class OldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.texFormat = true;
 
-    this.totalPages = quranTextService.nbPages;
+    this.totalPages = this.quranTextService.nbPages;
     this.maxPages = this.totalPages;
 
     this.pages = new Array(this.maxPages);

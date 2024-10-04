@@ -36,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\components\hbmedina\tajweed.service.ts" />
     <None Remove="ClientApp\src\app\components\hboldmedina\page_view.ts" />
     <None Remove="ClientApp\src\app\components\hboldmedina\qurantext.service.ts" />
     <None Remove="ClientApp\src\app\components\hboldmedina\rendering_states.ts" />
