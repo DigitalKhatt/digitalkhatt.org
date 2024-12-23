@@ -39,7 +39,7 @@ import { AboutComponent } from '../about/about.component';
 import { RenderingStates } from './rendering_states';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { loadAndCacheFont, loadHarfbuzz, harfbuzzFonts, HarfBuzzFont } from "./harfbuzz"
-import { NewMadinahQuranTextService, OldMadinahQuranTextService, QuranTextService } from '../../services/qurantext.service';
+import { MushafLayoutType, NewMadinahQuranTextService, OldMadinahQuranTextService, QuranTextIndopak15Service, QuranTextService } from '../../services/qurantext.service';
 import { TajweedService } from '../../services/tajweed.service';
 
 
@@ -117,14 +117,17 @@ const DEFAULT_CACHE_SIZE = 10;
   templateUrl: './hbmedina.component.ts.html',
   styleUrls: ['./hbmedina.component.ts.scss'],
   host: {
-    '[class.oldmadina]': 'isOldMadina',
-    '[class.newmadina]': '!isOldMadina'
+    '[class.oldmadina]': 'mushafType == MushafLayoutTypeEnum.OldMadinah',
+    '[class.newmadina]': 'mushafType == MushafLayoutTypeEnum.NewMadinah',
+    '[class.indopak]': 'mushafType == MushafLayoutTypeEnum.IndoPak15Lines'
   },
 })
 export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
+  MushafLayoutTypeEnum = MushafLayoutType;
+
   private sideBySideWidth = 992;
-  isOldMadina = false
+  mushafType: MushafLayoutType = MushafLayoutType.NewMadinah;
 
 
   fontsize;
@@ -213,13 +216,21 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
   ) {
 
-    this.isOldMadina = route.snapshot.data.type === "oldmedina";
-
-    if (this.isOldMadina) {
-      this.quranTextService = OldMadinahQuranTextService
-    } else {
-      this.quranTextService = NewMadinahQuranTextService
+    switch (route.snapshot.data.type) {
+      case "oldmedina":
+        this.mushafType = MushafLayoutType.OldMadinah;
+        this.quranTextService = OldMadinahQuranTextService;
+        break;
+      case "indopak15":
+        this.mushafType = MushafLayoutType.IndoPak15Lines;
+        this.quranTextService = QuranTextIndopak15Service;
+        break;
+      default:
+        this.mushafType = MushafLayoutType.NewMadinah;
+        this.quranTextService = NewMadinahQuranTextService;
+        break;
     }
+
 
     let nbav = window as any;
 
@@ -326,12 +337,11 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
       const tajweedResult = this.tajweedService.applyTajweedByPage(this.quranTextService, pageNumber - 1)
       result[pageNumber] = tajweedResult
     }
-    
+
     for (let pageNumber = 434; pageNumber <= 440; pageNumber++) {
       const tajweedResult = this.tajweedService.applyTajweedByPage(this.quranTextService, pageNumber - 1)
       result[pageNumber] = tajweedResult
     }
-    console.log(JSON.stringify(result, this.replacer, 2))
   }
 
   ngAfterViewInit() {
@@ -345,10 +355,12 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
         await loadHarfbuzz("assets/hb.wasm")
 
-        if (this.isOldMadina) {
+        if (this.mushafType === MushafLayoutType.OldMadinah) {
           await loadAndCacheFont("oldmadina", "assets/fonts/hb/oldmadina.otf")
-        } else {
+        } else if (this.mushafType === MushafLayoutType.NewMadinah) {
           await loadAndCacheFont("oldmadina", "assets/fonts/hb/digitalkhatt.otf")
+        } else {
+          await loadAndCacheFont("oldmadina", "assets/fonts/indopak.otf")
         }
 
         document.fonts.load("12px oldmadina").then(() => {
@@ -462,7 +474,7 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
       var box = this.pageNumberBoxRef.element.nativeElement;
 
       var pos: any = this.pageNumberBoxRef.getFreeDragPosition();
-      console.log("Pos=", pos);
+      
 
       var toolbarHeight = 48;
 

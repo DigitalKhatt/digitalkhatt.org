@@ -73,6 +73,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { HBMedinaComponent } from './components/hbmedina/hbmedina.component';
 import { OldMedinaComponent } from './components/oldmedina/oldmedina.component';
 import { LayoutService } from './services/layoutservice/layoutservice.service';
+import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.component';
 //import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
@@ -174,7 +175,8 @@ const routerOptions: ExtraOptions = {
     QuranOTFComponent,
     QuranPagesComponent,
     OldMedinaComponent,
-    HBMedinaComponent
+    HBMedinaComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -196,12 +198,20 @@ const routerOptions: ExtraOptions = {
       },
       {
         path: '',
-        component: QuranComponent,
-        children: [
+        children: [         
           {
             path: 'digitalmushaf',
-            component: EmptyComponent
-          },
+            component: HBMedinaComponent,
+            data: {
+              type: 'newmedina'
+            },
+          }
+        ]
+      },
+      {
+        path: '',
+        component: QuranComponent,
+        children: [          
           {
             path: 'about',
             component: AboutComponent
@@ -237,13 +247,20 @@ const routerOptions: ExtraOptions = {
             data: {
               type: 'newmedina'
             },
+          },
+          {
+            path: 'indopak15',
+            component: HBMedinaComponent,
+            data: {
+              type: 'indopak15'
+            },
           }
         ]
       },
       {
-        path: '**',
-        redirectTo: 'digitalmushaf'
-      }
+        path: '**', 
+        component: PageNotFoundComponent
+      },
     ], routerOptions),
     BrowserAnimationsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })

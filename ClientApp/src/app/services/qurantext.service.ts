@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { quranText as quranTextOldMadinah } from './quran_text_old_madinah'
+import { quranText as quranTextIndopak15 } from './quran_text_indopak_15'
 import { quranText } from './quran_text'
 
 
@@ -8,6 +9,12 @@ export enum LineType {
   Content = 0,
   Sura,
   Basmala,
+}
+
+export enum MushafLayoutType {
+  NewMadinah = 1,
+  OldMadinah,
+  IndoPak15Lines,
 }
 
 @Injectable({
@@ -62,13 +69,64 @@ export class QuranTextService {
     [604 * 15 + 15, 0.5],
   ]);
 
-  constructor(qt: string[][], public isOld: boolean) {
+  private indoPak15LineWidths = new Map([
+    [255 * 15 + 4, 0.9],
+    [312 * 15 + 4, 0.6],
+    [331 * 15 + 12, 0.7],
+    [349 * 15 + 15, 0.9],
+    [396 * 15 + 8, 0.7],
+    [417 * 15 + 15, 0.8],
+    [440 * 15 + 7, 0.5],
+    [452 * 15 + 11, 0.8],
+    [495 * 15 + 11, 0.8],
+    [498 * 15 + 7, 0.7],
+    [510 * 15 + 15, 0.6],
+    [523 * 15 + 8, 0.8],
+    [528 * 15 + 11, 0.7],
+    [531 * 15 + 7, 0.7],
+    [548 * 15 + 15, 0.5],
+    [554 * 15 + 9, 0.7],
+    [569 * 15 + 10, 0.8],
+    [573 * 15 + 12, 0.3],
+    [576 * 15 + 2, 0.5],
+    [577 * 15 + 15, 0.5],
+    [580 * 15 + 5, 0.7],
+    [581 * 15 + 15, 0.5],
+    [584 * 15 + 2, 0.3],
+    [590 * 15 + 10, 0.8],
+    [591 * 15 + 11, 0.5],
+    [592 * 15 + 8, 0.7],
+    [594 * 15 + 2, 0.8],
+    [595 * 15 + 3, 0.6],
+    [596 * 15 + 4, 0.7],
+    [596 * 15 + 15, 0.6],
+    [598 * 15 + 9, 0.8],
+    [599 * 15 + 15, 0.5],
+    [602 * 15 + 2, 0.5],
+    [602 * 15 + 15, 0.5],
+    [605 * 15 + 10, 0.5],
+    [606 * 15 + 2, 0.5],
+    [606 * 15 + 9, 0.8],
+    [606 * 15 + 15, 0.7],
+    [609 * 15 + 11, 0.7],
+    [609 * 15 + 15, 0.7],
+    [610 * 15 + 5, 0.5],
+    [610 * 15 + 10, 0.7],
+  ]);
+
+  adjustText(text) {
+    let newText = text.replaceAll("\u0627\u0653", "\u0627\u034F\u0653");
+    newText = newText.replaceAll("\u0627\u0654", "\u0627\u034F\u0654\u034F");
+    newText = newText.replaceAll("\u0648\u0654", "\u0648\u034F\u0654\u034F");
+    newText = newText.replaceAll("\u064A\u0654", "\u064A\u034F\u0654\u034F");
+    return newText;
+  }
+
+  constructor(qt: string[][], public mushafType: MushafLayoutType) {
 
     //const t0 = performance.now()
     // Correct hamza reordering otherwise the feature applied to the base is also applied to the fatha    
-    let qurantext = qt.map(page => page.map(line => line.replaceAll("\u0654", "\u034F\u0654\u034F")));    
-    qurantext = qurantext.map(page => page.map(line => line.replaceAll("آ", "\u0627\u034F\u0653")));    
-    //console.log(`quranreplace=${performance.now() - t0}`);
+    let qurantext = qt.map(page => page.map(line => this.adjustText(line)));
 
     this._quranText = qurantext;
 
@@ -81,30 +139,48 @@ export class QuranTextService {
       + suraWord + " .*)|(?<bism>"
       + bism
       + "|" + "بِّسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ"
+      + "|" + "بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ ۝" // indopak
       + ")$";
 
     let sajdapatterns = "(وَٱسْجُدْ) وَٱقْتَرِب|(خَرُّوا۟ سُجَّدࣰا)|(وَلِلَّهِ يَسْجُدُ)|(يَسْجُدُونَ)۩|(فَٱسْجُدُوا۟ لِلَّهِ)|(وَٱسْجُدُوا۟ لِلَّهِ)|(أَلَّا يَسْجُدُوا۟ لِلَّهِ)|(وَخَرَّ رَاكِعࣰا)|(يَسْجُدُ لَهُ)|(يَخِرُّونَ لِلْأَذْقَانِ سُجَّدࣰا)|(ٱسْجُدُوا۟) لِلرَّحْمَٰنِ|ٱرْكَعُوا۟ (وَٱسْجُدُوا۟)"; // sajdapatterns.replace("\u0657", "\u08F0").replace("\u065E", "\u08F1").replace("\u0656", "\u08F2");
-    sajdapatterns = sajdapatterns.replaceAll("\u0654", "\u034F\u0654\u034F");    
-    sajdapatterns = sajdapatterns.replaceAll("آ", "\u0627\u034F\u0653");  
+    sajdapatterns = this.adjustText(sajdapatterns);
 
     const sajdaRegExpr = new RegExp(sajdapatterns, "du")
 
 
     const regexpr = new RegExp(surabismpattern, "u")
 
-    const madinaLineWidths = isOld ? this.oldMadinaLineWidths : this.newMadinaLineWidths;
 
-    const ratio = 0.9;
-    for (let pageIndex = 0; pageIndex < 2; pageIndex++) {
-      const pageNumber = pageIndex + 1
-      madinaLineWidths.set(pageNumber * 15 + 2, ratio * 0.5)
-      madinaLineWidths.set(pageNumber * 15 + 3, ratio * 0.7)
-      madinaLineWidths.set(pageNumber * 15 + 4, ratio * 0.9)
-      madinaLineWidths.set(pageNumber * 15 + 5, ratio)
-      madinaLineWidths.set(pageNumber * 15 + 6, ratio * 0.9)
-      madinaLineWidths.set(pageNumber * 15 + 7, ratio * 0.7)
-      madinaLineWidths.set(pageNumber * 15 + 8, ratio * 0.4)
+    const madinaLineWidths = mushafType == MushafLayoutType.OldMadinah ? this.oldMadinaLineWidths
+      : mushafType == MushafLayoutType.NewMadinah ? this.newMadinaLineWidths
+        : this.indoPak15LineWidths;
+
+    if (mushafType == MushafLayoutType.OldMadinah || mushafType == MushafLayoutType.NewMadinah) {
+      const ratio = 0.9;
+      for (let pageIndex = 0; pageIndex < 2; pageIndex++) {
+        const pageNumber = pageIndex + 1
+        madinaLineWidths.set(pageNumber * 15 + 2, ratio * 0.5)
+        madinaLineWidths.set(pageNumber * 15 + 3, ratio * 0.7)
+        madinaLineWidths.set(pageNumber * 15 + 4, ratio * 0.9)
+        madinaLineWidths.set(pageNumber * 15 + 5, ratio)
+        madinaLineWidths.set(pageNumber * 15 + 6, ratio * 0.9)
+        madinaLineWidths.set(pageNumber * 15 + 7, ratio * 0.7)
+        madinaLineWidths.set(pageNumber * 15 + 8, ratio * 0.4)
+      }
+    } else {
+      const ratio = 0.7;
+      for (let pageIndex = 0; pageIndex < 2; pageIndex++) {
+        const pageNumber = pageIndex + 1
+        madinaLineWidths.set(pageNumber * 15 + 2, ratio * 0.8)
+        madinaLineWidths.set(pageNumber * 15 + 3, ratio)
+        madinaLineWidths.set(pageNumber * 15 + 4, ratio)
+        madinaLineWidths.set(pageNumber * 15 + 5, ratio)
+        madinaLineWidths.set(pageNumber * 15 + 6, ratio)
+        madinaLineWidths.set(pageNumber * 15 + 7, ratio)
+        madinaLineWidths.set(pageNumber * 15 + 8, ratio)
+      }
     }
+
 
     this.quranInfo = [];
     for (let pageIndex = 0; pageIndex < this._quranText.length; pageIndex++) {
@@ -189,5 +265,7 @@ export class QuranTextService {
   }
 }
 
-export const OldMadinahQuranTextService = new QuranTextService(quranTextOldMadinah, true);
-export const NewMadinahQuranTextService = new QuranTextService(quranText, false);
+export const OldMadinahQuranTextService = new QuranTextService(quranTextOldMadinah, MushafLayoutType.OldMadinah);
+export const NewMadinahQuranTextService = new QuranTextService(quranText, MushafLayoutType.NewMadinah);
+export const QuranTextIndopak15Service = new QuranTextService(quranTextIndopak15, MushafLayoutType.IndoPak15Lines);
+

@@ -29,6 +29,10 @@ $padding: 0.2em;
   font-family: digitalkhatt;
 }
 
+:host.indopak {
+  font-family: indopak;
+}
+
 :host {
   display: flex;
   flex-direction: column;

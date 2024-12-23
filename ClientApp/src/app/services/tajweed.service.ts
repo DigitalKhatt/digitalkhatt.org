@@ -116,7 +116,7 @@ export class TajweedService {
     pattern += `|(?<tafkhim5>ر[${fdk + sukuns + shadda}]*)` // otherwise tafkhim Reh with marks
 
     // Allah Tafkhim lam    
-    pattern += `|(?<=[${fatha + damma}][ى]?\\s?|[${digits}]\\s|وا[${ziaditHarf}]\\s)ٱل(?<tafkhim6>ل[${marks}]*)ه[${marks}]*${endWordCond}`
+    pattern += `|(?<=[${fatha + damma}][اى]?\\s?|[${digits}]\\s|وا[${ziaditHarf}]\\s)ٱل(?<tafkhim6>ل[${marks}]*)ه[${marks}]*${endWordCond}`
 
     this.TafkhimRE = new RegExp(pattern, "gdu");
 

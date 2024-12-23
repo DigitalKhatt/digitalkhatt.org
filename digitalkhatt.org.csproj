@@ -69,6 +69,7 @@
     <TypeScriptCompile Remove="ClientApp\src\app\components\hbmedina\quran_text.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\components\hboldmedina\hbmedina.component.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\components\hboldmedina\quran_text_old_madinah.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\components\pagenotfound\pagenotfound.component.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\services\quran_text.ts" />
     <TypeScriptCompile Remove="ClientApp\src\app\services\quran_text_old_madinah.ts" />
   </ItemGroup>

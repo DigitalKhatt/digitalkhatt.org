@@ -2,11 +2,11 @@
  * Copyright 2012 Mozilla Foundation (Some code is derived from https://github.com/mozilla/pdf.js/blob/master/web/pdf_page_view.js)
  * Copyright (c) 2019-2020 Amine Anane. http: //digitalkhatt/license  
 */
-import { QuranTextService } from "../../services/qurantext.service";
+import { MushafLayoutType, QuranTextService } from "../../services/qurantext.service";
 import { TajweedService } from "../../services/tajweed.service";
 import { HBFeature, hb as HarfBuzz, HarfBuzzBuffer, HarfBuzzFont, getWidth, harfbuzzFonts } from "./harfbuzz";
 import { PageFormat } from './hbmedina.component';
-import { FONTSIZE, INTERLINE, JustResultByLine, LineTextInfo, MARGIN, PAGE_WIDTH, SPACEWIDTH, SpaceType, analyzeLineForJust, justifyLine } from './just.service';
+import { FONTSIZE, INTERLINE, JustResultByLine, LineTextInfo, MARGIN, PAGE_WIDTH, SpaceType, analyzeLineForJust, justifyLine } from './just.service';
 
 import { RenderingStates } from './rendering_states';
 
@@ -29,7 +29,7 @@ class PageView {
   private oldMedinaFont: HarfBuzzFont
   private ayaSvgGroup: SVGGElement
   private ayaLength: number;
-
+  private spaceWidth;
   constructor(public div, private pageIndex, calculatewidthElem, lineJustify, viewport,
     private tajweedService: TajweedService, private quranTextService: QuranTextService) {
     this.renderingState = RenderingStates.INITIAL;
@@ -46,8 +46,10 @@ class PageView {
     this.oldMedinaFont = harfbuzzFonts.get("oldmadina")
 
     const svgAyaElem: SVGSVGElement = document.getElementById("ayaGlyph") as any
-    this.ayaSvgGroup = svgAyaElem.firstElementChild as SVGGElement;
-    this.ayaLength = quranTextService.isOld ? 3 : 14;
+    this.ayaSvgGroup = svgAyaElem?.firstElementChild as SVGGElement;
+    this.ayaLength = quranTextService.mushafType == MushafLayoutType.OldMadinah ? 3
+      : quranTextService.mushafType == MushafLayoutType.NewMadinah ? 14
+        : 0;
 
 
 
@@ -60,7 +62,7 @@ class PageView {
 
     this.quranText = quranTextService.quranText;
 
-
+    this.spaceWidth = getWidth(" ", this.oldMedinaFont, FONTSIZE, null);
   }
 
   pause() {
@@ -164,12 +166,8 @@ class PageView {
 
         const lineTextInfo = analyzeLineForJust(this.quranTextService, this.pageIndex, lineIndex)
 
-        const justResult = justifyLine(lineTextInfo, this.oldMedinaFont, fontSizeLineWidthRatio * maxFontSizeRatioWithoutOverFull / lineInfo.lineWidthRatio)
+        const justResult = justifyLine(lineTextInfo, this.oldMedinaFont, fontSizeLineWidthRatio * maxFontSizeRatioWithoutOverFull / lineInfo.lineWidthRatio, this.spaceWidth)
         justResult.fontSizeRatio = justResult.fontSizeRatio * maxFontSizeRatioWithoutOverFull
-
-        /*if (lineInfo.lineType === 2) {
-          justResult.globalFeatures = [{ name: 'basm', value: 1 }]
-        }*/
 
         this.renderLine(lineElem, lineIndex, lineTextInfo, justResult, tajweedResult?.[lineIndex], glyphScale, defaultMargin)
 
@@ -191,7 +189,7 @@ class PageView {
         innerSpan.style.fontSize = this.viewport.fontSize * 0.9 + "px"
         lineElem.appendChild(innerSpan);
       } else if (lineInfo.lineType === 2) /* basmala */ {
-        lineElem.style.textAlign = "center"
+        //lineElem.style.textAlign = "center"
         lineElem.style.marginLeft = margin + "px";
         lineElem.style.marginRight = lineElem.style.marginLeft
         lineElem.style.height = INTERLINE * scale + "px";
@@ -200,8 +198,8 @@ class PageView {
         let justResult: JustResultByLine = {
           globalFeatures: [{ name: 'basm', value: 1 }],
           fontFeatures: new Map(),
-          simpleSpacing: SPACEWIDTH,
-          ayaSpacing: SPACEWIDTH,
+          simpleSpacing: this.spaceWidth,
+          ayaSpacing: this.spaceWidth,
           fontSizeRatio: 0.9
         }
         this.renderLine(lineElem, lineIndex, lineTextInfo, justResult, tajweedResult?.[lineIndex], glyphScale, defaultMargin, true)
@@ -240,6 +238,8 @@ class PageView {
 
     const lineText = this.quranText[this.pageIndex][lineIndex]
 
+
+
     const features: HBFeature[] = []
 
     for (const feat of justResult.globalFeatures || []) {
@@ -254,8 +254,10 @@ class PageView {
     if (justResult.fontFeatures?.size > 0) {
       for (let wordIndex = 0; wordIndex < lineTextInfo.wordInfos.length; wordIndex++) {
         const wordInfo = lineTextInfo.wordInfos[wordIndex]
+
         for (let i = wordInfo.startIndex; i <= wordInfo.endIndex; i++) {
           const justInfo = justResult.fontFeatures.get(i)
+
           if (justInfo) {
             for (let feat of justInfo) {
               features.push({
@@ -310,6 +312,8 @@ class PageView {
       let pathString = glyphs.get(glyph.GlyphId)
       if (pathString === undefined) {
 
+
+
         pathString = this.oldMedinaFont.glyphToSvgPath(glyph.GlyphId)
 
         if (lineText.charCodeAt(glyph.Cluster) === 0x06DD) {
@@ -343,10 +347,13 @@ class PageView {
         if (typeof pathString !== 'string') {
           //Aya
 
-          const ayaGroup: SVGGElement = this.ayaSvgGroup.cloneNode(true) as any
+          if (this.ayaSvgGroup) {
+            const ayaGroup: SVGGElement = this.ayaSvgGroup.cloneNode(true) as any
 
-          ayaGroup.setAttribute("transform", "scale (1,-1) translate(" + (currentxPos + glyph.XOffset) + " " + (this.quranTextService.isOld ? -800 : -885) + ")");
-          lineGroup.appendChild(ayaGroup);
+            ayaGroup.setAttribute("transform", "scale (1,-1) translate(" + (currentxPos + glyph.XOffset) + " " + (this.quranTextService.mushafType == MushafLayoutType.OldMadinah ? -800 : -885) + ")");
+            lineGroup.appendChild(ayaGroup);
+          }
+
 
           pathString = pathString[0]
 
@@ -359,7 +366,7 @@ class PageView {
 
         if (tajweedResult) {
           const tajweedClass = tajweedResult.get(glyph.Cluster)
-          if (tajweedClass) {          
+          if (tajweedClass) {
             newpath.classList.add(tajweedClass)
           }
         }
@@ -383,22 +390,22 @@ class PageView {
 
     lineGroup.setAttribute("transform", "scale(" + glyphScale * justResult.fontSizeRatio + "," + -glyphScale * justResult.fontSizeRatio + ")");
 
-    //lineGroup.transform.baseVal.getItem(0).setScale(this.viewport.scale, this.viewport.scale);
-
-    const lineWidth = -glyphScale * currentxPos
+    const lineWidth = -glyphScale * justResult.fontSizeRatio * currentxPos
     const x = lineWidth * 2
-    let width = x + margin
+    let width = x + margin;
 
 
     const height = lineElem.clientHeight * 2
+
+
 
     svg.setAttribute('viewBox', `${-x} ${-height / 2} ${width} ${height}`)
     svg.setAttribute('width', width.toString());
     svg.setAttribute('height', height.toString());
     svg.style.position = "relative"
-    if (center) {
-      const rightMargin = (lineElem.clientWidth - lineWidth) / 2 + margin
-      svg.style.right = rightMargin + "px";
+    if (center) {      
+      const rightMargin = (lineElem.clientWidth - lineWidth) / 2 - margin;
+      svg.style.right = rightMargin + "px";      
     } else {
       svg.style.right = -margin + "px";
     }

@@ -19,25 +19,36 @@ export class PWAService {
     const everySixHoursOnceAppIsStable$ = concat(appIsStable$, everySixHours$);
 
     if (swUpdate.isEnabled) {
-      everySixHoursOnceAppIsStable$.subscribe(() => swUpdate.checkForUpdate());
+      everySixHoursOnceAppIsStable$.subscribe(async () => {
+        try {
+          const updateFound = await swUpdate.checkForUpdate();
+          console.log(updateFound ? 'A new version is available.' : 'Already on the latest version.');
+        } catch (err) {
+          console.error('Failed to check for updates:', err);
+        }
+      });
     }
 
-    const updatesAvailable = swUpdate.versionUpdates.pipe(
+    swUpdate.versionUpdates.pipe(
       filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY'),
       map(evt => ({
         type: 'UPDATE_AVAILABLE',
         current: evt.currentVersion,
         available: evt.latestVersion,
       }))).subscribe(evt => {
-        const snack = this.snackbar.open('A new update is available.', 'Reload', {
-          duration: 5 * 1000,
-        });
+        
+        const snack = this.snackbar.open('A new update is available.', 'Reload');
         snack
           .onAction()
           .subscribe(() => {
             swUpdate.activateUpdate().then(() => document.location.reload());
           });
-
+          /*
+        document.location.reload();
+        console.log("Application updated to the latest version.");
+        this.snackbar.open('Application updated to the latest version.', 'OK', {
+          duration: 5 * 1000,
+        });*/
       });
 
     this.swUpdate.unrecoverable.subscribe(event => {

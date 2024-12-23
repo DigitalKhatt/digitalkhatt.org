@@ -1,5 +1,3 @@
-//import { quranTextService, PAGE_WIDTH, FONTSIZE, MARGIN, INTERLINE, TOP, SPACEWIDTH, SpaceType, LineTextInfo, WordInfo } from './qurantext.service'
-
 import { QuranTextService } from "../../services/qurantext.service";
 import { HarfBuzzFont, HarfBuzzBuffer, hb as HarfBuzz, getWidth, HBFeature } from "./harfbuzz"
 import { compress, decompress } from 'lz-string';
@@ -11,7 +9,6 @@ export const INTERLINE = 1800
 export const TOP = 200
 export const MARGIN = 400
 export const FONTSIZE = 1000
-export const SPACEWIDTH = 100
 
 export const enum SpaceType {
   Simple = 1,
@@ -228,11 +225,9 @@ function tryApplyFeatures(wordIndex: number, lineTextInfo: LineTextInfo, justInf
   }
   return false
 }
-export function justifyLine(lineTextInfo: LineTextInfo, font: HarfBuzzFont, fontSizeLineWidthRatio: number): JustResultByLine {
+export function justifyLine(lineTextInfo: LineTextInfo, font: HarfBuzzFont, fontSizeLineWidthRatio: number, spaceWidth: number): JustResultByLine {
 
-  const desiredWidth = FONTSIZE / fontSizeLineWidthRatio
-
-  const defaultSpaceWidth = SPACEWIDTH
+  const desiredWidth = FONTSIZE / fontSizeLineWidthRatio  
 
   const lineText = lineTextInfo.lineText
 
@@ -266,14 +261,14 @@ export function justifyLine(lineTextInfo: LineTextInfo, font: HarfBuzzFont, font
   let diff = desiredWidth - currentLineWidth
 
   let fontSizeRatio = 1
-  let simpleSpacing = SPACEWIDTH
-  let ayaSpacing = SPACEWIDTH
+  let simpleSpacing = spaceWidth
+  let ayaSpacing = spaceWidth
 
   if (diff > 0) {
     // stretch   
 
-    let maxStretchBySpace = defaultSpaceWidth * 1;
-    let maxStretchByAyaSpace = defaultSpaceWidth * 2;
+    let maxStretchBySpace = Math.min(100, spaceWidth * 1);
+    let maxStretchByAyaSpace = Math.min(200, spaceWidth * 2);
 
     let maxStretch = maxStretchBySpace * lineTextInfo.simpleSpaceIndexes.length + maxStretchByAyaSpace * lineTextInfo.ayaSpaceIndexes.length;
 
@@ -282,8 +277,8 @@ export function justifyLine(lineTextInfo: LineTextInfo, font: HarfBuzzFont, font
     let stretchBySpace = spaceRatio * maxStretchBySpace;
     let stretchByByAyaSpace = spaceRatio * maxStretchByAyaSpace;
 
-    simpleSpaceWidth = defaultSpaceWidth + stretchBySpace
-    ayaSpaceWidth = defaultSpaceWidth + stretchByByAyaSpace
+    simpleSpaceWidth = spaceWidth + stretchBySpace
+    ayaSpaceWidth = spaceWidth + stretchByByAyaSpace
 
     currentLineWidth += stretch
 
@@ -325,12 +320,12 @@ function stretchLine(lineTextInfo: LineTextInfo, justInfo: JustInfo): JustInfo {
 
   const wordInfos = lineTextInfo.wordInfos;
 
-  applyKashidasSubWords(lineTextInfo, justInfo, StretchType.Beh, 2)
+  applyKashidasSubWords(lineTextInfo, justInfo, StretchType.Beh, 2);
   applyAlternatesSubWords(lineTextInfo, justInfo, "بتثكن", 2)
   applyKashidasSubWords(lineTextInfo, justInfo, StretchType.FinaAscendant, 3)
   applyKashidasSubWords(lineTextInfo, justInfo, StretchType.OtherKashidas, 2)
   applyAlternatesSubWords(lineTextInfo, justInfo, "ىصضسشفقيئ", 2)
-  applyKashidasSubWords(lineTextInfo, justInfo, StretchType.Kaf, 1)  
+  applyKashidasSubWords(lineTextInfo, justInfo, StretchType.Kaf, 1)
   applyKashidasSubWords(lineTextInfo, justInfo, StretchType.Beh, 1)
   applyAlternatesSubWords(lineTextInfo, justInfo, "بتثكن", 1)
   applyKashidasSubWords(lineTextInfo, justInfo, StretchType.FinaAscendant, 1)
@@ -492,7 +487,7 @@ function applyKashidasSubWords(lineTextInfo: LineTextInfo, justInfo: JustInfo, t
               }*/
             ]
 
-            
+
 
             tempResult.set(firstIndexInLine, mergeFeatures(firstPrevFeatures, firstAppliedFeatures)!!)
 
@@ -676,21 +671,21 @@ function applyAlternatesSubWords(lineTextInfo: LineTextInfo, justInfo: JustInfo,
 }
 
 
-async function saveLayout(quranTextService: QuranTextService, fontSizeLineWidthRatio: number, font: HarfBuzzFont) {
+async function saveLayout(quranTextService: QuranTextService, fontSizeLineWidthRatio: number, font: HarfBuzzFont, spaceWidth: number) {
 
   const result: JustResultByLine[][] = []
 
   for (let pageIndex = 0; pageIndex < quranTextService.quranText.length; pageIndex++) {
     //for (let pageIndex = 0; pageIndex < 10; pageIndex++) {      
 
-    result.push(await getPageLayout(quranTextService, pageIndex, fontSizeLineWidthRatio, font))
+    result.push(await getPageLayout(quranTextService, pageIndex, fontSizeLineWidthRatio, font, spaceWidth))
     console.log(`pageIndex=${pageIndex} saved`)
   }
 
   saveLayoutToStorage(fontSizeLineWidthRatio, result)
 }
 
-async function getPageLayout(quranTextService: QuranTextService, pageIndex: number, fontSizeLineWidthRatio: number, font: HarfBuzzFont) {
+async function getPageLayout(quranTextService: QuranTextService, pageIndex: number, fontSizeLineWidthRatio: number, font: HarfBuzzFont, spaceWidth: number) {
 
   const result: JustResultByLine[] = []
 
@@ -699,7 +694,7 @@ async function getPageLayout(quranTextService: QuranTextService, pageIndex: numb
     const lineTextInfo = analyzeLineForJust(quranTextService, pageIndex, lineIndex)
     let justResult: JustResultByLine
     if (lineInfo.lineType === 1 || (lineInfo.lineType === 2 && pageIndex != 0 && pageIndex != 1)) {
-      justResult = { fontFeatures: new Map(), simpleSpacing: SPACEWIDTH, ayaSpacing: SPACEWIDTH, fontSizeRatio: 1 }
+      justResult = { fontFeatures: new Map(), simpleSpacing: spaceWidth, ayaSpacing: spaceWidth, fontSizeRatio: 1 }
       result.push(justResult)
 
     } else {
@@ -713,7 +708,7 @@ async function getPageLayout(quranTextService: QuranTextService, pageIndex: numb
 
       }
 
-      justResult = justifyLine(lineTextInfo, font, fontSizeLineWidthRatio / lineWidthRatio)
+      justResult = justifyLine(lineTextInfo, font, fontSizeLineWidthRatio / lineWidthRatio, spaceWidth)
       result.push(justResult)
 
     }
