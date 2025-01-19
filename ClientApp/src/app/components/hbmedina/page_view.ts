@@ -113,7 +113,7 @@ class PageView {
 
     let defaultMargin = MARGIN * scale
     let lineWidth = this.viewport.width - 2 * defaultMargin;
-    const fontSizeLineWidthRatio = this.viewport.fontSize / lineWidth
+    const fontSizeLineWidthRatio = this.viewport.fontSize / lineWidth   
 
     // found minimum font size
 
@@ -164,9 +164,12 @@ class PageView {
         const lineText = this.quranText[this.pageIndex][lineIndex]
         this.lineJustify.appendChild(lineElem);
 
-        const lineTextInfo = analyzeLineForJust(this.quranTextService, this.pageIndex, lineIndex)
+        const lineTextInfo = analyzeLineForJust(this.quranTextService, this.pageIndex, lineIndex)        
 
-        const justResult = justifyLine(lineTextInfo, this.oldMedinaFont, fontSizeLineWidthRatio * maxFontSizeRatioWithoutOverFull / lineInfo.lineWidthRatio, this.spaceWidth)
+        const justResult = justifyLine(lineTextInfo, this.oldMedinaFont,
+          fontSizeLineWidthRatio * maxFontSizeRatioWithoutOverFull / lineInfo.lineWidthRatio,
+          this.spaceWidth,
+          this.quranTextService.mushafType)
         justResult.fontSizeRatio = justResult.fontSizeRatio * maxFontSizeRatioWithoutOverFull
 
         this.renderLine(lineElem, lineIndex, lineTextInfo, justResult, tajweedResult?.[lineIndex], glyphScale, defaultMargin)
@@ -403,9 +406,9 @@ class PageView {
     svg.setAttribute('width', width.toString());
     svg.setAttribute('height', height.toString());
     svg.style.position = "relative"
-    if (center) {      
+    if (center) {
       const rightMargin = (lineElem.clientWidth - lineWidth) / 2 - margin;
-      svg.style.right = rightMargin + "px";      
+      svg.style.right = rightMargin + "px";
     } else {
       svg.style.right = -margin + "px";
     }
