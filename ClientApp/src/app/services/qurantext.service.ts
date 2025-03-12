@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, InjectionToken } from '@angular/core';
 
 import { quranText as quranTextOldMadinah } from './quran_text_old_madinah'
 import { quranText as quranTextIndopak15 } from './quran_text_indopak_15'
-import { quranText } from './quran_text'
+import { quranText as quranTextNewMadinah } from './quran_text_madina'
 
 
 export enum LineType {
@@ -16,6 +16,8 @@ export enum MushafLayoutType {
   OldMadinah,
   IndoPak15Lines,
 }
+
+export const MUSHAFLAYOUTTYPE = new InjectionToken<MushafLayoutType>('MushafLayoutType used');
 
 @Injectable({
   providedIn: 'root',
@@ -240,8 +242,9 @@ export class QuranTextService {
         }
       }
     }
-    console.info(`sajdasMatched=${this._sajsdas.length}`);
-    console.log(`QuranTextService constructor=${performance.now() - start}`)
+
+    //console.info(`sajdasMatched=${this._sajsdas.length}`);
+    //console.log(`QuranTextService constructor=${performance.now() - start}`)
 
   }
 
@@ -266,6 +269,6 @@ export class QuranTextService {
 }
 
 export const OldMadinahQuranTextService = new QuranTextService(quranTextOldMadinah, MushafLayoutType.OldMadinah);
-export const NewMadinahQuranTextService = new QuranTextService(quranText, MushafLayoutType.NewMadinah);
+export const NewMadinahQuranTextService = new QuranTextService(quranTextNewMadinah, MushafLayoutType.NewMadinah);
 export const QuranTextIndopak15Service = new QuranTextService(quranTextIndopak15, MushafLayoutType.IndoPak15Lines);
 

@@ -22,6 +22,13 @@ const enum AppliedResult {
   Forbiden
 }
 
+export const enum JustStyle {
+  SameSizeByPage = 1,
+  XScale,
+  XScaleOnly,
+  SCLXAxis,
+}
+
 export interface SubWordInfo {
   baseIndexes: number[],
   baseText: string
@@ -59,7 +66,7 @@ export interface JustResultByLine {
   fontFeatures: Map<number, TextFontFeatures[]>; /* FontFeatures by character index in the line */
   simpleSpacing: number;
   ayaSpacing: number;
-  fontSizeRatio: number;
+  xScale: number;
 }
 
 export interface LayoutResult {
@@ -855,7 +862,7 @@ function stretchLine(
   if (mushafType === MushafLayoutType.NewMadinah || mushafType === MushafLayoutType.OldMadinah) {
     applyExperimentalJust(lineTextInfo, justInfo);
   } else {
-    applySimpleJust(lineTextInfo, justInfo, true, false, 6, 6);
+    applySimpleJust(lineTextInfo, justInfo, true, false, 2, 2);
   }
 
   return justInfo;
@@ -885,7 +892,7 @@ async function getPageLayout(quranTextService: QuranTextService, pageIndex: numb
     const lineTextInfo = analyzeLineForJust(quranTextService, pageIndex, lineIndex)
     let justResult: JustResultByLine
     if (lineInfo.lineType === 1 || (lineInfo.lineType === 2 && pageIndex != 0 && pageIndex != 1)) {
-      justResult = { fontFeatures: new Map(), simpleSpacing: spaceWidth, ayaSpacing: spaceWidth, fontSizeRatio: 1 }
+      justResult = { fontFeatures: new Map(), simpleSpacing: spaceWidth, ayaSpacing: spaceWidth, xScale: 1 }
       result.push(justResult)
 
     } else {
@@ -970,7 +977,8 @@ export function justifyLine(
   font: HarfBuzzFont,
   fontSizeLineWidthRatio: number,
   spaceWidth: number,
-  mushafType: MushafLayoutType = MushafLayoutType.NewMadinah
+  mushafType: MushafLayoutType = MushafLayoutType.NewMadinah,
+  justStyle: JustStyle = JustStyle.XScale
 ): JustResultByLine {
 
   const desiredWidth = FONTSIZE / fontSizeLineWidthRatio
@@ -1006,54 +1014,55 @@ export function justifyLine(
 
   let diff = desiredWidth - currentLineWidth
 
-  let fontSizeRatio = 1
+  let xScale = 1
   let simpleSpacing = spaceWidth
   let ayaSpacing = spaceWidth
 
   if (diff > 0) {
-    // stretch   
+    // stretch
 
-    let maxStretchBySpace = Math.min(100, spaceWidth * 1);
-    let maxStretchByAyaSpace = Math.min(200, spaceWidth * 2);
+    if (justStyle === JustStyle.XScaleOnly) {
+      xScale = desiredWidth / currentLineWidth;
+    } else {
+      let maxStretchBySpace = Math.min(100, spaceWidth * 1);
+      let maxStretchByAyaSpace = Math.min(200, spaceWidth * 2);
 
-    let maxStretch = maxStretchBySpace * lineTextInfo.simpleSpaceIndexes.length + maxStretchByAyaSpace * lineTextInfo.ayaSpaceIndexes.length;
+      let maxStretch = maxStretchBySpace * lineTextInfo.simpleSpaceIndexes.length + maxStretchByAyaSpace * lineTextInfo.ayaSpaceIndexes.length;
 
-    let stretch = Math.min(desiredWidth - currentLineWidth, maxStretch);
-    let spaceRatio = maxStretch != 0 ? stretch / maxStretch : 0;
-    let stretchBySpace = spaceRatio * maxStretchBySpace;
-    let stretchByByAyaSpace = spaceRatio * maxStretchByAyaSpace;
+      let stretch = Math.min(desiredWidth - currentLineWidth, maxStretch);
+      let spaceRatio = maxStretch != 0 ? stretch / maxStretch : 0;
+      let stretchBySpace = spaceRatio * maxStretchBySpace;
+      let stretchByByAyaSpace = spaceRatio * maxStretchByAyaSpace;
 
-    simpleSpaceWidth = spaceWidth + stretchBySpace
-    ayaSpaceWidth = spaceWidth + stretchByByAyaSpace
+      simpleSpaceWidth = spaceWidth + stretchBySpace
+      ayaSpaceWidth = spaceWidth + stretchByByAyaSpace
 
-    currentLineWidth += stretch
+      currentLineWidth += stretch
 
-    // stretching
+      // stretching
 
-    if (desiredWidth > currentLineWidth) {
-      const justInfo: JustInfo = { textLineWidth: currentLineWidth, fontFeatures: new Map<number, TextFontFeatures[]>(), layoutResults: layOutResult, desiredWidth, font: font };
-      justResults = stretchLine(lineTextInfo, justInfo, mushafType)
-      currentLineWidth = justResults.textLineWidth
+      if (desiredWidth > currentLineWidth) {
+        const justInfo: JustInfo = { textLineWidth: currentLineWidth, fontFeatures: new Map<number, TextFontFeatures[]>(), layoutResults: layOutResult, desiredWidth, font: font };
+        justResults = stretchLine(lineTextInfo, justInfo, mushafType)
+        currentLineWidth = justResults.textLineWidth
+      }
+
+      if (desiredWidth > currentLineWidth) {
+        // full justify with space
+        let addToSpace = (desiredWidth - currentLineWidth) / lineTextInfo.spaces.size
+        simpleSpaceWidth += addToSpace
+        ayaSpaceWidth += addToSpace
+      }
+
+      simpleSpacing = (simpleSpaceWidth)
+      ayaSpacing = (ayaSpaceWidth)
     }
-
-    if (desiredWidth > currentLineWidth) {
-      // full justify with space
-      let addToSpace = (desiredWidth - currentLineWidth) / lineTextInfo.spaces.size
-      simpleSpaceWidth += addToSpace
-      ayaSpaceWidth += addToSpace
-    }
-
-    simpleSpacing = (simpleSpaceWidth)
-    ayaSpacing = (ayaSpaceWidth)
-
-
   } else {
     //shrink
-    fontSizeRatio = desiredWidth / currentLineWidth;
-
+    xScale = desiredWidth / currentLineWidth;
   }
 
-  return { fontFeatures: justResults?.fontFeatures || new Map<number, TextFontFeatures[]>, simpleSpacing, ayaSpacing, fontSizeRatio }
+  return { fontFeatures: justResults?.fontFeatures || new Map<number, TextFontFeatures[]>, simpleSpacing, ayaSpacing, xScale }
 }
 
 const lineTextInfoCache: Map<number, LineTextInfo> = new Map()

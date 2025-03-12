@@ -74,6 +74,9 @@ import { HBMedinaComponent } from './components/hbmedina/hbmedina.component';
 import { OldMedinaComponent } from './components/oldmedina/oldmedina.component';
 import { LayoutService } from './services/layoutservice/layoutservice.service';
 import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.component';
+import { CompareTajweedComponent, SplitStringPipe } from './components/comparetajweed/comparetajweed.component';
+import { MUSHAFLAYOUTTYPE, MushafLayoutType } from './services/qurantext.service';
+import { CompareMushafComponent } from './components/comparemushaf/comparemushaf.component';
 //import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
@@ -176,7 +179,10 @@ const routerOptions: ExtraOptions = {
     QuranPagesComponent,
     OldMedinaComponent,
     HBMedinaComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    CompareTajweedComponent,
+    CompareMushafComponent,
+    SplitStringPipe
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -237,6 +243,7 @@ const routerOptions: ExtraOptions = {
           {
             path: 'oldmedina',
             component: HBMedinaComponent,
+            providers: [{ provide: MUSHAFLAYOUTTYPE, useValue: MushafLayoutType.OldMadinah }],
             data: {
               type: 'oldmedina'
             },
@@ -244,6 +251,7 @@ const routerOptions: ExtraOptions = {
           {
             path: 'newmedina',
             component: HBMedinaComponent,
+            providers: [{ provide: MUSHAFLAYOUTTYPE, useValue: MushafLayoutType.NewMadinah }],
             data: {
               type: 'newmedina'
             },
@@ -251,11 +259,20 @@ const routerOptions: ExtraOptions = {
           {
             path: 'indopak15',
             component: HBMedinaComponent,
+            providers: [{ provide: MUSHAFLAYOUTTYPE, useValue: MushafLayoutType.IndoPak15Lines }],
             data: {
               type: 'indopak15'
             },
           }
         ]
+      },
+      {
+        path: 'comparetajweed',
+        component: CompareTajweedComponent,
+      },
+      {
+        path: 'comparemushaf',
+        component: CompareMushafComponent,
       },
       {
         path: '**', 
@@ -275,7 +292,8 @@ const routerOptions: ExtraOptions = {
       provide: RouteReuseStrategy,
       useClass: CacheRouteReuseStrategy
     },
-    MatSnackBarModule
+    MatSnackBarModule,
+    { provide: MUSHAFLAYOUTTYPE, useValue: MushafLayoutType.NewMadinah }
   ],
   bootstrap: [AppComponent]
 })

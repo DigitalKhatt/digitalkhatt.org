@@ -1,6 +1,9 @@
 /* copied from https://github.com/harfbuzz/harfbuzzjs/blob/main/harfbuzz.ts
 license :  https://github.com/harfbuzz/harfbuzzjs/blob/main/LICENSE
 */
+
+import * as hbjs from "harfbuzzjs/hb.js"
+
 type Pointer = number;
 
 const HB_MEMORY_MODE_WRITABLE: number = 2;
@@ -52,8 +55,19 @@ class HarfBuzzExports {
 
   readonly utf8Decoder = new TextDecoder("utf8");
 
+  readonly exports;
 
-  constructor(public exports: any) {
+  readonly addFunction;
+  readonly freeFuncPtr;
+
+  constructor(public module: any) {
+
+    this.addFunction = module.addFunction;
+
+    this.freeFuncPtr = this.addFunction(function (ptr) { exports.free(ptr); }, 'vi');
+
+    this.exports = module.wasmExports;
+    const exports = this.exports;
     this.heapu8 = new Uint8Array(exports.memory.buffer);
     this.heapu32 = new Uint32Array(exports.memory.buffer);
     this.heapi32 = new Int32Array(exports.memory.buffer);
@@ -171,7 +185,7 @@ export class HarfBuzzBlob {
   constructor(data: Uint8Array) {
     let blobPtr = hb.malloc(data.length);
     hb.heapu8.set(data, blobPtr);
-    this.ptr = hb.hb_blob_create(blobPtr, data.byteLength, HB_MEMORY_MODE_WRITABLE, blobPtr, hb.free_ptr());
+    this.ptr = hb.hb_blob_create(blobPtr, data.byteLength, HB_MEMORY_MODE_WRITABLE, blobPtr, hb.freeFuncPtr);
   }
 
   destroy() {
@@ -228,19 +242,52 @@ export class HarfBuzzFace {
 export class HarfBuzzFont {
   readonly ptr: Pointer
   readonly unitsPerEM: number
-
+  private drawFuncsPtr = null;
+  private pathBuffer = "";
   constructor(face: HarfBuzzFace) {
     this.ptr = hb.hb_font_create(face.ptr);
     this.unitsPerEM = face.getUnitsPerEM();
+    this.initilizeDraw();
   }
 
   setScale(xScale: number, yScale: number) {
     hb.hb_font_set_scale(this.ptr, xScale, yScale);
   }
 
-  glyphToSvgPath(glyphId) {
-    var svgLength = hb.exports.hbjs_glyph_svg(this.ptr, glyphId, hb.pathBuffer, hb.pathBufferSize);
-    return svgLength > 0 ? hb.utf8Decoder.decode(hb.heapu8.subarray(hb.pathBuffer, hb.pathBuffer + svgLength)) : "";
+  glyphToSvgPath(glyphId) {    
+    this.pathBuffer = "";
+    hb.exports.hb_font_draw_glyph(this.ptr, glyphId, this.drawFuncsPtr, 0);
+    return this.pathBuffer;
+  }
+
+  initilizeDraw() {
+    var moveTo = (dfuncs, draw_data, draw_state, to_x, to_y, user_data) => {
+      this.pathBuffer += `M${to_x},${to_y}`;
+    }
+    var lineTo = (dfuncs, draw_data, draw_state, to_x, to_y, user_data) => {
+      this.pathBuffer += `L${to_x},${to_y}`;
+    }
+    var cubicTo = (dfuncs, draw_data, draw_state, c1_x, c1_y, c2_x, c2_y, to_x, to_y, user_data) => {
+      this.pathBuffer += `C${c1_x},${c1_y} ${c2_x},${c2_y} ${to_x},${to_y}`;
+    }
+    var quadTo = (dfuncs, draw_data, draw_state, c_x, c_y, to_x, to_y, user_data) => {
+      this.pathBuffer += `Q${c_x},${c_y} ${to_x},${to_y}`;
+    }
+    var closePath = (dfuncs, draw_data, draw_state, user_data) => {
+      this.pathBuffer += 'Z';
+    }
+
+    var moveToPtr = hb.addFunction(moveTo, 'viiiffi');
+    var lineToPtr = hb.addFunction(lineTo, 'viiiffi');
+    var cubicToPtr = hb.addFunction(cubicTo, 'viiiffffffi');
+    var quadToPtr = hb.addFunction(quadTo, 'viiiffffi');
+    var closePathPtr = hb.addFunction(closePath, 'viiii');
+    this.drawFuncsPtr = hb.exports.hb_draw_funcs_create();
+    hb.exports.hb_draw_funcs_set_move_to_func(this.drawFuncsPtr, moveToPtr, 0, 0);
+    hb.exports.hb_draw_funcs_set_line_to_func(this.drawFuncsPtr, lineToPtr, 0, 0);
+    hb.exports.hb_draw_funcs_set_cubic_to_func(this.drawFuncsPtr, cubicToPtr, 0, 0);
+    hb.exports.hb_draw_funcs_set_quadratic_to_func(this.drawFuncsPtr, quadToPtr, 0, 0);
+    hb.exports.hb_draw_funcs_set_close_path_func(this.drawFuncsPtr, closePathPtr, 0, 0);
   }
 
   destroy() {
@@ -376,11 +423,24 @@ export function loadHarfbuzz(webAssemblyUrl: string): Promise<void> {
   return fetch(webAssemblyUrl).then(response => {
     return response.arrayBuffer();
   }).then(wasm => {
+    const module = { wasmBinary: wasm }
+    let tt = hbjs(module);
+    tt.then(module => {
+      //@ts-ignore
+      hb = new HarfBuzzExports(module);
+      console.log(module);
+    })
+  })
+
+  /*
+  return fetch(webAssemblyUrl).then(response => {
+    return response.arrayBuffer();
+  }).then(wasm => {
     return WebAssembly.instantiate(wasm);
   }).then(result => {
     //@ts-ignore
     hb = new HarfBuzzExports(result.instance.exports);
-  });
+  });*/
 }
 
 export function loadAndCacheFont(fontName: string, fontUrl: string): Promise<void> {

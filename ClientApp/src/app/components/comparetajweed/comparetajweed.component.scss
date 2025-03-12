@@ -1,0 +1,50 @@
+@font-face {
+  font-family: madina;
+  font-style: normal;
+  src: url(../../../assets/fonts/hb/madina.otf) format("opentype");
+  font-display: block;
+}
+
+@font-face {
+  font-family: oldmadina;
+  font-style: normal;
+  src: url(../../../assets/fonts/hb/oldmadina.otf) format("opentype");
+  font-display: block;
+}
+
+
+:host ::ng-deep .green {
+  color: rgb(0 166 80);
+}
+
+:host ::ng-deep .tafkim {
+  color: rgb(0 102 148);
+}
+
+:host ::ng-deep .lgray {
+  color: rgb(180 180 180);
+}
+
+:host ::ng-deep .lkalkala {
+  color: rgb(0 173 239);
+}
+
+:host ::ng-deep .red1 {
+  color: rgb(195 138 8);
+}
+
+:host ::ng-deep .red2 {
+  color: rgb(244 114 22);
+}
+
+:host ::ng-deep .red3 {
+  color: rgb(236 0 140);
+}
+
+:host ::ng-deep .red4 {
+  color: rgb(140 0 0);
+}
+
+
+
+

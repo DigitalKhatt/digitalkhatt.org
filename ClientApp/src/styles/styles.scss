@@ -64,7 +64,6 @@ body {
 @font-face {
   font-family: indopak;
   font-style: normal;
-  src: /*url('../assets/fonts/indopak.woff2') format('woff2'),*/ url(../assets/fonts/indopak.otf) format("opentype");
+  src: url(../assets/fonts/hb/indopak.otf) format("opentype");
   font-display: block;
 }
-

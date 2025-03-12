@@ -288,3 +288,10 @@ html[dir='rtl'] #viewerContainer {
 :host ::ng-deep .red4 {
   fill: rgb(140 0 0);
 }
+
+@font-face {
+  font-family: madina;
+  font-style: normal;
+  src: url(../../../assets/fonts/hb/madina.otf) format("opentype");
+  font-display: block;
+}

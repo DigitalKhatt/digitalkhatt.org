@@ -1,0 +1,123 @@
+<input type="file" (change)="onUpload($event)" #file style="display: none;" multiple>
+<div style="margin:20px;">
+  <div>
+    <button type="button" mat-button (click)="addUpload(0)">Choose first json file</button><span> {{files[0]?.fileName}}</span>
+  </div>
+  <div><button type="button" mat-button (click)="addUpload(1)">Choose second json file</button><span> {{files[1]?.fileName}}</span></div>
+  <div>
+    <mat-checkbox [(ngModel)]="filter.madina" name="madina" style="padding-right:10px;">Madinah</mat-checkbox>
+    <mat-checkbox [(ngModel)]="filter.oldmadina" name="oldmadina" style="padding-right:10px;">Old madinah</mat-checkbox>
+    <mat-checkbox [(ngModel)]="filter.indopak" name="indopak" style="padding-right:10px;">IndoPak</mat-checkbox>
+    <mat-checkbox [(ngModel)]="filter.words" name="words" style="padding-right:10px;">Words</mat-checkbox>
+    <mat-checkbox [(ngModel)]="filter.lines" name="lines" style="padding-right:10px;">Lines</mat-checkbox>
+    <button type="button" mat-button (click)="compareTajweed()" *ngIf="files[0]?.fileName && files[1]?.fileName">Show differences</button>
+  </div>
+
+  <table border=1 style="border-collapse:collapse;width:100%;" *ngIf="filter.words && newDiffs">
+    <thead>
+      <tr>
+        <th>Layout</th>
+        <th>Words</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="!newDiffs.length">
+        <td colspan="5">No difference</td>
+      </tr>
+      <ng-container *ngFor="let layout of newDiffs; index as layoutIndex">
+        <tr *ngIf=showLayout(layout.key)>
+          <td>{{layout.key}}</td>
+          <td style="word-wrap: break-word;">
+            <div [style.font-family]="getFontFamily(layout.key)" style="font-size:20px;margin:10px 0px;line-height:50px">
+              <ng-container *ngFor="let word of layout.words; index as wordIndex">
+                <span *ngFor="let char of word.change; index as charIndex" [style.background-color]="getStyle2(char.change, true, true)"
+                      [ngClass]="getClass2(char.change, true, true)" (click)="showWord(word)">{{char.char}}</span>
+                <div style="display:inline-block; width: 10px;"></div>
+              </ng-container>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+
+  <div>
+    <table border=1 style="border-collapse:collapse;" *ngIf="filter.lines && newDiffs">
+      <thead>
+        <tr>
+          <th>Layout</th>
+          <th>Page</th>
+          <th>Line</th>
+          <th>Difference</th>
+          <th>After</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="!newDiffs.length">
+          <td colspan="5">No difference</td>
+        </tr>
+        <ng-container *ngFor="let layout of newDiffs; index as layoutIndex">
+          <ng-container *ngIf="showLayout(layout.key)">
+            <ng-container *ngFor="let pageChange of layout.changes; index as pageIndex">
+              <ng-container *ngFor="let lineChange of pageChange.changes; index as lineIndex">
+                <tr>
+                  <td>{{layout.key}}</td>
+                  <td><a href="https://easyquran.com/wp-content/uploads/2022/09/{{pageChange.key}}-scaled.jpg" target="_blank">{{pageChange.key}}</a></td>
+                  <td>{{1 * lineChange.key + 1}}</td>
+                  <td>
+
+                    <div [style.font-family]="getFontFamily(layout.key)">
+                      <div style="font-size:20px;margin:10px 0px;line-height:50px">
+                        <ng-container *ngFor="let char of lineChange.changes; index as charIndex">
+                          <span [style.background-color]="getStyle2(char.change, true, false)"
+                                [ngClass]="getClass2(char.change, true, false)">{{char.char}}</span>
+                        </ng-container>
+                      </div>
+                      <div style="font-size: 20px; margin: 10px 0px; line-height: 50px ">
+                        <ng-container *ngFor="let char of lineChange.changes; index as charIndex">
+                          <span [style.background-color]="getStyle2(char.change, false, true)"
+                                [ngClass]="getClass2(char.change, false, true)">{{char.char}}</span>
+                        </ng-container>
+                      </div>
+                    </div>
+                    <!--
+                    <div [style.font-family]="getFontFamily(layout.key)">
+                      <div style="font-size:20px;margin:10px 0px;line-height:50px">
+                        <ng-container *ngFor="let char of jsonSecond.quranText[layout.key][1 * pageChange.key - 1][lineChange.key] | split; index as charIndex">
+                          <span [style.background-color]="getStyle(layoutIndex,pageIndex,lineIndex,charIndex, true)"
+                                [ngClass]="getClass(layoutIndex,pageIndex,lineIndex,charIndex, true)">{{char}}</span>
+                        </ng-container>
+                      </div>
+                      <div style="font-size: 20px; margin: 10px 0px; line-height: 50px ">
+                        <ng-container *ngFor="let char of jsonSecond.quranText[layout.key][1 * pageChange.key - 1][lineChange.key] | split; index as charIndex">
+                          <span [style.background-color]="getStyle(layoutIndex,pageIndex,lineIndex,charIndex, false)"
+                                [ngClass]="getClass(layoutIndex,pageIndex,lineIndex,charIndex, false)">{{char}}</span>
+                        </ng-container>
+                      </div>
+                    </div>
+                      -->
+
+                  </td>
+                  <td>
+                    <div style="font-size: 20px; margin: 10px 0px; line-height: 50px;" [style.font-family]="getFontFamily(layout.key)">
+                      <!--
+                      <ng-container *ngFor="let char of jsonSecond.quranText[layout.key][1 * pageChange.key - 1][lineChange.key] | split; index as charIndex">
+                        <span [ngClass]="getClassFinal(layout.key,pageChange.key,lineChange.key,charIndex)">{{char}}</span>
+                      </ng-container>
+                        -->
+
+                      <ng-container *ngFor="let char of lineChange.changes; index as charIndex">
+                        <span [ngClass]="char.tajweed">{{char.char}}</span>
+                      </ng-container>
+
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>

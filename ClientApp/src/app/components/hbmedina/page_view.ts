@@ -6,7 +6,7 @@ import { MushafLayoutType, QuranTextService } from "../../services/qurantext.ser
 import { TajweedService } from "../../services/tajweed.service";
 import { HBFeature, hb as HarfBuzz, HarfBuzzBuffer, HarfBuzzFont, getWidth, harfbuzzFonts } from "./harfbuzz";
 import { PageFormat } from './hbmedina.component';
-import { FONTSIZE, INTERLINE, JustResultByLine, LineTextInfo, MARGIN, PAGE_WIDTH, SpaceType, analyzeLineForJust, justifyLine } from './just.service';
+import { FONTSIZE, INTERLINE, JustResultByLine, JustStyle, LineTextInfo, MARGIN, PAGE_WIDTH, SpaceType, analyzeLineForJust, justifyLine } from './just.service';
 
 import { RenderingStates } from './rendering_states';
 
@@ -30,6 +30,7 @@ class PageView {
   private ayaSvgGroup: SVGGElement
   private ayaLength: number;
   private spaceWidth;
+  private justStyle = JustStyle.XScale
   constructor(public div, private pageIndex, calculatewidthElem, lineJustify, viewport,
     private tajweedService: TajweedService, private quranTextService: QuranTextService) {
     this.renderingState = RenderingStates.INITIAL;
@@ -113,13 +114,16 @@ class PageView {
 
     let defaultMargin = MARGIN * scale
     let lineWidth = this.viewport.width - 2 * defaultMargin;
-    const fontSizeLineWidthRatio = this.viewport.fontSize / lineWidth   
+    const fontSizeLineWidthRatio = this.viewport.fontSize / lineWidth
 
     // found minimum font size
 
-    let maxFontSizeRatioWithoutOverFull = 1
+    let minRatio = 100;
+    let maxRatio = 0;
 
     const glyphScale = this.viewport.fontSize / FONTSIZE
+
+    const fontSizeRatio: number[] = [];
 
     for (let lineIndex = 0; lineIndex < lineCount; lineIndex++) {
       const lineInfo = this.quranTextService.getLineInfo(this.pageIndex, lineIndex)
@@ -132,17 +136,19 @@ class PageView {
 
         let currentLineWidth = getWidth(lineText, this.oldMedinaFont, FONTSIZE, null)
 
-        if (desiredWidth < currentLineWidth) {
-          maxFontSizeRatioWithoutOverFull = Math.min(desiredWidth / currentLineWidth, maxFontSizeRatioWithoutOverFull);
-        }
+        const ratio = desiredWidth / currentLineWidth;
+        fontSizeRatio[lineIndex] = ratio;
+        minRatio = Math.min(ratio, minRatio);
+        maxRatio = Math.max(ratio, maxRatio);
       }
     }
+    const meanRatio = 1; // (minRatio + maxRatio) / 2
     let tajweedResult
     if (tajweedColor) {
       const startTime = performance.now();
       tajweedResult = this.tajweedService.applyTajweedByPage(this.quranTextService, this.pageIndex)
       const endTime = performance.now();
-      console.log(`applyTajweed in page ${this.pageIndex + 1} takes ${endTime - startTime} ms`)
+      //console.log(`applyTajweed in page ${this.pageIndex + 1} takes ${endTime - startTime} ms`)
     }
 
     for (let lineIndex = 0; lineIndex < lineCount; lineIndex++) {
@@ -164,15 +170,26 @@ class PageView {
         const lineText = this.quranText[this.pageIndex][lineIndex]
         this.lineJustify.appendChild(lineElem);
 
-        const lineTextInfo = analyzeLineForJust(this.quranTextService, this.pageIndex, lineIndex)        
+        const lineTextInfo = analyzeLineForJust(this.quranTextService, this.pageIndex, lineIndex)
+
+        let fontSizeRatio = 1;
+
+        if (this.justStyle === JustStyle.SameSizeByPage) {
+          fontSizeRatio = Math.min(minRatio, 1);
+        } else {
+          fontSizeRatio = 1; // Math.min(fontSizeRatio[lineIndex], meanRatio);            
+        }
+
+        //console.log(`page=${this.pageIndex + 1} minRatio=${minRatio} maxRatio=${maxRatio} meanRatio=${meanRatio} fontSizeRatio=${fontSizeRatio[lineIndex]} fontRatio=${fontSizeRatio} %=${((fontSizeRatio / minRatio) - 1) * 100}%`)
 
         const justResult = justifyLine(lineTextInfo, this.oldMedinaFont,
-          fontSizeLineWidthRatio * maxFontSizeRatioWithoutOverFull / lineInfo.lineWidthRatio,
+          fontSizeLineWidthRatio * fontSizeRatio / lineInfo.lineWidthRatio,
           this.spaceWidth,
-          this.quranTextService.mushafType)
-        justResult.fontSizeRatio = justResult.fontSizeRatio * maxFontSizeRatioWithoutOverFull
+          this.quranTextService.mushafType,
+          this.justStyle)
 
-        this.renderLine(lineElem, lineIndex, lineTextInfo, justResult, tajweedResult?.[lineIndex], glyphScale, defaultMargin)
+
+        this.renderLine(lineElem, lineIndex, lineTextInfo, justResult, tajweedResult?.[lineIndex], glyphScale, fontSizeRatio, defaultMargin)
 
       } else if (lineInfo.lineType === 1) {
         lineElem.style.textAlign = "center"
@@ -203,9 +220,9 @@ class PageView {
           fontFeatures: new Map(),
           simpleSpacing: this.spaceWidth,
           ayaSpacing: this.spaceWidth,
-          fontSizeRatio: 0.9
+          xScale: 1
         }
-        this.renderLine(lineElem, lineIndex, lineTextInfo, justResult, tajweedResult?.[lineIndex], glyphScale, defaultMargin, true)
+        this.renderLine(lineElem, lineIndex, lineTextInfo, justResult, tajweedResult?.[lineIndex], glyphScale, 0.9, defaultMargin, true)
       }
 
       temp.appendChild(lineElem);
@@ -237,7 +254,7 @@ class PageView {
 
   }
 
-  renderLine(lineElem: HTMLDivElement, lineIndex, lineTextInfo: LineTextInfo, justResult: JustResultByLine, tajweedResult: Map<number, string>, glyphScale: number, margin: number, center: boolean = false) {
+  renderLine(lineElem: HTMLDivElement, lineIndex, lineTextInfo: LineTextInfo, justResult: JustResultByLine, tajweedResult: Map<number, string>, glyphScale: number, fontSizeRatio: number, margin: number, center: boolean = false) {
 
     const lineText = this.quranText[this.pageIndex][lineIndex]
 
@@ -273,6 +290,10 @@ class PageView {
           }
         }
       }
+    }
+
+    if (justResult.xScale !== 1 && this.justStyle === JustStyle.SCLXAxis) {
+      //this.oldMedinaFont.setScale(1000 * justResult.xScale, 1000 * justResult.xScale);
     }
 
     const buffer = new HarfBuzzBuffer()
@@ -390,10 +411,16 @@ class PageView {
       lineGroup.appendChild(line)
     }
 
+    const xScale = this.justStyle === JustStyle.SCLXAxis ? fontSizeRatio : fontSizeRatio  * justResult.xScale;
 
-    lineGroup.setAttribute("transform", "scale(" + glyphScale * justResult.fontSizeRatio + "," + -glyphScale * justResult.fontSizeRatio + ")");
+    const yScale = this.justStyle === JustStyle.SameSizeByPage ? xScale : 1;
 
-    const lineWidth = -glyphScale * justResult.fontSizeRatio * currentxPos
+    //console.log(`page=${this.pageIndex + 1} line=${lineIndex + 1} xScale=${xScale} yScale=${yScale} fontSizeRatio=${fontSizeRatio}`)
+
+
+    lineGroup.setAttribute("transform", "scale(" + glyphScale * xScale + "," + -glyphScale * yScale + ")");
+
+    const lineWidth = -glyphScale * xScale * currentxPos
     const x = lineWidth * 2
     let width = x + margin;
 

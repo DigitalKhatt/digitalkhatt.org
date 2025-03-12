@@ -1,0 +1,48 @@
+<input type="file" (change)="onUpload($event)" #file style="display: none;" multiple>
+<div style="margin:20px;">
+  <div>
+    <button type="button" mat-button (click)="addUpload(0)">Choose first json file</button><span> {{files[0]?.fileName}}</span>
+  </div>
+  <div><button type="button" mat-button (click)="addUpload(1)">Choose second json file</button><span> {{files[1]?.fileName}}</span></div>
+  <div>
+    <mat-checkbox [(ngModel)]="filter.madina" name="madina" style="padding-right:10px;">Madinah</mat-checkbox>
+    <mat-checkbox [(ngModel)]="filter.oldmadina" name="oldmadina" style="padding-right:10px;">Old madinah</mat-checkbox>
+    <mat-checkbox [(ngModel)]="filter.indopak" name="indopak" style="padding-right:10px;">IndoPak</mat-checkbox>
+    <mat-checkbox [(ngModel)]="filter.words" name="words" style="padding-right:10px;">Words</mat-checkbox>
+    <mat-checkbox [(ngModel)]="filter.lines" name="lines" style="padding-right:10px;">Lines</mat-checkbox>
+    <button type="button" mat-button (click)="compareTajweed()" *ngIf="files[0]?.fileName && files[1]?.fileName">Show differences</button>
+  </div>  
+
+  <div>
+    <table border=1 style="border-collapse:collapse;" *ngIf="filter.lines && newDiffs">
+      <thead>
+        <tr>
+          <th>Page</th>
+          <th>Line</th>
+          <th>Before</th>
+          <th>After</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="!newDiffs.size">
+          <td colspan="4">No difference</td>
+        </tr>
+        <ng-container *ngFor="let page of newDiffs | keyvalue;">         
+            <ng-container *ngFor="let line of page.value | keyvalue;">
+              <tr>
+                <td>{{page.key + 1}}</td>
+                <td>{{line.key + 1}}</td>
+                <td>
+                  <div #line line="{{line.key}}" page="{{page.key}}" [before]="true"></div>
+                </td>
+                <td>
+                  <div #line line="{{line.key}}" page="{{page.key}}"  [before]="false"></div>
+                </td>
+              </tr>             
+            </ng-container>
+          </ng-container>
+        
+      </tbody>
+    </table>
+  </div>
+</div>

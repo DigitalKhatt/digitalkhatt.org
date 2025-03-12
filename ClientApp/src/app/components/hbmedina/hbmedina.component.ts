@@ -17,7 +17,7 @@
  * <https: //www.gnu.org/licenses />.
 */
 
-import { AfterViewInit, Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren, Inject } from '@angular/core';
 import { Subscription, animationFrameScheduler } from 'rxjs';
 
 import { TemplatePortal } from '@angular/cdk/portal';
@@ -39,8 +39,9 @@ import { AboutComponent } from '../about/about.component';
 import { RenderingStates } from './rendering_states';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { loadAndCacheFont, loadHarfbuzz, harfbuzzFonts, HarfBuzzFont } from "./harfbuzz"
-import { MushafLayoutType, NewMadinahQuranTextService, OldMadinahQuranTextService, QuranTextIndopak15Service, QuranTextService } from '../../services/qurantext.service';
+import { MushafLayoutType, NewMadinahQuranTextService, OldMadinahQuranTextService, QuranTextIndopak15Service, QuranTextService, MUSHAFLAYOUTTYPE } from '../../services/qurantext.service';
 import { TajweedService } from '../../services/tajweed.service';
+import { saveAs } from 'file-saver';
 
 
 const CSS_UNITS = 96.0 / 72.0;
@@ -53,6 +54,15 @@ export interface PageFormat {
   width: number,
   height: number,
   fontSize: number
+}
+
+function reviver(key: any, value: any) {
+  if (typeof value === 'object' && value !== null) {
+    if (value.dataType === 'Map') {
+      return new Map(value.value);
+    }
+  }
+  return value;
 }
 
 class PDFPageViewBuffer {
@@ -121,6 +131,7 @@ const DEFAULT_CACHE_SIZE = 10;
     '[class.newmadina]': 'mushafType == MushafLayoutTypeEnum.NewMadinah',
     '[class.indopak]': 'mushafType == MushafLayoutTypeEnum.IndoPak15Lines'
   },
+  providers : [TajweedService],
 })
 export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -165,6 +176,7 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
   pageNumberBoxIsMoved: boolean;
   dragPosition;
   disableScroll: boolean = false;
+  debug = false;
 
   @ViewChildren('page') pageElements: QueryList<ElementRef>;
   @ViewChild('testcanvas', { static: false }) testcanvasRef: ElementRef;
@@ -205,7 +217,8 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   hideElement: boolean = false;
 
-  constructor(private sidebarContentsService: SidebarContentsService,
+  constructor(@Inject(MUSHAFLAYOUTTYPE) mushafLayoutType: MushafLayoutType,
+    private sidebarContentsService: SidebarContentsService,    
     public scrollDispatcher: ScrollDispatcher, private ngZone: NgZone,
     private elRef: ElementRef,
     private breakpointObserver: BreakpointObserver,
@@ -213,15 +226,18 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private tajweedService: TajweedService,
     private _snackBar: MatSnackBar,
-    private route: ActivatedRoute,
-  ) {
+    private route: ActivatedRoute,    
+  ) {    
 
-    switch (route.snapshot.data.type) {
-      case "oldmedina":
+    this.debug = this.route.snapshot.queryParams.debug !== undefined;
+
+
+    switch (mushafLayoutType) {
+      case MushafLayoutType.OldMadinah:
         this.mushafType = MushafLayoutType.OldMadinah;
         this.quranTextService = OldMadinahQuranTextService;
         break;
-      case "indopak15":
+      case MushafLayoutType.IndoPak15Lines:
         this.mushafType = MushafLayoutType.IndoPak15Lines;
         this.quranTextService = QuranTextIndopak15Service;
         break;
@@ -317,17 +333,6 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  replacer(key, value) {
-    if (value instanceof Map) {
-      return {
-        dataType: 'Map',
-        value: Array.from(value.entries()), // or with spread: value: [...value]
-      };
-    } else {
-      return value;
-    }
-  }
-
   ngOnInit() {
     //TODO delete
 
@@ -358,9 +363,9 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.mushafType === MushafLayoutType.OldMadinah) {
           await loadAndCacheFont("oldmadina", "assets/fonts/hb/oldmadina.otf")
         } else if (this.mushafType === MushafLayoutType.NewMadinah) {
-          await loadAndCacheFont("oldmadina", "assets/fonts/hb/digitalkhatt.otf")
+          await loadAndCacheFont("oldmadina", "assets/fonts/hb/madina.otf")
         } else {
-          await loadAndCacheFont("oldmadina", "assets/fonts/indopak.otf")
+          await loadAndCacheFont("oldmadina", "assets/fonts/hb/indopak.otf")
         }
 
         document.fonts.load("12px oldmadina").then(() => {
@@ -474,7 +479,7 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
       var box = this.pageNumberBoxRef.element.nativeElement;
 
       var pos: any = this.pageNumberBoxRef.getFreeDragPosition();
-      
+
 
       var toolbarHeight = 48;
 
@@ -1090,14 +1095,92 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
       console.log('The dialog was closed');
     });
 
+  }  
+
+  replacer(key: any, value: any) {
+    if (value instanceof Map) {
+      const result: { [key: number]: string } = {};
+      for (let [key, keyValue] of value) {
+        result[key] = keyValue;
+      }
+      return result;
+    } else {
+      return value;
+    }
   }
-  /*
-  @HostListener('window:reload')
-  doSomething() {
-    debugger;
-  }*/
+
+  saveTajweed() {
+
+    const result = {
+      quranText: {},
+      tajweedResult: {}
+    };
+
+    type MushafLayoutTypeStrings = keyof typeof MushafLayoutType;
+
+    const keys: MushafLayoutTypeStrings[] = Object.keys(MushafLayoutType) as MushafLayoutTypeStrings[];
+
+    for (let mushafTypeName in MushafLayoutType) {
+      if (isNaN(Number(mushafTypeName))) {
+        const tajweedData = this.getTajweedData(mushafTypeName);       
+
+
+        result.quranText[mushafTypeName] = tajweedData.quranText;
+        result.tajweedResult[mushafTypeName] = tajweedData.tajweedResult;
+      }     
+    }
 
 
 
+
+   
+
+    const json = JSON.stringify(result, this.replacer, 2);    
+
+    const blob = new Blob([json], { type: "application/json;charset=utf-8" });
+    saveAs(blob, `tajweed_data.json`);
+  }
+
+
+
+  getTajweedData(mushafTypeName: string) {
+
+    let textService: QuranTextService;
+
+    const mushafType = MushafLayoutType[mushafTypeName];
+
+    switch (mushafType) {
+      case MushafLayoutType.OldMadinah:
+        textService = OldMadinahQuranTextService;
+        break;
+      case MushafLayoutType.IndoPak15Lines:
+        textService = QuranTextIndopak15Service;
+        break;
+      default:
+        textService = NewMadinahQuranTextService;
+        break;
+    }
+
+    const quranText = textService.quranText;
+
+    const tajweedResult = new Map();
+
+    for (let pageIndex = 0; pageIndex < quranText.length; pageIndex++) {
+      const lineTajweed = this.tajweedService.applyTajweedByPage(textService, pageIndex);
+      tajweedResult.set(pageIndex + 1, lineTajweed);
+    }
+
+    return {
+      quranText,
+      tajweedResult
+    };
+    
+  }
+  navigateToMushaf(layoutIndex) {
+    if (layoutIndex === 3) {
+      this.router.navigate(['/hb/indopak15'])
+    }
+
+  }
 }
 
