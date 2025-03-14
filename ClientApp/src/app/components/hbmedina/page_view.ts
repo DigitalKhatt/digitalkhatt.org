@@ -389,9 +389,44 @@ class PageView {
         newpath.setAttribute("transform", "translate(" + (currentxPos + glyph.XOffset) + " " + glyph.YOffset + ")");
 
         if (tajweedResult) {
-          const tajweedClass = tajweedResult.get(glyph.Cluster)
+          const tajweedClass = tajweedResult.get(glyph.Cluster)        
           if (tajweedClass) {
             newpath.classList.add(tajweedClass)
+            /*
+            /** happens to يُحْـِۧي page 578 before adding harakat to `|(?<madd2_1>ـ[${smallHighYeh}])(?![${harakat}])`
+            let nextIndex = glyphIndex - 1;
+            let knowColor = true;
+            while (nextIndex >= 0 && result[nextIndex].Cluster === glyph.Cluster) nextIndex--;
+            const nextCluster = nextIndex < 0 ? lineText.length : result[nextIndex].Cluster;
+            for (let currCluster = glyph.Cluster + 1; currCluster < nextCluster; currCluster++) {
+              if (tajweedResult.get(currCluster) !== tajweedClass) {
+                knowColor = false;
+                console.log(`knowColor=false***************************************Page ${this.pageIndex + 1} Line ${lineIndex+1}`)
+                break;
+              }
+            }
+            if (knowColor) {
+              newpath.classList.add(tajweedClass)
+            }*/
+          } else if (lineText[glyph.Cluster] === "\u034F") {                      
+            let nextIndex = glyphIndex - 1;
+            const nextCluster = result[nextIndex].Cluster;
+            const currCluster = glyph.Cluster + 1;
+            if (nextCluster > currCluster) {
+              const nextTajweedClass = tajweedResult.get(currCluster);
+              if (nextTajweedClass) {
+                // happens only in لِيَسُ͏ࣳٓـٔ͏ُوا۟ page 282 line 14  
+                console.log(`cgi***************************************************************Page ${this.pageIndex + 1} Line ${lineIndex + 1}`)
+                newpath.classList.add(nextTajweedClass)
+              }
+              /* debug
+              if (nextCluster - currCluster > 1 && lineText[glyph.Cluster + 2] !== "\u034F") {
+                console.log(`nextCluster - currCluster > 1**********************************************************Page ${this.pageIndex + 1} Line ${lineIndex + 1}`)
+              }*/
+            } /*else {
+              // happens only for فَٱدَّٰرَٰ͏ْٔتُمْ page 11 line 5 no tajweed coloring so it is OK
+              //console.log(`nextCluster<=currCluster**********************************************************Page ${this.pageIndex + 1} Line ${lineIndex + 1}`)
+            }  */         
           }
         }
 

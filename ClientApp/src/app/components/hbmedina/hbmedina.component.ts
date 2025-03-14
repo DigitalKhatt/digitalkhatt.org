@@ -41,7 +41,7 @@ import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack
 import { loadAndCacheFont, loadHarfbuzz, harfbuzzFonts, HarfBuzzFont } from "./harfbuzz"
 import { MushafLayoutType, NewMadinahQuranTextService, OldMadinahQuranTextService, QuranTextIndopak15Service, QuranTextService, MUSHAFLAYOUTTYPE } from '../../services/qurantext.service';
 import { TajweedService } from '../../services/tajweed.service';
-import { saveAs } from 'file-saver';
+import { saveAs } from 'file-saver-es';
 
 
 const CSS_UNITS = 96.0 / 72.0;
@@ -334,19 +334,7 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    //TODO delete
-
-    const result = {}
-
-    for (let pageNumber = 1; pageNumber <= 8; pageNumber++) {
-      const tajweedResult = this.tajweedService.applyTajweedByPage(this.quranTextService, pageNumber - 1)
-      result[pageNumber] = tajweedResult
-    }
-
-    for (let pageNumber = 434; pageNumber <= 440; pageNumber++) {
-      const tajweedResult = this.tajweedService.applyTajweedByPage(this.quranTextService, pageNumber - 1)
-      result[pageNumber] = tajweedResult
-    }
+    
   }
 
   ngAfterViewInit() {

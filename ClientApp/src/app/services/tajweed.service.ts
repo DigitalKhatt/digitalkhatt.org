@@ -200,7 +200,7 @@ export class TajweedService {
     pattern += `|(?<madd1>[او${smallMadd}]${cgi}?[${sukuns}]?${maddClass})(?=[${bases}][${shadda}${sukuns}]|[${bases}][${bases}])(?!وا)`; // 6 count madd (red4)
     pattern += `|(?<madd4_2>[اويى${smallMadd}]${cgi}?[${sukuns}]?${maddClass})(?=(?:ا[${ziaditHarf}])?(?<madd4_2_a>${waqfCond})?)`;
     pattern += `|(?<madd5_1>ـ[${smallHighYeh}])${madJaizAssert}`;
-    pattern += `|(?<madd2_1>ـ[${smallHighYeh}])`;
+    pattern += `|(?<madd2_1>ـ[${smallHighYeh}])(?![${harakat}])`;
     pattern += `|(?<madd2>[${smallMadd}])(?!${cgi}?${hamzaabove}|[${fdkt}]|${ayaCond})`;
     pattern += `|[او${smallMadd}]${cgi}?[${sukuns}]?${maddClass}${ayaCond}`;
     pattern += `|(?<madd3>[نكعصلمسق][${shadda}]?[${fatha}]?${maddClass})`; // 6 count madd (red4)
