@@ -20,7 +20,8 @@
 import { Directive, ElementRef, Output, EventEmitter } from '@angular/core';
 
 @Directive({
-  selector: '[appQuranTouchZoom]'
+    selector: '[appQuranTouchZoom]',
+    standalone: false
 })
 export class QuranZoomTouchDirective {
 

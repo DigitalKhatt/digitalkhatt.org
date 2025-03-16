@@ -33,15 +33,16 @@ import { PageView } from './page_view';
 
 import { CdkDrag, DragRef, Point } from '@angular/cdk/drag-drop';
 import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AboutComponent } from '../about/about.component';
 import { RenderingStates } from './rendering_states';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { loadAndCacheFont, loadHarfbuzz, harfbuzzFonts, HarfBuzzFont } from "./harfbuzz"
 import { MushafLayoutType, NewMadinahQuranTextService, OldMadinahQuranTextService, QuranTextIndopak15Service, QuranTextService, MUSHAFLAYOUTTYPE } from '../../services/qurantext.service';
 import { TajweedService } from '../../services/tajweed.service';
 import { saveAs } from 'file-saver-es';
+import { commonModules } from '../../app.config';
 
 
 const CSS_UNITS = 96.0 / 72.0;
@@ -131,7 +132,8 @@ const DEFAULT_CACHE_SIZE = 10;
     '[class.newmadina]': 'mushafType == MushafLayoutTypeEnum.NewMadinah',
     '[class.indopak]': 'mushafType == MushafLayoutTypeEnum.IndoPak15Lines'
   },
-  providers : [TajweedService],
+  providers: [TajweedService],
+  imports: [...commonModules, RouterOutlet, RouterLink]
 })
 export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -166,7 +168,7 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
   static DFAULT_FONT_SIZE = HBMedinaComponent.DEFAULT_PAGE_SIZE.width / (17000 / 1000);
 
   pageSize = HBMedinaComponent.DEFAULT_PAGE_SIZE
-  defaultFontSize = HBMedinaComponent.DFAULT_FONT_SIZE
+  defaultFontSize: number;
 
   totalPages: number;
   maxPages: number;
@@ -218,7 +220,7 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
   hideElement: boolean = false;
 
   constructor(@Inject(MUSHAFLAYOUTTYPE) mushafLayoutType: MushafLayoutType,
-    private sidebarContentsService: SidebarContentsService,    
+    private sidebarContentsService: SidebarContentsService,
     public scrollDispatcher: ScrollDispatcher, private ngZone: NgZone,
     private elRef: ElementRef,
     private breakpointObserver: BreakpointObserver,
@@ -226,8 +228,8 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private tajweedService: TajweedService,
     private _snackBar: MatSnackBar,
-    private route: ActivatedRoute,    
-  ) {    
+    private route: ActivatedRoute,
+  ) {
 
     this.debug = this.route.snapshot.queryParams.debug !== undefined;
 
@@ -236,14 +238,17 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
       case MushafLayoutType.OldMadinah:
         this.mushafType = MushafLayoutType.OldMadinah;
         this.quranTextService = OldMadinahQuranTextService;
+        this.defaultFontSize = HBMedinaComponent.DEFAULT_PAGE_SIZE.width / (16400  / 1000);
         break;
       case MushafLayoutType.IndoPak15Lines:
         this.mushafType = MushafLayoutType.IndoPak15Lines;
         this.quranTextService = QuranTextIndopak15Service;
+        this.defaultFontSize = HBMedinaComponent.DEFAULT_PAGE_SIZE.width / (16400 / 1000);
         break;
       default:
         this.mushafType = MushafLayoutType.NewMadinah;
         this.quranTextService = NewMadinahQuranTextService;
+        this.defaultFontSize = HBMedinaComponent.DEFAULT_PAGE_SIZE.width / (16200 / 1000);
         break;
     }
 
@@ -334,7 +339,7 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    
+
   }
 
   ngAfterViewInit() {
@@ -432,7 +437,7 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
           });
 
-
+          /*
           this.fontScaleCtrl.valueChanges.subscribe(value => {
             this.fontScale = this.fontScaleCtrl.value;
             this.ngZone.runOutsideAngular(() => {
@@ -441,25 +446,22 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
               this.updateWidth(false);
               this.update();
             });
-          });
+          });*/
 
         })
 
       });
     });
   }
-
-  fontScaleChanged(event) {
-    /*
-    this.fontScale = event.value;
+  fontSizeChanged() {
+    this.fontScale = this.fontScaleCtrl.value;
     this.ngZone.runOutsideAngular(() => {
       this.setViewport(this.scale, false, false);
       this.buffer.reset();
       this.updateWidth(false);
       this.update();
-    });*/
+    });
   }
-
   adjustPageNumBoxPosition(point: Point, dragRef: DragRef): Point {
 
     if (this.pageNumberBoxRef) {
@@ -1083,7 +1085,7 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
       console.log('The dialog was closed');
     });
 
-  }  
+  }
 
   replacer(key: any, value: any) {
     if (value instanceof Map) {
@@ -1110,20 +1112,20 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
     for (let mushafTypeName in MushafLayoutType) {
       if (isNaN(Number(mushafTypeName))) {
-        const tajweedData = this.getTajweedData(mushafTypeName);       
+        const tajweedData = this.getTajweedData(mushafTypeName);
 
 
         result.quranText[mushafTypeName] = tajweedData.quranText;
         result.tajweedResult[mushafTypeName] = tajweedData.tajweedResult;
-      }     
+      }
     }
 
 
 
 
-   
 
-    const json = JSON.stringify(result, this.replacer, 2);    
+
+    const json = JSON.stringify(result, this.replacer, 2);
 
     const blob = new Blob([json], { type: "application/json;charset=utf-8" });
     saveAs(blob, `tajweed_data.json`);
@@ -1162,7 +1164,7 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
       quranText,
       tajweedResult
     };
-    
+
   }
   navigateToMushaf(layoutIndex) {
     if (layoutIndex === 3) {

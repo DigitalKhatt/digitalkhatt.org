@@ -20,6 +20,7 @@
 import { Component, AfterViewInit, OnInit, HostListener, Input, ViewChild, ElementRef } from '@angular/core';
 import { QuranService } from '../../services/quranservice/quranservice.service';
 import { QuranShaper } from '../../services/quranservice/quran_shaper';
+import { commonModules } from '../../app.config';
 
 
 
@@ -27,6 +28,7 @@ import { QuranShaper } from '../../services/quranservice/quran_shaper';
   selector: 'quran-joinletters',
   templateUrl: './joinletters.component.html',
   styleUrls: ['./joinletters.component.scss'],
+  imports: [...commonModules]
 })
 export class JoinLettersComponent implements OnInit, AfterViewInit {
   quranShaper: QuranShaper;
@@ -46,7 +48,7 @@ export class JoinLettersComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    
+
 
     this.quranService.promise.then((respone: QuranShaper) => {
       this.quranShaper = respone;
@@ -147,7 +149,7 @@ export class JoinLettersComponent implements OnInit, AfterViewInit {
 
   }
 
-  
+
 
 
   @HostListener('window:resize', ['$event'])

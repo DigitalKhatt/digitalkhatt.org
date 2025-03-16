@@ -36,44 +36,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="ClientApp\src\app\components\hbmedina\tajweed.service.ts" />
-    <None Remove="ClientApp\src\app\components\hboldmedina\page_view.ts" />
-    <None Remove="ClientApp\src\app\components\hboldmedina\qurantext.service.ts" />
-    <None Remove="ClientApp\src\app\components\hboldmedina\rendering_states.ts" />
-    <None Remove="ClientApp\src\app\components\oldmedina\page_view.ts" />
-    <None Remove="ClientApp\src\app\components\oldmedina\qurangestures.directive.ts" />
-    <None Remove="ClientApp\src\app\components\oldmedina\quranzoom.directive.ts" />
-    <None Remove="ClientApp\src\app\components\oldmedina\quranzoom.touch.directive.ts" />
-    <None Remove="ClientApp\src\app\components\oldmedina\rendering_states.ts" />
-    <None Remove="ClientApp\src\app\components\quranotf\page_view.ts" />
-    <None Remove="ClientApp\src\app\components\quranotf\qurangestures.directive.ts" />
-    <None Remove="ClientApp\src\app\components\quranotf\quranzoom.directive.ts" />
-    <None Remove="ClientApp\src\app\components\quranotf\quranzoom.touch.directive.ts" />
-    <None Remove="ClientApp\src\app\components\quranotf\rendering_queue.ts" />
-    <None Remove="ClientApp\src\app\components\quranotf\rendering_states.ts" />
-    <None Remove="ClientApp\src\app\components\quran\page_view.ts" />
-    <None Remove="ClientApp\src\app\components\quran\qurangestures.directive.ts" />
-    <None Remove="ClientApp\src\app\components\quran\quranzoom.directive.ts" />
-    <None Remove="ClientApp\src\app\components\quran\quranzoom.touch.directive.ts" />
-    <None Remove="ClientApp\src\app\components\quran\rendering_queue.ts" />
-    <None Remove="ClientApp\src\app\components\quran\rendering_states.ts" />
-    <None Remove="ClientApp\src\app\services\cache-route-reuse.strategy.ts" />
-    <None Remove="ClientApp\src\app\services\navigation\sidebarcontents.ts" />
-    <None Remove="ClientApp\src\app\services\PWA.service.ts" />
-    <None Remove="ClientApp\src\app\services\quranservice\quran_shaper.ts" />
-    <None Remove="ClientApp\src\app\services\qurantext.service.ts" />
-    <None Remove="ClientApp\src\app\services\tajweed.service.ts" />
+    <None Remove="ClientApp\tsconfig.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Remove="ClientApp\src\app\components\comparemushaf\comparemushaf.component.ts" />
-    <TypeScriptCompile Remove="ClientApp\src\app\components\comparetajweed\comparetajweed.component.ts" />
-    <TypeScriptCompile Remove="ClientApp\src\app\components\hbmedina\quran_text.ts" />
-    <TypeScriptCompile Remove="ClientApp\src\app\components\hboldmedina\hbmedina.component.ts" />
-    <TypeScriptCompile Remove="ClientApp\src\app\components\hboldmedina\quran_text_old_madinah.ts" />
-    <TypeScriptCompile Remove="ClientApp\src\app\components\pagenotfound\pagenotfound.component.ts" />
-    <TypeScriptCompile Remove="ClientApp\src\app\services\quran_text.ts" />
-    <TypeScriptCompile Remove="ClientApp\src\app\services\quran_text_old_madinah.ts" />
+    <Content Include="ClientApp\tsconfig.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -82,49 +49,7 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\src\app\components\about\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\components\oldmedina\page_view.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\components\oldmedina\qurangestures.directive.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="ClientApp\src\app\components\oldmedina\quranzoom.directive.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\components\oldmedina\quranzoom.touch.directive.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="ClientApp\src\app\components\oldmedina\rendering_states.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\components\quranotf\page_view.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\components\quranotf\qurangestures.directive.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="ClientApp\src\app\components\quranotf\quranzoom.directive.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\components\quranotf\quranzoom.touch.directive.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="ClientApp\src\app\components\quranotf\rendering_queue.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\components\quranotf\rendering_states.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\components\quran\page_view.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\components\quran\qurangestures.directive.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="ClientApp\src\app\components\quran\quranzoom.touch.directive.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="ClientApp\src\app\components\quran\rendering_queue.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\components\quran\rendering_states.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\components\quran\quranzoom.directive.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\services\cache-route-reuse.strategy.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\services\navigation\sidebarcontents.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\services\qurantext.service.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="ClientApp\src\app\services\tajweed.service.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="ClientApp\src\app\services\PWA.service.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\services\quranservice\quran_shaper.ts" />
-  </ItemGroup>
+  </ItemGroup>  
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->

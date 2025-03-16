@@ -33,13 +33,14 @@ import { PageView } from './page_view';
 
 import { CdkDrag, DragRef, Point } from '@angular/cdk/drag-drop';
 import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import { NavigationEnd, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AboutComponent } from '../about/about.component';
 import { RenderingStates } from './rendering_states';
 import { TajweedService } from '../../services/tajweed.service';
 import { OldMadinahQuranTextService, QuranTextService } from '../../services/qurantext.service';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { commonModules } from '../../app.config';
 
 const CSS_UNITS = 96.0 / 72.0;
 const MIN_SCALE = 0.25;
@@ -110,13 +111,7 @@ const DEFAULT_CACHE_SIZE = 10;
   selector: 'app-oldmedina-component',
   templateUrl: './oldmedina.component.ts.html',
   styleUrls: ['./oldmedina.component.ts.scss'],
-  /*
-  providers: [
-    {
-      provide: HAMMER_GESTURE_CONFIG,
-      useClass: QuranComponentHammerConfig
-    }
-  ],*/
+  imports: [...commonModules, RouterOutlet, RouterLink]
 })
 export class OldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -124,7 +119,7 @@ export class OldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
   private CSS_UNITS = 96.0 / 72.0;
   private sideBySideWidth = 992;
   private maxCanvasPixels = 16777216;
-  
+
   fontsize;
   highestPriorityPage: PageView;
 
@@ -143,9 +138,9 @@ export class OldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
   itemSize;
   buffer: PDFPageViewBuffer = new PDFPageViewBuffer(DEFAULT_CACHE_SIZE);
   views: PageView[] = [];
-  outline : any = [];
+  outline: any = [];
 
-  static DEFAULT_PAGE_SIZE = { width: 255, height: 410, marginWidth : 15 * 400 / 1000 };
+  static DEFAULT_PAGE_SIZE = { width: 255, height: 410, marginWidth: 15 * 400 / 1000 };
   static DFAULT_FONT_SIZE = OldMedinaComponent.DEFAULT_PAGE_SIZE.width / (17000 / 1000);
 
   pageSize = OldMedinaComponent.DEFAULT_PAGE_SIZE
@@ -184,13 +179,13 @@ export class OldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
   get mode() { return this.isSideBySide ? 'side' : 'over'; }
 
   zooms;
-  zoomCtrl: UntypedFormControl;  
+  zoomCtrl: UntypedFormControl;
   isJustifiedCtrl: UntypedFormControl;
   tajweedColorCtrl: UntypedFormControl;
   visibleViews;
   loaded: boolean = false;
   fontScale: number = 1;
-  quranTextService : QuranTextService
+  quranTextService: QuranTextService
 
   wasmStatus;
 
@@ -204,7 +199,7 @@ export class OldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private matDialog: MatDialog,
     private router: Router,
-    private tajweedService: TajweedService,    
+    private tajweedService: TajweedService,
     private _snackBar: MatSnackBar
   ) {
 
@@ -242,7 +237,7 @@ export class OldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.isJustifiedCtrl = new UntypedFormControl(true);
-    this.zoomCtrl = new UntypedFormControl('page-fit');    
+    this.zoomCtrl = new UntypedFormControl('page-fit');
     this.tajweedColorCtrl = new UntypedFormControl(true);
 
     this.currentPageNumber = this.form.controls['currentPageNumber'].value;
@@ -484,7 +479,7 @@ export class OldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
       width: Math.floor(this.pageSize.width * this.scale),
       height: Math.floor(this.pageSize.height * this.scale + borderWidth),
       fontSize: this.fontsize,
-      scale : this.scale
+      scale: this.scale
     }
 
 
@@ -554,8 +549,8 @@ export class OldMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const paddingTop = 0.2 * this.viewport.fontSize;
     const lineHeight = 1.77;
-    const y = paddingTop +  1.77 * this.viewport.fontSize * outline.lineIndex;
-    
+    const y = paddingTop + 1.77 * this.viewport.fontSize * outline.lineIndex;
+
     let offset = outline.pageIndex * this.itemSize + y;
     this.currentPageNumber = outline.pageIndex + 1;
     this.form.controls['currentPageNumber'].setValue(this.currentPageNumber);

@@ -41,32 +41,21 @@ export class QuranTextService {
   ]);
 
   private newMadinaLineWidths = new Map([
+    [255 * 15 + 2, 0.74],
+    [528 * 15 + 9, 0.6],
+    [534 * 15 + 6, 0.7],
+    [545 * 15 + 6, 0.75],
     [586 * 15 + 1, 0.81],
     [593 * 15 + 2, 0.81],
     [594 * 15 + 5, 0.63],
-    [600 * 15 + 10, 0.63],
-    [601 * 15 + 3, 1],
-    [601 * 15 + 4, 1],
-    [601 * 15 + 7, 1],
-    [601 * 15 + 8, 1],
-    [601 * 15 + 9, 1],
-    [601 * 15 + 10, 1],
-    [601 * 15 + 13, 1],
-    [601 * 15 + 14, 1],
-    [601 * 15 + 15, 1],
+    [600 * 15 + 10, 0.75],
     [602 * 15 + 5, 0.63],
     [602 * 15 + 11, 0.9],
     [602 * 15 + 15, 0.53],
     [603 * 15 + 10, 0.66],
-    [603 * 15 + 13, 1],
     [603 * 15 + 15, 0.60],
-    [604 * 15 + 3, 1],
     [604 * 15 + 4, 0.55],
-    [604 * 15 + 7, 1],
-    [604 * 15 + 8, 1],
     [604 * 15 + 9, 0.55],
-    [604 * 15 + 12, 1],
-    [604 * 15 + 13, 1],
     [604 * 15 + 14, 0.675],
     [604 * 15 + 15, 0.5],
   ]);
@@ -157,11 +146,23 @@ export class QuranTextService {
       : mushafType == MushafLayoutType.NewMadinah ? this.newMadinaLineWidths
         : this.indoPak15LineWidths;
 
-    if (mushafType == MushafLayoutType.OldMadinah || mushafType == MushafLayoutType.NewMadinah) {
+    if (mushafType === MushafLayoutType.OldMadinah) {
       const ratio = 0.9;
       for (let pageIndex = 0; pageIndex < 2; pageIndex++) {
         const pageNumber = pageIndex + 1
-        madinaLineWidths.set(pageNumber * 15 + 2, ratio * 0.5)
+        madinaLineWidths.set(pageNumber * 15 + 2, ratio * (pageIndex === 0 ? 0.5 : 0.43))
+        madinaLineWidths.set(pageNumber * 15 + 3, ratio * 0.7)
+        madinaLineWidths.set(pageNumber * 15 + 4, ratio * 0.9)
+        madinaLineWidths.set(pageNumber * 15 + 5, ratio)
+        madinaLineWidths.set(pageNumber * 15 + 6, ratio * 0.9)
+        madinaLineWidths.set(pageNumber * 15 + 7, ratio * 0.7)
+        madinaLineWidths.set(pageNumber * 15 + 8, ratio * 0.4)
+      }
+    } else if (mushafType == MushafLayoutType.NewMadinah) {      
+      for (let pageIndex = 0; pageIndex < 2; pageIndex++) {
+        const ratio = pageIndex === 0 ? 0.95 : 0.95;
+        const pageNumber = pageIndex + 1
+        madinaLineWidths.set(pageNumber * 15 + 2, ratio * (pageIndex === 0 ? 0.5 : 0.45))
         madinaLineWidths.set(pageNumber * 15 + 3, ratio * 0.7)
         madinaLineWidths.set(pageNumber * 15 + 4, ratio * 0.9)
         madinaLineWidths.set(pageNumber * 15 + 5, ratio)

@@ -20,7 +20,8 @@
 import { Directive, ElementRef, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 
 @Directive({
-  selector: '[appQuranZoom]'
+    selector: '[appQuranZoom]',
+    standalone: false
 })
 export class QuranZoomDirective implements OnInit, OnDestroy {
 

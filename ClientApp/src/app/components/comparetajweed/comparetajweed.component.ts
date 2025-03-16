@@ -17,25 +17,18 @@
  * <https: //www.gnu.org/licenses />.
 */
 
-import { Component, AfterViewInit, OnInit, HostListener, Input, ViewChild, ElementRef, PipeTransform, Pipe } from '@angular/core';
-import { QuranService } from '../../services/quranservice/quranservice.service';
-import { QuranShaper } from '../../services/quranservice/quran_shaper';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { QuranShaper } from '../../services/quranservice/quran_shaper';
 
 import { IChange, diff } from 'json-diff-ts';
-
-@Pipe({ name: 'split' })
-export class SplitStringPipe implements PipeTransform {
-
-  transform(value: any, args?: any): any {
-    return value.split('');
-  }
-}
+import { commonModules } from '../../app.config';
 
 @Component({
   selector: 'quran-comparetajweed',
   templateUrl: './comparetajweed.component.html',
   styleUrls: ['./comparetajweed.component.scss'],
+  imports: [...commonModules]
 })
 export class CompareTajweedComponent implements OnInit, AfterViewInit {
   quranShaper: QuranShaper;
@@ -49,7 +42,7 @@ export class CompareTajweedComponent implements OnInit, AfterViewInit {
   jsonSecond;
   showByLines = false;
   showByWords = false;
-  filter : any = {}
+  filter: any = {}
 
   constructor(private titleService: Title) {
     this.titleService.setTitle("Tajweed Differences");
@@ -99,7 +92,7 @@ export class CompareTajweedComponent implements OnInit, AfterViewInit {
 
   }
 
-  compareTajweed() {   
+  compareTajweed() {
 
     const t0 = performance.now();
 
@@ -108,25 +101,25 @@ export class CompareTajweedComponent implements OnInit, AfterViewInit {
 
     this.tajweedDiffs = diff(this.jsonFirst.tajweedResult, this.jsonSecond.tajweedResult);
 
-    
+
     this.newDiffs = [];
 
-    const newDiffs = this.newDiffs;    
+    const newDiffs = this.newDiffs;
 
     for (let layoutIndex = 0; layoutIndex < this.tajweedDiffs.length; layoutIndex++) {
       const words = [];
       const layoutChange = this.tajweedDiffs[layoutIndex];
-      newDiffs.push({ key: layoutChange.key, changes: [], words  :[] });
+      newDiffs.push({ key: layoutChange.key, changes: [], words: [] });
       for (let pageIndex = 0; pageIndex < layoutChange.changes.length; pageIndex++) {
         const pageChange = layoutChange.changes[pageIndex];
         newDiffs[layoutIndex].changes.push({ key: pageChange.key, changes: [] });
         for (let lineIndex = 0; lineIndex < pageChange.changes.length; lineIndex++) {
           const lineChange = pageChange.changes[lineIndex];
           const changes = [];
-          newDiffs[layoutIndex].changes[pageIndex].changes.push({ key: lineChange.key, changes: changes });          
+          newDiffs[layoutIndex].changes[pageIndex].changes.push({ key: lineChange.key, changes: changes });
           const lineText = this.jsonSecond.quranText[layoutChange.key][parseInt(pageChange.key) - 1][parseInt(lineChange.key)];
-          const tajweedResult = this.jsonSecond.tajweedResult[layoutChange.key][pageChange.key][lineChange.key];          
-         
+          const tajweedResult = this.jsonSecond.tajweedResult[layoutChange.key][pageChange.key][lineChange.key];
+
           for (let charChange of lineChange.changes) {
             const charIndex = parseInt(charChange.key);
             changes[charIndex] = {
@@ -138,7 +131,7 @@ export class CompareTajweedComponent implements OnInit, AfterViewInit {
           let word = [];
           let isWordChanged = false;
 
-          for (let charindex = 0; charindex < lineText.length; charindex++) {            
+          for (let charindex = 0; charindex < lineText.length; charindex++) {
             if (!changes[charindex]) {
               changes[charindex] = { char: lineText[charindex] };
             } else {
@@ -155,10 +148,10 @@ export class CompareTajweedComponent implements OnInit, AfterViewInit {
               isWordChanged = false;
             } else {
               word.push(changes[charindex]);
-            }            
+            }
           }
           if (isWordChanged) {
-            newDiffs[layoutIndex].words.push({ page : pageChange.key, line : lineChange.key, change: word });
+            newDiffs[layoutIndex].words.push({ page: pageChange.key, line: lineChange.key, change: word });
           }
         }
       }
@@ -278,7 +271,7 @@ export class CompareTajweedComponent implements OnInit, AfterViewInit {
   getFontFamily(layout) {
     return layout === "NewMadinah" ? 'madina' : layout === "OldMadinah" ? 'oldmadina' : 'indopak';
   }
- 
+
   showWord(word) {
     alert(`page = ${word.page} line=${word.line}`)
   }

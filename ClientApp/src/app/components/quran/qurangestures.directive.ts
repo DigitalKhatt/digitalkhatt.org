@@ -20,7 +20,8 @@
 import { Directive, ElementRef, Output, EventEmitter } from '@angular/core';
 
 @Directive({
-  selector: '[appQuranGestures]'
+    selector: '[appQuranGestures]',
+    standalone: false
 })
 export class QuranGesturesDirective {
 

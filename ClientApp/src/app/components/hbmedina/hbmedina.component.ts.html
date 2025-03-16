@@ -57,121 +57,106 @@
   <canvas #testcanvas style="display:none"></canvas>
   <div #calculatewidthElem id="calculatewidthElem"></div>
   <div #lineJustify class="page" id="lineJustify"></div>
-  <div class="quran-toolbar">
-    <div class="quran-toolbar-row">
-
-      <div class="leftnav">
-
-        <button mat-button class="hamburger" (click)="sidenav.toggle()" title="Surahs menu">
-          <mat-icon svgIcon="menu" style="color:darkblue;"></mat-icon>
-        </button>
-      </div>
-      <div class="centernav">
-        <div style="color:black;display: flex;flex-direction: row;align-items: center;">
-          <div style="box-sizing:border-box;display: flex;flex-direction: row;align-items: center;margin-right:20px;"
-               class="hiddenSmallView hiddenMediumView">
-            <button type="button" [disabled]="currentPageNumber === 1" (click)="navigateTo('first')" mat-mini-fab style="margin-right:8px" class="small-icon-button"><mat-icon>first_page</mat-icon></button>
-            <button type="button" [disabled]="currentPageNumber === 1" (click)="navigateTo('prev')" mat-mini-fab style="margin-right:8px" class="small-icon-button"><mat-icon>chevron_left</mat-icon></button>
-            <button type="button" [disabled]="currentPageNumber === totalPages" (click)="navigateTo('next')" mat-mini-fab style="margin-right: 8px" class="small-icon-button"><mat-icon>chevron_right</mat-icon></button>
-            <button type="button" [disabled]="currentPageNumber === totalPages" (click)="navigateTo('last')" mat-mini-fab class="small-icon-button"><mat-icon>last_page</mat-icon></button>
-          </div>
-          <mat-form-field style="width:57px;font-size:small;margin-right:20px;">
-            <input matInput [formControl]="form.controls['currentPageNumber']" (blur)="updatePageNumber($event)" (keydown.enter)="updatePageNumber($event)" style="color:black">
-            <span matSuffix>/ {{totalPages}}</span>
-          </mat-form-field>
+  <mat-toolbar>
+    <div class="leftnav">
+      <button mat-icon-button class="hamburger" (click)="sidenav.toggle()" title="Surahs menu">
+        <mat-icon class="menicon">menu</mat-icon>
+      </button>
+    </div>
+    <div class="centernav">
+      <div style="color:black;display: flex;flex-direction: row;align-items: center;">
+        <div style="box-sizing:border-box;display: flex;flex-direction: row;align-items: center;margin-right:10px;"
+             class="hiddenSmallView hiddenMediumView">
+          <button type="button" [disabled]="currentPageNumber === 1" (click)="navigateTo('first')" mat-mini-fab style="margin-right:8px" class="small-icon-button"><mat-icon>first_page</mat-icon></button>
+          <button type="button" [disabled]="currentPageNumber === 1" (click)="navigateTo('prev')" mat-mini-fab style="margin-right:8px" class="small-icon-button"><mat-icon>chevron_left</mat-icon></button>
+          <button type="button" [disabled]="currentPageNumber === totalPages" (click)="navigateTo('next')" mat-mini-fab style="margin-right: 8px" class="small-icon-button"><mat-icon>chevron_right</mat-icon></button>
+          <button type="button" [disabled]="currentPageNumber === totalPages" (click)="navigateTo('last')" mat-mini-fab class="small-icon-button"><mat-icon>last_page</mat-icon></button>
         </div>
-        <form [formGroup]="form" style="color:black;display: flex;flex-direction: row;align-items: center;">
-
-
-          <!-- <span style="font-size:small;margin-left:10px;margin-bottom:5px;">/ {{totalPages}}</span>-->
-
-
-          <button mat-icon-button color="accent" (click)="zoomOut()">
-            <mat-icon>remove_circle</mat-icon>
-          </button>
-          <button mat-icon-button color="accent" (click)="zoomIn()">
-            <mat-icon>add_circle</mat-icon>
-          </button>
-          <mat-form-field class="hiddenSmallView" style="width:150px;margin-left:20px;font-size:small;">
-            <mat-select disableOptionCentering panelClass="mypanelclass" [formControl]="zoomCtrl">
-              <mat-option style="display:none;" value="custom">{{(scale * 100) | number:'1.0-0'  }} %</mat-option>
-              <!--<mat-option value="auto" style="line-height:2em;height:2em;"><span>Automatic Zoom</span></mat-option>-->
-              <mat-option value="page-actual" style="line-height:2em;height:2em;"><span>Actual Size</span></mat-option>
-              <mat-option value="page-fit" style="line-height:2em;height:2em;"><span>Page Fit</span></mat-option>
-              <mat-option value="page-width" style="line-height:2em;height:2em;"><span>Page Width</span></mat-option>
-              <mat-divider></mat-divider>
-              <mat-option *ngFor="let zoom of zooms" [value]="zoom.value" style="line-height:2em;height:2em;">
-                <span>{{zoom.value * 100}} %</span>
-              </mat-option>
-
-            </mat-select>
-          </mat-form-field>
-          <mat-slider style="top:10px;" name="fontScale" min="0.5" max="1.2" step="0.01" [formControl]="fontScaleCtrl" (input)="fontScaleChanged($event)"
-                      thumbLabel [displayWith]="formatLabel" discrete></mat-slider>
-        </form>
+        <mat-form-field style="width:70px;font-size:small;margin-right:10px;" subscriptSizing="dynamic" class="pagenumber">
+          <input matInput [formControl]="form.controls['currentPageNumber']" (blur)="updatePageNumber($event)" (keydown.enter)="updatePageNumber($event)" style="color:black">
+          <span matSuffix style="padding-right:5px;">/ {{totalPages}}</span>
+        </mat-form-field>
       </div>
-      <div class="rightnav">
-        <!--
-        <button mat-icon-button [matMenuTriggerFor]="menu1">
-          <mat-icon>tablet</mat-icon>
+      <form [formGroup]="form" style="color:black;display: flex;flex-direction: row;align-items: center;">
+        <button class="small-icon-button" mat-mini-fab (click)="zoomOut()" style="margin-right: 8px">
+          <mat-icon>remove</mat-icon>
         </button>
-        <mat-menu #menu1="matMenu">
+        <button class="small-icon-button" mat-mini-fab (click)="zoomIn()" style="margin-right:20px;">
+          <mat-icon>add</mat-icon>
+        </button>
+
+        <mat-select disableOptionCentering panelClass="mypanelclass" [formControl]="zoomCtrl" style="font-size: small; width: 130px;margin-right:20px; ">
+          <mat-option style="display:none;" value="custom">{{(scale * 100) | number:'1.0-0'  }} %</mat-option>
+          <!--<mat-option value="auto" style="line-height:2em;height:2em;"><span>Automatic Zoom</span></mat-option>-->
+          <mat-option value="page-actual" style="font-size: small;min-height:30px"><span>Actual Size</span></mat-option>
+          <mat-option value="page-fit" style="font-size: small;min-height:30px"><span>Page Fit</span></mat-option>
+          <mat-option value="page-width" style="font-size: small;min-height:30px"><span>Page Width</span></mat-option>
+          <mat-divider></mat-divider>
+          <mat-option *ngFor="let zoom of zooms" [value]="zoom.value" style="font-size: small;min-height:30px">
+            <span>{{zoom.value * 100}} %</span>
+          </mat-option>
+        </mat-select>
+
+        <mat-slider class="hiddenSmallView fontsize" min="0.5" max="1.2" step="0.01" 
+                    thumbLabel [displayWith]="formatLabel" #ngSlider>
+          <input matSliderThumb #ngSliderThumb="matSliderThumb" [formControl]="fontScaleCtrl" name="fontScale" (dragEnd)="fontSizeChanged()"/>
+        </mat-slider>
+      </form>
+    </div>
+    <div class="rightnav">
+      <!--
+      <button mat-icon-button [matMenuTriggerFor]="menu1">
+        <mat-icon>tablet</mat-icon>
+      </button>
+      <mat-menu #menu1="matMenu">
 
 
-        </mat-menu>-->
-        <form *ngIf="debug" style="color:black;display: flex;flex-direction: row;align-items: center;">
-          
-          <button mat-icon-button [matMenuTriggerFor]="menu" title="Format">
-            <mat-icon>text_format</mat-icon>
-          </button>
-          <mat-menu #menu="matMenu" class="panelClass">
-            <button mat-menu-item type="button" (click)="saveTajweed()">Save Tajweed</button>
-            <button mat-menu-item type="button" (click)="navigateToMushaf(3)">IndoPak15</button>
-            <!--
-  <div mat-menu-item>
-    <mat-icon>format_align_justify</mat-icon>
-    <mat-slide-toggle [formControl]="isJustifiedCtrl">Justification?</mat-slide-toggle>
-  </div>
-  <div mat-menu-item>
-    <mat-icon>invert_colors</mat-icon>
-    <mat-slide-toggle [formControl]="tajweedColorCtrl">Tajweed Color</mat-slide-toggle>
-  </div>
-  <div mat-menu-item style="overflow:visible">
-    <mat-icon>format_size</mat-icon>
-    <mat-slider name="fontScale" min="0.5" max="1" step="0.01" value="1" [(ngModel)]="fontScale" (input)="fontScaleChanged($event)"
-                thumbLabel [displayWith]="formatLabel"></mat-slider>
+      </mat-menu>-->
+      <form *ngIf="debug" style="color:black;display: flex;flex-direction: row;align-items: center;">
 
-  </div>
-  -->
-          </mat-menu>
-          <button mat-icon-button [routerLink]='["/about"]' title="About">
-            <mat-icon>info</mat-icon>
-          </button>
-          <a mat-icon-button href="https://twitter.com/DigitalKhatt" title="Twitter" aria-label="DigitalKhatt on twitter">
-            <mat-icon svgIcon="logos:twitter"></mat-icon>
-          </a>
-          <a mat-icon-button href="https://github.com/DigitalKhatt" title="GitHub" aria-label="DigitalKhatt on github">
-            <mat-icon svgIcon="logos:github"></mat-icon>
-          </a>
+        <button mat-icon-button [matMenuTriggerFor]="menu" title="Format">
+          <mat-icon>text_format</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu" class="panelClass">
+          <button mat-menu-item type="button" (click)="saveTajweed()">Save Tajweed</button>
+          <button mat-menu-item type="button" (click)="navigateToMushaf(3)">IndoPak15</button>
+          <!--
+          <div mat-menu-item>
+            <mat-icon>format_align_justify</mat-icon>
+            <mat-slide-toggle [formControl]="isJustifiedCtrl">Justification?</mat-slide-toggle>
+          </div>
+          <div mat-menu-item>
+            <mat-icon>invert_colors</mat-icon>
+            <mat-slide-toggle [formControl]="tajweedColorCtrl">Tajweed Color</mat-slide-toggle>
+          </div>
+          <div mat-menu-item style="overflow:visible">
+            <mat-icon>format_size</mat-icon>
+            <mat-slider name="fontScale" min="0.5" max="1" step="0.01" value="1" [(ngModel)]="fontScale"
+                        thumbLabel [displayWith]="formatLabel"></mat-slider>
 
-        </form>
+          </div>
+          -->
+        </mat-menu>
+        <button mat-icon-button [routerLink]='["/about"]' title="About">
+          <mat-icon>info</mat-icon>
+        </button>
+        <a mat-icon-button href="https://twitter.com/DigitalKhatt" title="Twitter" aria-label="DigitalKhatt on twitter">
+          <mat-icon svgIcon="logos:twitter"></mat-icon>
+        </a>
+        <a mat-icon-button href="https://github.com/DigitalKhatt" title="GitHub" aria-label="DigitalKhatt on github">
+          <mat-icon svgIcon="logos:github"></mat-icon>
+        </a>
 
-      </div>
-
-
-
-
+      </form>
 
     </div>
-
-
-  </div>
+  </mat-toolbar>
   <mat-sidenav-container class="sidenav-container" [class.has-floating-toc]="hasFloatingToc"
                          role="main" style="height:100% !important;background-color:white;">
 
     <mat-sidenav [ngClass]="{'collapsed': !isSideBySide}" #sidenav class="sidenav" [mode]="mode" [opened]="isOpened" (openedChange)="updateHostClasses()">
       <div style="width: 100%; padding: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%;">
-        <mat-card style="overflow: auto; " mat-elevation-z8>
+        <mat-card appearance="outlined" style="overflow: auto; " mat-elevation-z8>
 
           <div *ngFor="let item of outline">
             <button mat-button type="button" (click)="setOutline(item)" style="direction: rtl; width: 100%; text-align: right; font-family: madina;font-size:larger">{{item.name}}</button>

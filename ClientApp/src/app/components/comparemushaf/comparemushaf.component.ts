@@ -23,21 +23,15 @@ import { QuranShaper } from '../../services/quranservice/quran_shaper';
 import { DomSanitizer, Title } from '@angular/platform-browser';
 
 import { IChange, diff } from 'json-diff-ts';
-
-@Pipe({ name: 'split' })
-export class SplitStringPipe implements PipeTransform {
-
-  transform(value: any, args?: any): any {
-    return value.split('');
-  }
-}
+import { commonModules } from '../../app.config';
 
 @Component({
   selector: 'quran-comparemushaf',
   templateUrl: './comparemushaf.component.html',
   styleUrls: ['./comparemushaf.component.scss'],
+  imports: [...commonModules]
 })
-export class CompareMushafComponent implements OnInit, AfterViewInit {  
+export class CompareMushafComponent implements OnInit, AfterViewInit {
 
   @ViewChildren('line') lines: QueryList<ElementRef>;
 
@@ -50,7 +44,7 @@ export class CompareMushafComponent implements OnInit, AfterViewInit {
   jsonSecond;
   showByLines = false;
   showByWords = false;
-  filter : any = {}
+  filter: any = {}
 
   constructor(private titleService: Title, private sanitizer: DomSanitizer) {
     this.titleService.setTitle("Mushaf Differences");
@@ -67,7 +61,7 @@ export class CompareMushafComponent implements OnInit, AfterViewInit {
 
     const glyphs = lineElem.before ? this.jsonFirst.glyphs : this.jsonSecond.glyphs;
     const pages = lineElem.before ? this.jsonFirst.pages : this.jsonSecond.pages;
-    
+
     const pageIndex = parseInt(lineElem.page);
     const lineIndex = parseInt(lineElem.line);
 
@@ -129,7 +123,7 @@ export class CompareMushafComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.lines.changes.subscribe(() => {
-      
+
       console.log(`lines.length = ${this.lines.length} `);
       for (let lineRef of this.lines) {
         this.generateLine(lineRef);
@@ -173,7 +167,7 @@ export class CompareMushafComponent implements OnInit, AfterViewInit {
 
   }
 
-  compareTajweed() {   
+  compareTajweed() {
 
     const t0 = performance.now();
 
@@ -193,7 +187,7 @@ export class CompareMushafComponent implements OnInit, AfterViewInit {
         const pageChange = pagesChange[pageChangeIndex];
         const pageIndex = parseInt(pageChange.key);
         const lines = new Map();
-        pages.set(pageIndex, lines );
+        pages.set(pageIndex, lines);
         const linesChange = pageChange.changes[0].changes;
         for (let lineChangeIndex = 0; lineChangeIndex < linesChange.length; lineChangeIndex++) {
           const lineChange = linesChange[lineChangeIndex];
@@ -324,7 +318,7 @@ export class CompareMushafComponent implements OnInit, AfterViewInit {
   getFontFamily(layout) {
     return layout === "NewMadinah" ? 'madina' : layout === "OldMadinah" ? 'oldmadina' : 'indopak';
   }
- 
+
   showWord(word) {
     alert(`page = ${word.page} line=${word.line}`)
   }
@@ -344,7 +338,7 @@ export class CompareMushafComponent implements OnInit, AfterViewInit {
 
   getGlyphSvg(glyphs: any[], codepoint: number, lefttatweel: number, righttatweel: number) {
 
-    let svg : string = "";
+    let svg: string = "";
 
     const glyphInfo = glyphs[codepoint];
     const limits = glyphInfo.limits || [0, 0, 0, 0];
@@ -405,7 +399,7 @@ export class CompareMushafComponent implements OnInit, AfterViewInit {
           pathd += `M${interpolate(element[0], i, j, 0)} ${interpolate(element[1], i, j, 1)}`;
           //ctx.moveTo(interpolate(element[0], i, j, 0), interpolate(element[1], i, j, 1));
         } else if (element.length === 6) {
-          pathd += `C${interpolate(element[0], i, j, 0)} ${interpolate(element[1], i, j, 1)},${interpolate(element[2], i, j, 2)} ${interpolate(element[3], i, j, 3)},${interpolate(element[4], i, j, 4)} ${interpolate(element[5], i, j, 5)}`;          
+          pathd += `C${interpolate(element[0], i, j, 0)} ${interpolate(element[1], i, j, 1)},${interpolate(element[2], i, j, 2)} ${interpolate(element[3], i, j, 3)},${interpolate(element[4], i, j, 4)} ${interpolate(element[5], i, j, 5)}`;
         }
       }
 

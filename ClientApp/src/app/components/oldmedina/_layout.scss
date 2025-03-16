@@ -43,12 +43,12 @@
     white-space: nowrap;
   }
 
-  .mat-icon-button {
+  .mat-mdc-icon-button {
     width: 32px;
   }
 
   @media (min-width: 992px) {
-    .hamburger.mat-button {
+    .hamburger.mat-mdc-button {
       min-width: unset;
       margin: 0 8px 0 0;
       padding: 0 0 0 0;

@@ -63,7 +63,10 @@ along with DigitalKhatt.  If not, see
     <canvas *ngFor="let glyphName of glyphNames" height="200" width="300" style="height:10px;width:10px;" [id]="glyphName"></canvas>
   </div>
   <div style="width:100px;">
-    <mat-slider style="width:100%" id="tatweel" name="tatweel" min="0" max="12" step="0.1" value="0" [hidden]="!loaded" [(ngModel)]="tatweel" (input)="tatweelChanged($event)"></mat-slider>
+    <mat-slider style="width:100%" id="tatweel"  min="0" max="12" step="0.1" [hidden]="!loaded"  #ngSlider>
+      <input matSliderThumb (input)="tatweelChanged({source: ngSliderThumb, parent: ngSlider, value: ngSliderThumb.value})" #ngSliderThumb="matSliderThumb"
+             [(ngModel)]="tatweel" name="tatweel" value="0" />
+    </mat-slider>
     <!--
     <input type="range" id="tatweel" name="tatweel" min="0" max="12" step="any" value="0" [hidden]="!loaded" [(ngModel)]="tatweel"
            (ngModelChange)="tatweelChanged()"

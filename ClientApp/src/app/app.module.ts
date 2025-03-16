@@ -17,66 +17,20 @@
  * <https: //www.gnu.org/licenses />.
 */
 
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { ScrollingModule } from '@angular/cdk/scrolling';
-import { HttpClientModule } from '@angular/common/http';
-import { Injectable, NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/material/legacy-autocomplete';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
-import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
-import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
-import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
-import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
-import { MatLegacyRadioModule as MatRadioModule } from '@angular/material/legacy-radio';
-import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
-import { MatLegacySlideToggleModule as MatSlideToggleModule } from '@angular/material/legacy-slide-toggle';
-import { MatLegacySliderModule as MatSliderModule } from '@angular/material/legacy-slider';
-import { MatLegacySnackBarModule as MatSnackBarModule } from '@angular/material/legacy-snack-bar';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { BrowserModule, HammerGestureConfig } from '@angular/platform-browser';
-import { ExtraOptions, RouteReuseStrategy, RouterModule } from '@angular/router';
+import { Injectable } from '@angular/core';
+import { HammerGestureConfig } from '@angular/platform-browser';
+import { ExtraOptions } from '@angular/router';
 
-import { AppComponent } from './app.component';
 
-import { QuranService } from './services/quranservice/quranservice.service';
 
 //import { ScrollingModule, ScrollDispatchModule } from '@angular/cdk/scrolling';
 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { PortalModule } from '@angular/cdk/portal';
-import { CustomIconRegistry, SVG_ICONS } from 'src/app/shared/custom-icon-registry';
-import { QuranComponent } from './components/quran/quran.component';
-import { SidebarContentsService } from './services/navigation/sidebarcontents';
+import { SVG_ICONS } from './shared/custom-icon-registry';
 
-import { environment } from '../environments/environment';
 
 //import * as Hammer from 'hammerjs';
-import { AboutComponent } from './components/about/about.component';
-import { DynamicTextComponent } from './components/dynamictext/dynamictext.component';
-import { EmptyComponent } from './components/empty/empty.component';
-import { JoinLettersComponent } from './components/joinletters/joinletters.component';
-import { QuranGesturesDirective } from './components/quran/qurangestures.directive';
-import { QuranZoomDirective } from './components/quran/quranzoom.directive';
-import { QuranZoomTouchDirective } from './components/quran/quranzoom.touch.directive';
-import { QuranPagesComponent } from './components/quranotf/pages.component';
-import { QuranOTFComponent } from './components/quranotf/quranotf.component';
-import { CacheRouteReuseStrategy } from './services/cache-route-reuse.strategy';
 //import { QuranCanvasComponent } from './components/qurancanvas/qurancanvas.component';
-import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { HBMedinaComponent } from './components/hbmedina/hbmedina.component';
-import { OldMedinaComponent } from './components/oldmedina/oldmedina.component';
-import { LayoutService } from './services/layoutservice/layoutservice.service';
-import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.component';
-import { CompareTajweedComponent, SplitStringPipe } from './components/comparetajweed/comparetajweed.component';
-import { MUSHAFLAYOUTTYPE, MushafLayoutType } from './services/qurantext.service';
-import { CompareMushafComponent } from './components/comparemushaf/comparemushaf.component';
 //import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
@@ -163,138 +117,4 @@ const routerOptions: ExtraOptions = {
     anchorScrolling: 'enabled'
 };
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    AboutComponent,
-    //NavMenuComponent,
-    QuranComponent,
-    QuranZoomDirective,
-    QuranZoomTouchDirective,
-    QuranGesturesDirective,
-    DynamicTextComponent,
-    JoinLettersComponent,
-    EmptyComponent,
-    QuranOTFComponent,
-    QuranPagesComponent,
-    OldMedinaComponent,
-    HBMedinaComponent,
-    PageNotFoundComponent,
-    CompareTajweedComponent,
-    CompareMushafComponent,
-    SplitStringPipe
-  ],
-  imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
-    HttpClientModule,
-    FormsModule, ReactiveFormsModule,
-    ScrollingModule,
-    DragDropModule,
-    MatToolbarModule, MatButtonModule, MatSliderModule, MatCardModule, MatIconModule, MatSidenavModule, PortalModule,
-    MatSlideToggleModule, MatInputModule, MatAutocompleteModule, MatDividerModule, MatSelectModule, MatRadioModule, MatCheckboxModule, MatDialogModule,
-    MatMenuModule,
-    MatSnackBarModule,
-    MatInputModule,
-    MatFormFieldModule,
-    RouterModule.forRoot([
-      {
-        path: '',
-        pathMatch: 'full',
-        redirectTo: 'digitalmushaf'
-      },
-      {
-        path: '',
-        children: [         
-          {
-            path: 'digitalmushaf',
-            component: HBMedinaComponent,
-            data: {
-              type: 'newmedina'
-            },
-          }
-        ]
-      },
-      {
-        path: '',
-        component: QuranComponent,
-        children: [          
-          {
-            path: 'about',
-            component: AboutComponent
-          }
-        ]
-      },    
-      {
-        path: 'otf',
-        children: [
-          {
-            path: 'digitalmushaf',
-            component: QuranOTFComponent
-          },
-          {
-            path: 'oldmedina',
-            component: OldMedinaComponent
-          }
-        ]
-      },
-      {
-        path: 'hb',
-        children: [          
-          {
-            path: 'oldmedina',
-            component: HBMedinaComponent,
-            providers: [{ provide: MUSHAFLAYOUTTYPE, useValue: MushafLayoutType.OldMadinah }],
-            data: {
-              type: 'oldmedina'
-            },
-          },
-          {
-            path: 'newmedina',
-            component: HBMedinaComponent,
-            providers: [{ provide: MUSHAFLAYOUTTYPE, useValue: MushafLayoutType.NewMadinah }],
-            data: {
-              type: 'newmedina'
-            },
-          },
-          {
-            path: 'indopak15',
-            component: HBMedinaComponent,
-            providers: [{ provide: MUSHAFLAYOUTTYPE, useValue: MushafLayoutType.IndoPak15Lines }],
-            data: {
-              type: 'indopak15'
-            },
-          }
-        ]
-      },
-      {
-        path: 'comparetajweed',
-        component: CompareTajweedComponent,
-      },
-      {
-        path: 'comparemushaf',
-        component: CompareMushafComponent,
-      },
-      {
-        path: '**', 
-        component: PageNotFoundComponent
-      },
-    ], routerOptions),
-    BrowserAnimationsModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
-  ],
-  providers: [
-    QuranService,
-    LayoutService,   
-    { provide: MatIconRegistry, useClass: CustomIconRegistry },
-    svgIconProviders,
-    SidebarContentsService,
-    {
-      provide: RouteReuseStrategy,
-      useClass: CacheRouteReuseStrategy
-    },
-    MatSnackBarModule,
-    { provide: MUSHAFLAYOUTTYPE, useValue: MushafLayoutType.NewMadinah }
-  ],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
+

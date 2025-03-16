@@ -17,7 +17,7 @@
  * <https: //www.gnu.org/licenses />.
 */
 
-import { Component, AfterViewInit, OnInit, HostListener, OnDestroy,  QueryList, ElementRef,  ViewChild, NgZone, TemplateRef,  ContentChildren, ViewChildren } from '@angular/core';
+import { Component, AfterViewInit, OnInit, HostListener, OnDestroy, QueryList, ElementRef, ViewChild, NgZone, TemplateRef, ContentChildren, ViewChildren } from '@angular/core';
 import { QuranService } from '../../services/quranservice/quranservice.service';
 import { Subscription, animationFrameScheduler, Subject } from 'rxjs';
 
@@ -35,12 +35,13 @@ import { HammerGestureConfig, Title } from '@angular/platform-browser';
 
 //import * as Hammer from 'hammerjs';
 
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { AboutComponent } from '../about/about.component';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, RouterOutlet, RouterLink } from '@angular/router';
 import { QuranPagesComponent } from './pages.component';
 import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { CdkDrag, DragRef, Point } from '@angular/cdk/drag-drop';
+import { commonModules } from '../../app.config';
 //import { CdkDrag } from '@angular/cdk/drag-drop';
 
 const CSS_UNITS = 96.0 / 72.0;
@@ -112,13 +113,7 @@ const DEFAULT_CACHE_SIZE = 10;
   selector: 'app-quranotf-component',
   templateUrl: './quranotf.component.ts.html',
   styleUrls: ['./quranotf.component.ts.scss'],
-  /*
-  providers: [
-    {
-      provide: HAMMER_GESTURE_CONFIG,
-      useClass: QuranComponentHammerConfig
-    }
-  ],*/
+  imports: [...commonModules, RouterOutlet, RouterLink, QuranPagesComponent]
 })
 export class QuranOTFComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -163,7 +158,7 @@ export class QuranOTFComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 
- 
+
   @ViewChild(QuranPagesComponent, { static: false }) quranPagesComponent: QuranPagesComponent;
 
   @ViewChild('testcanvas', { static: false }) testcanvasRef: ElementRef;
@@ -342,7 +337,7 @@ export class QuranOTFComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.viewAreaElement = this.firstMyCustomDirective.getElementRef().nativeElement;
 
-    
+
 
     //this.loaded = true;
     setTimeout(() => {

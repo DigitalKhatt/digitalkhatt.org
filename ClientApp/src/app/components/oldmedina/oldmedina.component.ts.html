@@ -118,7 +118,7 @@
 
     <mat-sidenav [ngClass]="{'collapsed': !isSideBySide}" #sidenav class="sidenav" [mode]="mode" [opened]="isOpened" (openedChange)="updateHostClasses()">
       <div style="width: 100%; padding: 0px; box-sizing: border-box; display: flex; flex-direction: column; height: 100%;">       
-        <mat-card style="overflow: auto; " mat-elevation-z8 >
+        <mat-card appearance="outlined" style="overflow: auto; " mat-elevation-z8 >
 
           <div *ngFor="let item of outline">
             <button mat-button type="button" (click)="setOutline(item)" style="direction: rtl; width: 100%; text-align: right; font-family: digitalkhatt;font-size:larger">{{item.name}}</button>

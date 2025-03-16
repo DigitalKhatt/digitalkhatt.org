@@ -47,6 +47,7 @@ export interface LineTextInfo {
   simpleSpaceIndexes: number[];
   spaces: Map<number, SpaceType>
   wordInfos: WordInfo[],
+  features: HBFeature[]
 }
 export interface TextFontFeatures {
   name: string,
@@ -178,7 +179,7 @@ function isInitBase(wordInfo: WordInfo, index: number): boolean {
 
 }
 
-function getWordWidth(wordInfo: WordInfo, justResults: Map<number, TextFontFeatures[]>, font: HarfBuzzFont): number {
+function getWordWidth(wordInfo: WordInfo, justResults: Map<number, TextFontFeatures[]>, font: HarfBuzzFont, pfeatures: HBFeature[]): number {
 
 
   const buffer = new HarfBuzzBuffer()
@@ -187,7 +188,7 @@ function getWordWidth(wordInfo: WordInfo, justResults: Map<number, TextFontFeatu
   buffer.setScript(HarfBuzz.arabScript)
   buffer.setClusterLevel(1)
 
-  const features: HBFeature[] = []
+  const features: HBFeature[] = pfeatures ? [...pfeatures] : [];
 
   for (let i = wordInfo.startIndex; i <= wordInfo.endIndex; i++) {
 
@@ -225,7 +226,7 @@ function tryApplyFeatures(wordIndex: number, lineTextInfo: LineTextInfo, justInf
 
   const wordInfo = lineTextInfo.wordInfos[wordIndex];
 
-  const wordNewWidth = getWordWidth(wordInfo, newFeatures, justInfo.font);
+  const wordNewWidth = getWordWidth(wordInfo, newFeatures, justInfo.font, lineTextInfo.features);
   const diff = wordNewWidth - layout.parWidth;
   if (
     wordNewWidth !== layout.parWidth &&
@@ -537,7 +538,7 @@ function applyKashidasSubWords(lineTextInfo: LineTextInfo, justInfo: JustInfo, t
   const left = "ئبتثني" + "جحخ" + "طظ" + "عغ" + "فق" + "ةلم" + "رز"
   const mediLeftAsendant = "ل"
 
-  const wordInfos = lineTextInfo.wordInfos;  
+  const wordInfos = lineTextInfo.wordInfos;
 
   const matchresult: SubWordsMatch[] = [];
 
@@ -569,13 +570,13 @@ function applyKashidasSubWords(lineTextInfo: LineTextInfo, justInfo: JustInfo, t
   }
 
   for (let level = 1; level <= nbLevels; level++) {
-    for (let wordIndex = 0; wordIndex < wordInfos.length; wordIndex++) {      
+    for (let wordIndex = 0; wordIndex < wordInfos.length; wordIndex++) {
       const subWordsMatch = matchresult[wordIndex];
       const wordLayout = justInfo.layoutResults[wordIndex];
 
       const type1Applied = wordLayout.appliedKashidas.get(StretchType.Beh);
       const type2Applied = wordLayout.appliedKashidas.get(StretchType.FinaAscendant);
-      const type3Applied = wordLayout.appliedKashidas.get(StretchType.OtherKashidas);      
+      const type3Applied = wordLayout.appliedKashidas.get(StretchType.OtherKashidas);
       const type5Applied = wordLayout.appliedKashidas.get(StretchType.SecondKashidaNotSameSubWord);
 
       if (type === StretchType.Beh && (type2Applied || type3Applied)) continue;
@@ -590,7 +591,7 @@ function applyKashidasSubWords(lineTextInfo: LineTextInfo, justInfo: JustInfo, t
         const subWordIndex = subWordsMatch.subWordIndexes[i]
 
         for (let match of subWordsMatch.matches[subWordIndex]) {
-          const kashidaGroup = match?.indices?.[1]; 
+          const kashidaGroup = match?.indices?.[1];
 
           if (!kashidaGroup) continue;
 
@@ -690,7 +691,7 @@ function applyAlternatesSubWords(lineTextInfo: LineTextInfo, justInfo: JustInfo,
         const subWordIndex = subWordsMatch.subWordIndexes[i]
         const alt = subWordsMatch.matches[subWordIndex][0]?.indices?.[1];
         if (!alt) continue;
-        const matchIndex = alt[0];   
+        const matchIndex = alt[0];
         const indexInLine = wordInfo.startIndex + wordInfo.subwords[subWordIndex].baseIndexes[matchIndex]
 
         const appliedResult = applyAlternate(lineTextInfo, justInfo, wordIndex, indexInLine);
@@ -987,8 +988,6 @@ export function justifyLine(
 
 
   let layOutResult: LayoutResult[] = []
-  let wordWidths: any[] = []
-  let spaceWidths: any[] = []
 
   let justResults: JustInfo | undefined
 
@@ -996,21 +995,18 @@ export function justifyLine(
   let simpleSpaceWidth;
   let ayaSpaceWidth;
 
-  const totalSpaces = lineTextInfo.ayaSpaceIndexes.length + lineTextInfo.simpleSpaceIndexes.length;
-
   for (let wordIndex = 0; wordIndex < lineTextInfo.wordInfos.length; wordIndex++) {
     const wordInfo = lineTextInfo.wordInfos[wordIndex]
 
-    const parWidth = getWidth(wordInfo.text, font, FONTSIZE, null)
+    const parWidth = getWidth(wordInfo.text, font, FONTSIZE, lineTextInfo.features)
 
     layOutResult.push({
       parWidth,
       appliedKashidas: new Map()
     })
-
   }
 
-  let currentLineWidth = getWidth(lineText, font, FONTSIZE, null)
+  let currentLineWidth = getWidth(lineText, font, FONTSIZE, lineTextInfo.features)
 
   let diff = desiredWidth - currentLineWidth
 
@@ -1074,8 +1070,7 @@ export function analyzeLineForJust(quranTextService: QuranTextService, pageIndex
 
   if (lineTextInfo) return lineTextInfo
 
-  const pageText = quranTextService.quranText[pageIndex];
-
+  const bism = (pageIndex === 0 || pageIndex === 1) && (plineIndex == 1);
 
   const lineText = quranTextService.quranText[pageIndex][plineIndex]
 
@@ -1084,7 +1079,8 @@ export function analyzeLineForJust(quranTextService: QuranTextService, pageIndex
     ayaSpaceIndexes: [],
     simpleSpaceIndexes: [],
     wordInfos: [],
-    spaces: new Map()
+    spaces: new Map(),
+    features: bism ? [{ tag: 'bism', value: 1, start: 0, end: -1 }] : null,
   }
 
   lineTextInfoCache.set(key, lineTextInfo)

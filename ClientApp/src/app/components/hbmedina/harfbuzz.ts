@@ -407,7 +407,7 @@ export function shape(text: string, font: HarfBuzzFont, features: HBFeature[]): 
   return result;
 }
 
-export function getWidth(text: string, font: HarfBuzzFont, fontSizeInPixel: number, features: any): number {
+export function getWidth(text: string, font: HarfBuzzFont, fontSizeInPixel: number, features: HBFeature[]): number {
   let scale = fontSizeInPixel / font.unitsPerEM;
   let shapeResult = shape(text, font, features);
   let totalWidth = 0.0
@@ -424,7 +424,7 @@ export function loadHarfbuzz(webAssemblyUrl: string): Promise<void> {
     return response.arrayBuffer();
   }).then(wasm => {
     const module = { wasmBinary: wasm }
-    let tt = hbjs(module);
+    let tt = hbjs.default(module);
     tt.then(module => {
       //@ts-ignore
       hb = new HarfBuzzExports(module);

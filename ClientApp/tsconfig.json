@@ -1,33 +1,17 @@
 {
   "compileOnSave": false,
-  "compilerOptions": {
-    "baseUrl": "./",
+  "compilerOptions": {    
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
+    "esModuleInterop": true,
     "declaration": false,
-    "moduleResolution": "node",
-    "module": "es2020",
     "experimentalDecorators": true,
+    "moduleResolution": "bundler",
+    "importHelpers": true,
     "target": "ES2022",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2022",
-      "dom"
-    ],
+    "module": "es2020",
     "allowJs": true,
-    "paths": {
-      "pdfjs-web/*": [
-        "custom_typings/pdfjs-web/*"
-      ],
-      "pdfjs-worker": [
-        "custom_typings/pdfjs-worker"
-      ],
-      "pdfjs-lib": [
-        "custom_typings/pdfjs-lib"
-      ]
-    },
     "useDefineForClassFields": false
   }
 }
+

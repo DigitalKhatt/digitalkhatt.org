@@ -37,11 +37,12 @@ import { HammerGestureConfig, Title } from '@angular/platform-browser';
 //import * as Hammer from 'hammerjs';
 
 
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { AboutComponent } from '../about/about.component';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { CdkDrag, DragRef, Point } from '@angular/cdk/drag-drop';
 import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
+import { commonModules } from '../../app.config';
 //import { CdkDrag } from '@angular/cdk/drag-drop';
 
 const CSS_UNITS = 96.0 / 72.0;
@@ -122,13 +123,7 @@ const DEFAULT_CACHE_SIZE = 10;
   selector: 'app-quran-component',
   templateUrl: './quran.component.html',
   styleUrls: ['./quran.component.scss'],
-  /*
-  providers: [
-    {
-      provide: HAMMER_GESTURE_CONFIG,
-      useClass: QuranComponentHammerConfig
-    }
-  ],*/
+  imports: [...commonModules, RouterOutlet]
 })
 export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -161,7 +156,7 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
   totalPages;
   maxPages = 648;
   currentPageNumber;
-  scrollState;  
+  scrollState;
   pageNumberBoxIsMoved: boolean;
   dragPosition;
   disableScroll = false;
@@ -431,12 +426,12 @@ export class QuranComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.formatCtrl.valueChanges.subscribe(value => {
           if (value === 1) {
-            this.totalPages = this.totalPageTex;            
+            this.totalPages = this.totalPageTex;
             this.fontScale = 1;
             this.quranService.quranShaper.setScalePoint(this.fontScale);
             this.outline = respone.getOutline(true);
           } else {
-            this.totalPages = this.totalPageMadina;            
+            this.totalPages = this.totalPageMadina;
             this.fontScale = 0.90;
             this.quranService.quranShaper.setScalePoint(this.fontScale);
             this.outline = respone.getOutline(false);

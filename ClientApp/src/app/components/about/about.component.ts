@@ -21,7 +21,10 @@ import { Component, AfterViewInit, OnInit, HostListener } from '@angular/core';
 import { QuranService } from '../../services/quranservice/quranservice.service';
 import { QuranShaper } from '../../services/quranservice/quran_shaper';
 import { Title } from '@angular/platform-browser';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { commonModules } from '../../app.config';
+import { DynamicTextComponent } from '../dynamictext/dynamictext.component';
+import { JoinLettersComponent } from '../joinletters/joinletters.component';
 
 const CSS_UNITS = 96.0 / 72.0;
 
@@ -29,6 +32,7 @@ const CSS_UNITS = 96.0 / 72.0;
   selector: 'app-about-component',
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss'],
+  imports: [...commonModules, DynamicTextComponent, JoinLettersComponent, RouterLink]
 })
 export class AboutComponent implements OnInit, AfterViewInit {
   quranShaper: QuranShaper;
@@ -41,9 +45,9 @@ export class AboutComponent implements OnInit, AfterViewInit {
     'sad.isol.expa', 'sad.fina.expa'];
 
   pageSize = { width: 255, height: 410 };
-  
+
   constructor(
-    private quranService: QuranService, private titleService: Title, private router : Router
+    private quranService: QuranService, private titleService: Title, private router: Router
   ) {
 
     this.contexts = []
@@ -53,13 +57,13 @@ export class AboutComponent implements OnInit, AfterViewInit {
       if (val instanceof NavigationEnd) {
         let fragmentIdx = val.urlAfterRedirects.lastIndexOf('#');
         if (fragmentIdx >= 0 && fragmentIdx < val.urlAfterRedirects.length - 1) {
-          let fragment = val.urlAfterRedirects.substring(fragmentIdx+1);
+          let fragment = val.urlAfterRedirects.substring(fragmentIdx + 1);
           console.log('fragment: ' + fragment);
           let element = document.getElementById(fragment);
-          if(element){
+          if (element) {
             element.scrollIntoView();
           }
-          
+
         }
       }
     })
@@ -68,7 +72,7 @@ export class AboutComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    
+
   }
 
   ngAfterViewInit() {
@@ -101,7 +105,7 @@ export class AboutComponent implements OnInit, AfterViewInit {
   }
 
 
-  
+
 
   initCanavas() {
     this.contexts = [];
@@ -140,7 +144,7 @@ export class AboutComponent implements OnInit, AfterViewInit {
 
       this.contexts.push(ctx);
     });
-  }  
+  }
 
   clearCanvas(ctx) {
     ctx.save();

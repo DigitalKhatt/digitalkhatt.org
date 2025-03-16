@@ -20,13 +20,15 @@
 import { Component, AfterViewInit, OnInit, HostListener, Input, ViewChild, ElementRef, OnChanges, SimpleChanges } from '@angular/core';
 import { QuranService } from '../../services/quranservice/quranservice.service';
 import { QuranShaper } from '../../services/quranservice/quran_shaper';
+import { commonModules } from '../../app.config';
 
 
 
 @Component({
-  selector: 'quran-dynamictext',
-  templateUrl: './dynamictext.component.html',
-  styleUrls: ['./dynamictext.component.scss'],
+    selector: 'quran-dynamictext',
+    templateUrl: './dynamictext.component.html',
+    styleUrls: ['./dynamictext.component.scss'],
+    imports : [...commonModules]
 })
 export class DynamicTextComponent implements OnInit, AfterViewInit, OnChanges {
   quranShaper: QuranShaper;

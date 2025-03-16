@@ -24,10 +24,10 @@ import { QuranShaper } from '../../services/quranservice/quran_shaper';
 
 
 @Component({
-  selector: 'quran-pages',
-  templateUrl: './pages.component.ts.html',
-  styleUrls: ['./pages.component.ts.scss'],
-  host: { 'class': 'digitalkhatt' }
+    selector: 'quran-pages',
+    templateUrl: './pages.component.ts.html',
+    styleUrls: ['./pages.component.ts.scss'],
+    host: { 'class': 'digitalkhatt' }    
 })
 export class QuranPagesComponent implements OnInit, AfterViewInit {
   

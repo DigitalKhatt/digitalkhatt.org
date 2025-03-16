@@ -25,9 +25,9 @@ import { Title } from '@angular/platform-browser';
 
 
 @Component({
-  selector: 'quran-empty',
-  templateUrl: './empty.component.html',
-  styleUrls: ['./empty.component.scss'],
+    selector: 'quran-empty',
+    templateUrl: './empty.component.html',
+    styleUrls: ['./empty.component.scss']
 })
 export class EmptyComponent implements OnInit, AfterViewInit {
   quranShaper: QuranShaper;

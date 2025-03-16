@@ -17,25 +17,31 @@
  * <https: //www.gnu.org/licenses />.
 */
 
-// import global variables
-@import './constants';
 
-// import global mixins
-@import './mixins';
-
-@import './materialtheme';
+@use '@angular/material' as mat;
 
 html, body {
   height: 100%;
 }
 
+
 body {
   width: 100%;
   position: relative;
-  margin: 0;  
-  overscroll-behavior: none;  
+  margin: 0;
+  overscroll-behavior: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  @include mat.theme(( color: ( theme-type: light, primary: mat.$azure-palette, tertiary: mat.$blue-palette, ), typography: Roboto, density: 0, ));
+}
+
+:root {
+  @include mat.toolbar-overrides(( standard-height: 48px,mobile-height: 48px ));
+}
+
+
+.menicon {
+  @include mat.icon-overrides(( color: var(--mat-sys-on-primary-container) ));
 }
 
 .toolbarbutton {

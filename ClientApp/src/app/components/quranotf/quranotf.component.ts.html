@@ -142,7 +142,7 @@
           <button mat-icon-button matSuffix><mat-icon>chevron_right</mat-icon></button>
           <button mat-icon-button matSuffix><mat-icon>last_page</mat-icon></button>
         </mat-form-field>-->
-        <mat-card style="overflow:auto" mat-elevation-z8>
+        <mat-card appearance="outlined" style="overflow:auto" mat-elevation-z8>
 
           <div *ngFor="let item of outline">
             <button mat-button type="button" (click)="setOutline(item)" style="direction:rtl;width:100%;text-align:left;">{{item.name}}</button>

@@ -222,7 +222,7 @@ class PageView {
           ayaSpacing: this.spaceWidth,
           xScale: 1
         }
-        this.renderLine(lineElem, lineIndex, lineTextInfo, justResult, tajweedResult?.[lineIndex], glyphScale, 0.9, defaultMargin, true)
+        this.renderLine(lineElem, lineIndex, lineTextInfo, justResult, tajweedResult?.[lineIndex], glyphScale * 0.9, 1, defaultMargin, true)
       }
 
       temp.appendChild(lineElem);
@@ -260,7 +260,7 @@ class PageView {
 
 
 
-    const features: HBFeature[] = []
+    const features: HBFeature[] = lineTextInfo.features ? [...lineTextInfo.features] : [];
 
     for (const feat of justResult.globalFeatures || []) {
       features.push({
@@ -389,7 +389,7 @@ class PageView {
         newpath.setAttribute("transform", "translate(" + (currentxPos + glyph.XOffset) + " " + glyph.YOffset + ")");
 
         if (tajweedResult) {
-          const tajweedClass = tajweedResult.get(glyph.Cluster)        
+          const tajweedClass = tajweedResult.get(glyph.Cluster)
           if (tajweedClass) {
             newpath.classList.add(tajweedClass)
             /*
@@ -408,7 +408,7 @@ class PageView {
             if (knowColor) {
               newpath.classList.add(tajweedClass)
             }*/
-          } else if (lineText[glyph.Cluster] === "\u034F") {                      
+          } else if (lineText[glyph.Cluster] === "\u034F") {
             let nextIndex = glyphIndex - 1;
             const nextCluster = result[nextIndex].Cluster;
             const currCluster = glyph.Cluster + 1;
@@ -426,7 +426,7 @@ class PageView {
             } /*else {
               // happens only for فَٱدَّٰرَٰ͏ْٔتُمْ page 11 line 5 no tajweed coloring so it is OK
               //console.log(`nextCluster<=currCluster**********************************************************Page ${this.pageIndex + 1} Line ${lineIndex + 1}`)
-            }  */         
+            }  */
           }
         }
 
@@ -446,7 +446,7 @@ class PageView {
       lineGroup.appendChild(line)
     }
 
-    const xScale = this.justStyle === JustStyle.SCLXAxis ? fontSizeRatio : fontSizeRatio  * justResult.xScale;
+    const xScale = this.justStyle === JustStyle.SCLXAxis ? fontSizeRatio : fontSizeRatio * justResult.xScale;
 
     const yScale = this.justStyle === JustStyle.SameSizeByPage ? xScale : 1;
 
