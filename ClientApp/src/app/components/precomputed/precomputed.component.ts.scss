@@ -1,0 +1,373 @@
+::ng-deep .panelClass {
+  overflow: hidden !important;
+}
+
+@media all and (max-width: 535px) {
+  ::ng-deep .hiddenSmallView {
+    display: none !important;
+  }
+}
+
+@media all and (max-width: 770px) {
+  ::ng-deep .hiddenMediumView {
+    display: none !important;
+  }
+}
+
+::ng-deep .pagenumber .mdc-text-field {
+  padding: 0px 5px;
+}
+
+::ng-deep .fontsize .mat-slider-wrapper {
+
+  .mat-slider-thumb-container {
+    .mat-slider-thumb-label {
+      width: 50px;
+      height: 50px;
+      top: -62px;
+      right: -25px;
+    }
+  }
+}
+
+
+
+.pageNumberBoxBoundry {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  border-top: 0px solid transparent;
+  border-bottom: 50px solid transparent;
+}
+
+.pagenumber-boxsvg {
+  position: absolute;
+  width: 30px;
+  height: 25px;
+  right: 0px;
+  top: 0px;
+  z-index: 1;
+}
+
+.pagenumber-box {
+  position: absolute;
+  min-width: 35px;
+  border-left: solid 1px #ccc;
+  border-top: solid 1px #ccc;
+  border-bottom: solid 1px #ccc;
+  color: rgba(0, 0, 0, 0.87);
+  background: rgba(240, 240, 240, 0.80);
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-align: right;
+  //background: #fff;
+  border-bottom-left-radius: 50% 50%;
+  border-top-left-radius: 50% 50%;
+  //margin-right: 25px;
+  z-index: 1;
+  box-sizing: border-box;
+  padding: 8px 8px 8px 10px;
+  transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  right: 0px;
+  top: 0px;
+  font-family: 'Roboto';
+  font-size: small;
+  touch-action: none;
+  line-height: 10px;
+}
+
+.pagenumber-box:active {
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+$mediumgray: #6E6E6E;
+$darkgray: #444444;
+$padding: 0.2em;
+
+#calculatewidthElem {
+  position: absolute;
+  visibility: hidden;
+  height: auto;
+  width: auto;
+  white-space: pre;
+}
+
+#lineJustify {
+  position: absolute;
+  visibility: hidden;
+  height: auto;
+  width: auto;
+  white-space: pre;
+}
+
+
+:host.oldmadina {
+  font-family: oldmadina;
+}
+
+:host.newmadina {
+  font-family: digitalkhatt;
+}
+
+:host.indopak {
+  font-family: indopak;
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 0 1 auto;
+  touch-action: pan-x pan-y;
+  font-weight: normal;
+}
+
+.qurancontainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 0 1 auto;
+  touch-action: pan-x pan-y;
+  position: relative;
+}
+
+#viewerContainer {
+  height: 100%;
+  flex: 0 0 auto;
+  position: absolute;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0;
+  margin: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  top: 0;
+  outline: none;
+  background-color: #999999; /*#999999;*/ /*#eee ;*/
+  -webkit-transition-duration: 200ms;
+  -webkit-transition-timing-function: ease;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+  touch-action: pan-x pan-y;
+}
+
+@media (hover : hover) {
+  #viewerContainer::-webkit-scrollbar {
+    height: 6px;
+    width: 8px;
+  }
+
+  #viewerContainer::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: white;
+  }
+
+  #viewerContainer::-webkit-scrollbar-thumb {
+    background-color: $mediumgray;
+    outline: 1px solid slategrey;
+  }
+
+  #viewerContainer {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  #viewerContainer::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/*
+@media (hover: none) {
+  #viewerContainer {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  #viewerContainer::-webkit-scrollbar {
+    display: none;
+  }
+}*/
+
+html[dir='ltr'] #viewerContainer {
+  box-shadow: inset 1px 0 0 hsla(0,0%,100%,.05);
+}
+
+html[dir='rtl'] #viewerContainer {
+  box-shadow: inset -1px 0 0 hsla(0,0%,100%,.05);
+}
+
+
+:host ::ng-deep .page {
+  line-height: 1.77em;
+  margin: 0 auto 0 auto;
+  position: relative;
+  overflow: visible;
+  border-bottom: 2px solid transparent;
+  background-clip: content-box;
+  background-color: white;
+  white-space: nowrap;
+  box-sizing: border-box;
+
+
+  .linesuran {
+    /*font-family: digitalkhatt;
+    /*font-size:0.95em;*/
+    text-align: center;
+    background: url(../../../assets/ayaframe.svg);
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-origin: content-box;
+    background-clip: content-box;
+    box-sizing: content-box;
+
+    .innersura {
+      position: relative;
+      top: -0.15em;
+    }
+  }
+
+  .line {
+    position: relative;
+
+    .sajda {
+      position: relative;
+      /*box-shadow: inset 0 7px 9px -7px rgba(0,0,0,0.4);*/
+      //text-decoration: line-through;
+    }
+
+    .sajda::before {
+      content: '';
+      width: 100%;
+      position: absolute;
+      right: 0;
+      top: 14%;
+      border-bottom: 0.08em solid rgba(0,0,0,0.8);
+    }
+  }
+
+  .line:first-child {
+    padding-top: 0.4em;
+  }
+
+  direction: rtl;
+}
+
+:host .page canvas[hidden] {
+  display: none !important;
+}
+
+:host .hidden {
+  display: none !important;
+}
+
+:host [hidden] {
+  display: none !important;
+}
+
+.small-icon-button {
+  width: 24px !important;
+  height: 24px !important;
+  line-height: 24px !important;
+  /*TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+  ::ng-deep .mat-button-wrapper {
+    padding: 0px 0 !important;
+  }
+
+  .mat-icon {
+    width: 16px !important;
+    height: 16px !important;
+    line-height: 16px !important;
+  }
+
+  .material-icons {
+    font-size: 16px !important;
+  }
+}
+
+.mat-toolbar .mat-mdc-input-element {
+  color: black !important;
+}
+
+.leftnav {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.centernav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rightnav {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+::ng-deep .mypanelclass {
+  margin-top: 25px !important;
+  max-height: 350px !important;
+}
+
+.imgcenter {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 100px;
+  width: 10%;
+}
+
+:host ::ng-deep .green {
+  fill: rgb(0 166 80);
+}
+
+:host ::ng-deep .tafkim {
+  fill: rgb(0 102 148);
+}
+
+:host ::ng-deep .lgray {
+  fill: rgb(180 180 180);
+}
+
+:host ::ng-deep .lkalkala {
+  fill: rgb(0 173 239);
+}
+
+:host ::ng-deep .red1 {
+  fill: rgb(195 138 8);
+}
+
+:host ::ng-deep .red2 {
+  fill: rgb(244 114 22);
+}
+
+:host ::ng-deep .red3 {
+  fill: rgb(236 0 140);
+}
+
+:host ::ng-deep .red4 {
+  fill: rgb(140 0 0);
+}
+
+@font-face {
+  font-family: madina;
+  font-style: normal;
+  src: url(../../../assets/fonts/hb/madina.otf) format("opentype");
+  font-display: block;
+}
+
+.sidenav {
+  width: 180px;
+}

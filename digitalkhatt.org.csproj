@@ -36,7 +36,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\components\precomputed\baseforce.ts" />
+    <None Remove="ClientApp\src\app\components\precomputed\constant.ts" />
+    <None Remove="ClientApp\src\app\components\precomputed\glyphpath.ts" />
+    <None Remove="ClientApp\src\app\components\precomputed\layout.ts" />
+    <None Remove="ClientApp\src\app\components\precomputed\markbaseforce.ts" />
     <None Remove="ClientApp\tsconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Remove="ClientApp\src\app\components\precomputed\page_view.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\components\precomputed\precomputed.component.ts" />
+    <TypeScriptCompile Remove="ClientApp\src\app\components\precomputed\rendering_states.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,6 +60,12 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\src\app\components\about\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Update="ClientApp\src\app\components\precomputed\baseforce.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
   </ItemGroup>  
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

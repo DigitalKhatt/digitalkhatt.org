@@ -35,7 +35,8 @@
     "harfbuzzjs": "0.4.5",
     "lz-string": "1.5.0",
     "file-saver-es": "2.0.5",
-    "json-diff-ts": "4.1.0"
+    "json-diff-ts": "4.1.0",
+    "d3-force": "3.0.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "19.2.3",

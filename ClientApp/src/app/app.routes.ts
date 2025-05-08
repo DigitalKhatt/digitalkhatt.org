@@ -8,6 +8,7 @@ import { MUSHAFLAYOUTTYPE, MushafLayoutType } from './services/qurantext.service
 import { CompareTajweedComponent } from './components/comparetajweed/comparetajweed.component';
 import { CompareMushafComponent } from './components/comparemushaf/comparemushaf.component';
 import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.component';
+import { PrecomputedComponent } from './components/precomputed/precomputed.component';
 
 export const routes: Routes = [
   {
@@ -86,6 +87,10 @@ export const routes: Routes = [
   {
     path: 'comparemushaf',
     component: CompareMushafComponent,
+  },
+  {
+    path: 'precomputed',
+    component: PrecomputedComponent,
   },
   {
     path: '**',
