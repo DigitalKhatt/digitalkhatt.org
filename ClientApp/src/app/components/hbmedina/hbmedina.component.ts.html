@@ -112,12 +112,12 @@
 
 
       </mat-menu>-->
-      <form *ngIf="debug" style="color:black;display: flex;flex-direction: row;align-items: center;">
+      <form  style="color:black;display: flex;flex-direction: row;align-items: center;">
 
-        <button mat-icon-button [matMenuTriggerFor]="menu" title="Format">
+        <button *ngIf="debug" mat-icon-button [matMenuTriggerFor]="menu" title="Format">
           <mat-icon>text_format</mat-icon>
         </button>
-        <mat-menu #menu="matMenu" class="panelClass">
+        <mat-menu *ngIf="debug" #menu="matMenu" class="panelClass">
           <button mat-menu-item type="button" (click)="saveTajweed()">Save Tajweed</button>
           <button mat-menu-item type="button" (click)="navigateToMushaf(3)">IndoPak15</button>
           <!--

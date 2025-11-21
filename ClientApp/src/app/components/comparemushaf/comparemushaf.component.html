@@ -10,7 +10,7 @@
     <mat-checkbox [(ngModel)]="filter.indopak" name="indopak" style="padding-right:10px;">IndoPak</mat-checkbox>
     <mat-checkbox [(ngModel)]="filter.words" name="words" style="padding-right:10px;">Words</mat-checkbox>
     <mat-checkbox [(ngModel)]="filter.lines" name="lines" style="padding-right:10px;">Lines</mat-checkbox>
-    <button type="button" mat-button (click)="compareTajweed()" *ngIf="files[0]?.fileName && files[1]?.fileName">Show differences</button>
+    <button type="button" mat-button (click)="compareMushaf()" *ngIf="files[0]?.fileName && files[1]?.fileName">Show differences</button>
   </div>  
 
   <div>

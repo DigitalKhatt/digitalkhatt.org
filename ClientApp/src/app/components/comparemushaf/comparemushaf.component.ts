@@ -167,15 +167,49 @@ export class CompareMushafComponent implements OnInit, AfterViewInit {
 
   }
 
-  compareTajweed() {
+  compareMushaf() {
 
     const t0 = performance.now();
 
     this.jsonFirst = this.files[0].json;
     this.jsonSecond = this.files[1].json;
 
-    const glyphDifferences = diff(this.jsonFirst.glyphs, this.jsonSecond.glyphs);
-    const layoutDifferences = diff(this.jsonFirst.pages, this.jsonSecond.pages);
+    const byPos = true;
+
+    // Calculate positions
+    let layoutDifferences : IChange[];
+    if(byPos){
+      const mushafPos1  = [];
+      const mushafPos2  = [];
+      for(let i = 0; i < 2; i++){
+        const mushafPos = i == 0 ? mushafPos1 : mushafPos2;
+        const pages = i == 0 ? this.jsonFirst.pages : this.jsonSecond.pages;
+        for (let pageIndex = 0; pageIndex < pages.length; pageIndex++) {
+          const page = pages[pageIndex];
+          const pagePos = [];
+          for (let lineIndex = 0; lineIndex < page.lines.length; lineIndex++) {        
+            const linelayout = page.lines[lineIndex];
+            let currentxPos = 0
+            const linePos = [];
+            for (let glyphIndex = 0; glyphIndex < linelayout.glyphs.length; glyphIndex++) {
+              const glyph = linelayout.glyphs[glyphIndex];
+              currentxPos -= glyph.x_advance || 0;
+              const xPos = currentxPos + (glyph.x_offset || 0);
+              const yPos = glyph.y_offset || 0;
+              linePos.push({xPos,yPos});
+            }
+            pagePos.push({glyphs : linePos});
+          }
+          mushafPos.push({lines : pagePos});
+        }
+      }
+      layoutDifferences = diff(mushafPos1, mushafPos2)
+    }else{
+      layoutDifferences = diff(this.jsonFirst.pages, this.jsonSecond.pages) ;
+    }
+
+    //const glyphDifferences = diff(this.jsonFirst.glyphs, this.jsonSecond.glyphs);
+    
 
     const pages = new Map();
 
