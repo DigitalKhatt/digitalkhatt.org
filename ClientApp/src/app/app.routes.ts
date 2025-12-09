@@ -9,6 +9,7 @@ import { CompareTajweedComponent } from './components/comparetajweed/comparetajw
 import { CompareMushafComponent } from './components/comparemushaf/comparemushaf.component';
 import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.component';
 import { PrecomputedComponent } from './components/precomputed/precomputed.component';
+import { OTFMushafComponent } from './components/otfmushaf/otfmushaf.component';
 
 export const routes: Routes = [
   {
@@ -73,6 +74,35 @@ export const routes: Routes = [
       {
         path: 'indopak15',
         component: HBMedinaComponent,
+        providers: [{ provide: MUSHAFLAYOUTTYPE, useValue: MushafLayoutType.IndoPak15Lines }],
+        data: {
+          type: 'indopak15'
+        },
+      }
+    ]
+  },
+  {
+    path: 'ot',
+    children: [
+      {
+        path: 'oldmedina',
+        component: OTFMushafComponent,
+        providers: [{ provide: MUSHAFLAYOUTTYPE, useValue: MushafLayoutType.OldMadinah }],
+        data: {
+          type: 'oldmedina'
+        },
+      },
+      {
+        path: 'newmedina',
+        component: OTFMushafComponent,
+        providers: [{ provide: MUSHAFLAYOUTTYPE, useValue: MushafLayoutType.NewMadinah }],
+        data: {
+          type: 'newmedina'
+        },
+      },
+      {
+        path: 'indopak15',
+        component: OTFMushafComponent,
         providers: [{ provide: MUSHAFLAYOUTTYPE, useValue: MushafLayoutType.IndoPak15Lines }],
         data: {
           type: 'indopak15'

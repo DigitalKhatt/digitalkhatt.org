@@ -235,8 +235,8 @@ export class QuranTextService {
                   currentWordIndex++;
                 }
 
-              }
-              lineInfo.sajda = { startWordIndex, endWordIndex }
+              }              
+              lineInfo.sajda = { startWordIndex, endWordIndex,text : sajdaMatch[i]}
               this._sajsdas.push({ pageIndex, lineIndex, startWordIndex, endWordIndex/*, words: sajdaMatch[i]*/ })
             }
           }

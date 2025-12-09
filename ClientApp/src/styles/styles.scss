@@ -73,3 +73,24 @@ body {
   src: url(../assets/fonts/hb/indopak.otf) format("opentype");
   font-display: block;
 }
+
+@font-face {
+  font-family: ctmadina;
+  font-style: normal;
+  src: url('../assets/fonts/coretext/DigitalKhattV2.otf') format("opentype");
+  font-display: block;
+}
+
+@font-face {
+  font-family: ctoldmadina;
+  font-style: normal;
+  src: url('../assets/fonts/coretext/DigitalKhattQuranic.otf') format("opentype");
+  font-display: block;
+}
+
+@font-face {
+  font-family: ctindopak;
+  font-style: normal;
+  src: url('../assets/fonts/coretext/DigitalKhattIndoPak.otf') format("opentype");
+  font-display: block;
+}
