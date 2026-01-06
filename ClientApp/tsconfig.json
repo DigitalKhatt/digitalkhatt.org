@@ -1,6 +1,6 @@
 {
   "compileOnSave": false,
-  "compilerOptions": {    
+  "compilerOptions": {
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "esModuleInterop": true,
@@ -11,7 +11,13 @@
     "target": "ES2022",
     "module": "es2020",
     "allowJs": true,
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "baseUrl": ".",
+    "skipLibCheck": true,
+    "paths": {
+      "@digitalkhatt/quran-engine": ["../packages/quran-engine/src/index.ts"],
+      "@digitalkhatt/quran-engine/*": ["../packages/quran-engine/src/*"]
+    }
   }
 }
 

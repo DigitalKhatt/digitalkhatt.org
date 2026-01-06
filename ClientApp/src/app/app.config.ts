@@ -21,6 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
@@ -32,4 +33,4 @@ export const appConfig: ApplicationConfig = {
 
 export const commonModules = [CommonModule, FormsModule, ReactiveFormsModule, ScrollingModule, DragDropModule, MatToolbarModule, MatButtonModule, MatSliderModule,
   MatCardModule, MatIconModule, MatSidenavModule, PortalModule, MatSlideToggleModule, MatInputModule, MatAutocompleteModule, MatDividerModule,
-  MatSelectModule, MatRadioModule, MatCheckboxModule, MatDialogModule, MatMenuModule, MatSnackBarModule, MatInputModule, MatFormFieldModule];
+  MatSelectModule, MatRadioModule, MatCheckboxModule, MatDialogModule, MatMenuModule, MatSnackBarModule, MatInputModule, MatFormFieldModule, MatButtonToggleModule];

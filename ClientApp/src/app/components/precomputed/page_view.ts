@@ -1,21 +1,23 @@
 /*
  * Copyright 2012 Mozilla Foundation (Some code is derived from https://github.com/mozilla/pdf.js/blob/master/web/pdf_page_view.js)
- * Copyright (c) 2019-2020 Amine Anane. http: //digitalkhatt/license  
+ * Copyright (c) 2019-2020 Amine Anane. http: //digitalkhatt/license
 */
 import { MushafLayoutType, QuranTextService } from "../../services/qurantext.service";
 import { TajweedService } from "../../services/tajweed.service";
-import { LayoutService } from "./layout";
+import {
+  LayoutService,
+  PAGE_WIDTH,
+  MARGIN,
+  LINE_WIDTH,
+  INTERLINE,
+  baseForce,
+  markbaseforce,
+} from '@digitalkhatt/quran-engine';
+import * as d3Force from "d3-force";
 
 import { PageFormat } from './precomputed.component';
 
 import { RenderingStates } from './rendering_states';
-
-const PAGE_WIDTH = 17000;
-const MARGIN = 300;
-const LINE_WIDTH = PAGE_WIDTH - 2 * MARGIN;
-const INTERLINE = 1800
-
-
 
 class PageView {
   renderingState: RenderingStates;
@@ -31,11 +33,11 @@ class PageView {
   private pausePromise: Promise<Boolean>;
   private quranText: string[][];
   private ayaSvgGroup: SVGGElement
-  private ayaLength: number;  
+  private ayaLength: number;
   constructor(public div, private pageIndex, lineJustify, viewport,
     private tajweedService: TajweedService,
     private quranTextService: QuranTextService,
-    private layout : LayoutService) {
+    private layout: LayoutService) {
     this.renderingState = RenderingStates.INITIAL;
     this.lineJustify = lineJustify
     this.id = pageIndex + 1;
@@ -105,7 +107,13 @@ class PageView {
     this.lineJustify.style.width = pageElem.style.width;
     this.lineJustify.style.fontSize = pageElem.style.fontSize
 
-    const lineCount = this.layout.pages[this.pageIndex].lines.length;
+    const pageLayout = this.layout.getPageLayout(this.pageIndex);
+    if (!pageLayout) {
+      this.renderingState = RenderingStates.FINISHED;
+      return;
+    }
+
+    const lineCount = pageLayout.lines.length;
 
     let temp = document.createElement('div');
 
@@ -127,24 +135,13 @@ class PageView {
 
       lineElem.style.marginLeft = margin + "px";
       lineElem.style.marginRight = lineElem.style.marginLeft
-      lineElem.style.height = INTERLINE * scale + "px";      
+      lineElem.style.height = INTERLINE * scale + "px";
       this.lineJustify.appendChild(lineElem);
 
 
-      this.layout.generateLine(lineElem, this.pageIndex, lineIndex, glyphScale, defaultMargin);
+      this.generateLine(lineElem, this.pageIndex, lineIndex, glyphScale, defaultMargin);
 
       temp.appendChild(lineElem);
-      /*
-      if (performance.now() - this.lastDrawTime > 16) {
-        await new Promise(resolve => {
-          requestAnimationFrame(resolve);
-        })
-        if (this.isPaused()) {
-          const cont = await this.pausePromise
-          if (!cont) return;
-        } else if (this.renderingState !== RenderingStates.RUNNING) return;
-        this.lastDrawTime = performance.now()
-      }*/
     }
 
     while (temp.firstChild) {
@@ -161,8 +158,93 @@ class PageView {
     let endDraw = performance.now();
     console.info(`draw page ${this.id} take ${endDraw - startDraw} ms`)
 
-    this.layout.simulatePage(this.pageIndex);
+    this.simulatePage(this.pageIndex);
 
+  }
+
+  /**
+   * Generate SVG line content using quran-engine LayoutService
+   */
+  private generateLine(lineElem: HTMLElement, pageIndex: number, lineIndex: number, glyphScale: number, margin: number) {
+    const linelayout = this.layout.getLineLayout(pageIndex, lineIndex);
+    if (!linelayout) return;
+
+    const glyphs = this.layout.glyphs;
+    const pageNodes = this.layout.getSimulationNodes(pageIndex);
+
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute('shape-rendering', 'geometricPrecision');
+    svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
+
+    const lineGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    svg.appendChild(lineGroup);
+
+    let currentBase: any;
+
+    let currentxPos = -linelayout.x;
+    for (let glyphIndex = 0; glyphIndex < linelayout.glyphs.length; glyphIndex++) {
+      const glyph = linelayout.glyphs[glyphIndex];
+      currentxPos -= glyph.x_advance || 0;
+      const pathString = this.layout.getGlyphPath(glyph.codepoint, glyph.lefttatweel || 0, glyph.righttatweel || 0);
+      let newpath = document.createElementNS('http://www.w3.org/2000/svg', "path");
+      newpath.setAttribute("d", pathString);
+
+      const posX = currentxPos + (glyph.x_offset || 0);
+      const posY = glyph.y_offset || 0;
+
+      const glyphInfo = glyphs[glyph.codepoint];
+      if (glyphInfo && glyphInfo.classes?.marks) {
+        const markNode = { isMark: true, x: 0, y: 0, posX, posY, path: newpath, baseNode: currentBase, x_offset: glyph.x_offset || 0, y_offset: glyph.y_offset || 0 };
+        pageNodes.push(markNode as any);
+      } else {
+        const baseNode = {
+          x: 0, y: 0, posX, posY, path: newpath
+        }
+        pageNodes.push(baseNode as any);
+        currentBase = baseNode;
+      }
+
+      lineGroup.appendChild(newpath)
+    }
+
+    const xScale = linelayout.xscale || 1;
+    const yScale = 1;
+
+    lineGroup.setAttribute("transform", "scale(" + glyphScale * xScale + "," + -glyphScale * yScale + ")");
+    const lineWidth = -glyphScale * xScale * currentxPos
+    const x = lineWidth * 1.2
+    let width = x + margin;
+    const height = lineElem.clientHeight * 2
+
+    svg.setAttribute('viewBox', `${-x} ${-height / 2} ${width} ${height}`)
+    svg.setAttribute('width', width.toString());
+    svg.setAttribute('height', height.toString());
+    svg.style.position = "relative"
+    svg.style.right = -margin + "px";
+    svg.style.top = -lineElem.clientHeight / 2 + "px";
+
+    lineElem.appendChild(svg);
+  }
+
+  /**
+   * Run D3 force simulation for mark positioning
+   */
+  private simulatePage(pageIndex: number) {
+    const pageNodes = this.layout.getSimulationNodes(pageIndex);
+
+    const simulation = d3Force.forceSimulation(pageNodes as any)
+
+    simulation.force("baseForce", baseForce());
+    simulation.force("marktobase", markbaseforce());
+
+    simulation.on("tick", () => {
+      for (let i = 0; i < pageNodes.length; i++) {
+        const node = pageNodes[i] as any;
+        if (!isNaN(node.x) && !isNaN(node.y) && node.path) {
+          node.path.setAttribute("transform", "translate(" + node.x + " " + node.y + ")");
+        }
+      }
+    });
   }
 
   reset(keepZoomLayer = false) {

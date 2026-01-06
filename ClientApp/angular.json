@@ -14,6 +14,7 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "progress": true,
+            "preserveSymlinks": true,
             "outputPath": {
               "base": "dist"
             },
@@ -22,6 +23,7 @@
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
+            "externalDependencies": ["fs", "path", "os"],
             "assets": [
               "src/assets",
               "src/manifest.webmanifest",

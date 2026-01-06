@@ -24,104 +24,41 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { auditTime, startWith } from 'rxjs/operators';
 import { SidebarContentsService } from '../../services/navigation/sidebarcontents';
-//import { ScrollDispatcher, CdkScrollable } from '@angular/cdk/scrolling';
 
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { PageView } from './page_view';
-
-//import * as Hammer from 'hammerjs';
 
 import { CdkDrag, DragRef, Point } from '@angular/cdk/drag-drop';
 import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AboutComponent } from '../about/about.component';
-import { RenderingStates } from './rendering_states';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { loadAndCacheFont, loadHarfbuzz, harfbuzzFonts, HarfBuzzFont } from "./harfbuzz"
+import {
+  loadAndCacheFont,
+  loadHarfbuzz,
+  harfbuzzFonts,
+  RenderingStates,
+  PageViewBuffer,
+  DEFAULT_CACHE_SIZE,
+  SVGPageRenderer,
+  PageViewer,
+  JustStyleEnum,
+  MushafLayoutTypeEnum,
+  type PageFormat,
+  type PageViewerRenderOptions,
+  type VerseNumberFormat,
+  type SVGWordClickInfo,
+} from "@digitalkhatt/quran-engine"
 import { MushafLayoutType, NewMadinahQuranTextService, OldMadinahQuranTextService, QuranTextIndopak15Service, QuranTextService, MUSHAFLAYOUTTYPE } from '../../services/qurantext.service';
+import { VerseMappingService, VerseRef, WordClickInfo, VerseClickInfo, HighlightGroup, isAyahMarker } from '../../services/verse-mapping.service';
 import { TajweedService } from '../../services/tajweed.service';
 import { saveAs } from 'file-saver-es';
 import { commonModules } from '../../app.config';
 
 
-const CSS_UNITS = 96.0 / 72.0;
 const MIN_SCALE = 0.25;
 const MAX_SCALE = 10.0;
 const DEFAULT_SCALE_DELTA = 1.1;
-const MAX_AUTO_SCALE = 1.25;
-
-export interface PageFormat {
-  width: number,
-  height: number,
-  fontSize: number
-}
-
-function reviver(key: any, value: any) {
-  if (typeof value === 'object' && value !== null) {
-    if (value.dataType === 'Map') {
-      return new Map(value.value);
-    }
-  }
-  return value;
-}
-
-class PDFPageViewBuffer {
-
-  private data = [];
-  constructor(private size) {
-  }
-
-  push(view) {
-    let i = this.data.indexOf(view);
-    if (i >= 0) {
-      this.data.splice(i, 1);
-    }
-    this.data.push(view);
-    if (this.data.length > this.size) {
-      this.data.shift().destroy();
-    }
-  };
-  resize(newSize, pagesToKeep) {
-    this.size = newSize;
-    if (pagesToKeep) {
-      const pageIdsToKeep = new Set();
-      for (let i = 0, iMax = pagesToKeep.length; i < iMax; ++i) {
-        pageIdsToKeep.add(pagesToKeep[i].id);
-      }
-      this.moveToEndOfArray(this.data, function (page) {
-        return pageIdsToKeep.has(page.id);
-      });
-    }
-    while (this.data.length > this.size) {
-      this.data.shift().destroy();
-    }
-  };
-
-  reset() {
-    while (this.data.length > 0) {
-      this.data.shift().destroy();
-    }
-  }
-
-  private moveToEndOfArray(arr, condition) {
-    const moved = [], len = arr.length;
-    let write = 0;
-    for (let read = 0; read < len; ++read) {
-      if (condition(arr[read])) {
-        moved.push(arr[read]);
-      } else {
-        arr[write] = arr[read];
-        ++write;
-      }
-    }
-    for (let read = 0; write < len; ++read, ++write) {
-      arr[write] = moved[read];
-    }
-  }
-}
-
-const DEFAULT_CACHE_SIZE = 10;
 
 @Component({
   selector: 'app-medina-component',
@@ -144,12 +81,14 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   fontsize;
-  highestPriorityPage: PageView;
+  highestPriorityPage: PageViewer | null = null;
 
   hasFloatingToc: boolean = false;
   isOpened: boolean = false;
   private quranTextService: QuranTextService
 
+  // SVG page renderer from quran-engine
+  private svgPageRenderer: SVGPageRenderer | null = null;
 
   scale;
   viewport: PageFormat;
@@ -159,8 +98,8 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
   pages = [];
   scrollingSubscription: Subscription;
   itemSize;
-  buffer: PDFPageViewBuffer = new PDFPageViewBuffer(DEFAULT_CACHE_SIZE);
-  views: PageView[] = [];
+  buffer: PageViewBuffer<PageViewer> = new PageViewBuffer<PageViewer>(DEFAULT_CACHE_SIZE);
+  views: PageViewer[] = [];
   outline: any = [];
 
   static DEFAULT_SCALE = 15 / 1000
@@ -208,6 +147,8 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
   isJustifiedCtrl: UntypedFormControl;
   tajweedColorCtrl: UntypedFormControl;
   fontScaleCtrl: UntypedFormControl;
+  mushafStyleCtrl: UntypedFormControl;
+  verseNumberFormatCtrl: UntypedFormControl;
   fontScale = 1;
   visibleViews;
   loaded: boolean = false;
@@ -219,6 +160,10 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
   hideElement: boolean = false;
 
+  // Word click and highlight support
+  enableWordClick: boolean = true;
+  highlightGroups: HighlightGroup[] = [];
+
   constructor(@Inject(MUSHAFLAYOUTTYPE) mushafLayoutType: MushafLayoutType,
     private sidebarContentsService: SidebarContentsService,
     public scrollDispatcher: ScrollDispatcher, private ngZone: NgZone,
@@ -229,6 +174,7 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
     private tajweedService: TajweedService,
     private _snackBar: MatSnackBar,
     private route: ActivatedRoute,
+    private verseMappingService: VerseMappingService,
   ) {
 
     this.debug = this.route.snapshot.queryParams.debug !== undefined;
@@ -280,7 +226,28 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isJustifiedCtrl = new UntypedFormControl(true);
     this.zoomCtrl = new UntypedFormControl('page-fit');
     this.tajweedColorCtrl = new UntypedFormControl(true);
-    this.fontScaleCtrl = new UntypedFormControl(this.fontScale)
+    this.fontScaleCtrl = new UntypedFormControl(this.fontScale);
+
+    // Initialize verse number format from localStorage, default to 'arabic'
+    const savedVerseNumberFormat = localStorage.getItem('verseNumberFormat') || 'arabic';
+    this.verseNumberFormatCtrl = new UntypedFormControl(savedVerseNumberFormat);
+
+    // Initialize mushaf style based on current layout type
+    let currentStyle = 'newmedina';
+    switch (mushafLayoutType) {
+      case MushafLayoutType.OldMadinah:
+        currentStyle = 'oldmedina';
+        break;
+      case MushafLayoutType.IndoPak15Lines:
+        currentStyle = 'indopak15';
+        break;
+    }
+    this.mushafStyleCtrl = new UntypedFormControl(currentStyle);
+
+    // Subscribe to style changes for navigation
+    this.mushafStyleCtrl.valueChanges.subscribe(value => {
+      this.navigateToMushafStyle(value);
+    });
 
     this.currentPageNumber = this.form.controls['currentPageNumber'].value;
 
@@ -365,11 +332,29 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
           this.setViewport(this.getScale(this.zoomCtrl.value), false);
 
+          // Create SVGPageRenderer from quran-engine
+          const font = harfbuzzFonts.get("oldmadina");
+          // Map Angular MushafLayoutType to quran-engine MushafLayoutTypeEnum
+          const engineMushafType = this.mushafType === MushafLayoutType.OldMadinah ? MushafLayoutTypeEnum.OldMadinah
+            : this.mushafType === MushafLayoutType.IndoPak15Lines ? MushafLayoutTypeEnum.IndoPak15Lines
+            : MushafLayoutTypeEnum.NewMadinah;
+
+          this.svgPageRenderer = new SVGPageRenderer({
+            font,
+            textService: this.quranTextService,
+            mushafType: engineMushafType,
+          });
+
+          // Create PageViewer instances for each page
           this.pageElements.forEach((page, index) => {
-            //this.views[index] = new PageView(page.nativeElement, index, this.quranService, this.viewport, this.renderingQueue);
-            this.views[index] = new PageView(page.nativeElement, index,
-              this.calculatewidthElem.nativeElement, this.lineJustify.nativeElement,
-              this.viewport, this.tajweedService, this.quranTextService);
+            this.views[index] = new PageViewer({
+              pageIndex: index,
+              container: page.nativeElement,
+              viewport: this.viewport,
+              renderer: this.svgPageRenderer!,
+              rendererType: 'svg',
+              lineJustifyElement: this.lineJustify.nativeElement,
+            });
           });
 
           this.scrollState = {
@@ -412,6 +397,14 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
           this.tajweedColorCtrl.valueChanges.subscribe(value => {
 
+            this.ngZone.runOutsideAngular(() => {
+              this.buffer.reset();
+              this.update();
+            });
+          });
+
+          this.verseNumberFormatCtrl.valueChanges.subscribe(value => {
+            localStorage.setItem('verseNumberFormat', value);
             this.ngZone.runOutsideAngular(() => {
               this.buffer.reset();
               this.update();
@@ -628,7 +621,7 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
     let pageIndex = (this.visibleViews.first.id - 1) || 0;
 
-    var element = this.views[pageIndex].div;
+    var element = this.views[pageIndex].container;
 
     var displY = event.clientY - 48;
     var displX = event.clientX;
@@ -703,7 +696,7 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
     let pageIndex = (this.visibleViews.first.id - 1) || 0;
 
-    var element = this.views[pageIndex].div;
+    var element = this.views[pageIndex].container;
 
     const top = this.firstMyCustomDirective.measureScrollOffset('top'), bottom = top + this.viewAreaElement.clientHeight;
     const left = this.firstMyCustomDirective.measureScrollOffset('start'), right = left + this.viewAreaElement.clientWidth;
@@ -795,15 +788,14 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
     if (pageView) {
       this.buffer.push(pageView);
       this.renderView(pageView,
-        this.canvasWidth, this.canvasHeight,
-        this.texFormat,
-        this.tajweedColorCtrl.value);
+        this.tajweedColorCtrl.value,
+        this.verseNumberFormatCtrl.value as VerseNumberFormat);
       return true;
     }
     return false;
   }
 
-  renderView(view: PageView, canvasWidth, canvasHeight, texFormat, tajweedColor) {
+  renderView(view: PageViewer, tajweedColor: boolean, verseNumberFormat: VerseNumberFormat) {
     const oldHigh = this.highestPriorityPage;
     switch (view.renderingState) {
       case RenderingStates.FINISHED:
@@ -817,12 +809,33 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       case RenderingStates.INITIAL:
         this.highestPriorityPage = view;
-        view.draw(canvasWidth, canvasHeight, texFormat, tajweedColor)
-          .catch(error => {
+        // Get the aya SVG group element for verse number frames
+        const svgAyaElem = document.getElementById("ayaGlyph") as unknown as SVGSVGElement | null;
+        const ayaSvgGroup = svgAyaElem?.firstElementChild as SVGGElement | undefined;
+
+        // Create render options for PageViewer
+        console.log('[HBMedinaComponent] Creating renderOptions, this.enableWordClick =', this.enableWordClick);
+        const enableWordClickValue = this.enableWordClick;
+        const renderOptions: PageViewerRenderOptions = {
+          tajweedEnabled: tajweedColor,
+          verseNumberFormat,
+          justStyle: JustStyleEnum.XScale,
+          ayaSvgGroup,
+          applyTajweed: (pageIndex: number) => this.tajweedService.applyTajweedByPage(this.quranTextService, pageIndex),
+          enableWordClick: enableWordClickValue,
+          onWordClick: enableWordClickValue ? (info: SVGWordClickInfo) => {
+            console.log('SVGPageRenderer onWordClick fired:', info);
+            this.handleWordClick(info);
+          } : undefined,
+        };
+        console.log('[HBMedinaComponent] renderOptions.enableWordClick =', renderOptions.enableWordClick);
+
+        view.draw(renderOptions)
+          .catch((error: Error) => {
             console.log(error)
           })
           .finally(() => {
-            // console.log("Finish rendering view " + view.id + " state=" + view.renderingState)          
+            // console.log("Finish rendering view " + view.id + " state=" + view.renderingState)
             this.forceRendering(null)
           });
         break;
@@ -851,7 +864,7 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
 
     let visible = [];
     for (let currIndex = firstVisibleIndex; currIndex <= lastVisibleIndex; currIndex++) {
-      const view = this.views[currIndex], element = view.div;
+      const view = this.views[currIndex], element = view.container;
       const currentWidth = element.offsetLeft + element.clientLeft;
       const currentHeight = element.offsetTop + element.clientTop;
       const viewWidth = element.clientWidth, viewHeight = element.clientHeight;
@@ -1170,7 +1183,180 @@ export class HBMedinaComponent implements OnInit, AfterViewInit, OnDestroy {
     if (layoutIndex === 3) {
       this.router.navigate(['/hb/indopak15'])
     }
+  }
 
+  navigateToMushafStyle(style: string) {
+    const routes: { [key: string]: string } = {
+      'newmedina': '/hb/newmedina',
+      'oldmedina': '/hb/oldmedina',
+      'indopak15': '/hb/indopak15'
+    };
+
+    const route = routes[style];
+    if (route) {
+      // Force full page reload to reinitialize fonts and text services
+      window.location.href = route;
+    }
+  }
+
+  // ============================================
+  // Word Click and Highlight Methods
+  // ============================================
+
+  /**
+   * Handle word click from SVGPageRenderer
+   */
+  handleWordClick(info: SVGWordClickInfo): void {
+    // Get verse reference for clicked word
+    const verseRef = this.verseMappingService.getVerseForWord(
+      this.quranTextService,
+      info.pageIndex,
+      info.lineIndex,
+      info.wordIndex
+    );
+
+    // Build word click info
+    const wordClickInfo: WordClickInfo = {
+      pageNumber: info.pageIndex + 1,
+      lineIndex: info.lineIndex,
+      wordIndex: info.wordIndex,
+      text: info.text,
+      surah: verseRef?.surah,
+      ayah: verseRef?.ayah,
+    };
+
+    // Run in Angular zone for change detection
+    this.ngZone.run(() => {
+      console.log('Word clicked:', wordClickInfo);
+
+      // Check if clicked word is an ayah marker
+      if (isAyahMarker(info.text)) {
+        // Highlight entire verse for ayah marker clicks
+        if (verseRef) {
+          this.highlightVerse(verseRef.surah, verseRef.ayah);
+        }
+      } else {
+        // Highlight just this word for regular word clicks
+        this.highlightWord(info.pageIndex, info.lineIndex, info.wordIndex);
+      }
+
+      // Emit word click event
+      this.onWordClick(wordClickInfo);
+    });
+  }
+
+  /**
+   * Called when a word is clicked
+   * Override this method or use @Output to handle word clicks
+   */
+  onWordClick(info: WordClickInfo): void {
+    // Default implementation - can be overridden or connected to @Output
+    console.log(`Word clicked: Page ${info.pageNumber}, Line ${info.lineIndex}, Word ${info.wordIndex}`);
+    if (info.surah && info.ayah) {
+      console.log(`Verse: Surah ${info.surah}, Ayah ${info.ayah}`);
+    }
+  }
+
+  /**
+   * Called when a verse is clicked
+   * Override this method or use @Output to handle verse clicks
+   */
+  onVerseClick(info: VerseClickInfo): void {
+    // Default implementation - can be overridden or connected to @Output
+    console.log(`Verse clicked: Surah ${info.surah}, Ayah ${info.ayah}`);
+
+    // Example: Highlight the clicked verse
+    this.highlightVerse(info.surah, info.ayah);
+  }
+
+  /**
+   * Highlight a specific verse
+   */
+  highlightVerse(surah: number, ayah: number, color: string = 'rgba(255, 255, 0, 0.3)'): void {
+    // Get all word positions for this verse
+    const words = this.verseMappingService.getWordsForVerse(
+      this.quranTextService,
+      surah,
+      ayah
+    );
+
+    // Update highlight groups
+    this.highlightGroups = [{
+      verses: [{ surah, ayah }],
+      words: words,
+      color,
+    }];
+
+    // Apply highlights to visible pages
+    this.applyHighlightsToVisiblePages();
+  }
+
+  /**
+   * Highlight a single word
+   */
+  highlightWord(pageIndex: number, lineIndex: number, wordIndex: number, color: string = 'rgba(255, 255, 0, 0.3)'): void {
+    // Update highlight groups with just this word
+    this.highlightGroups = [{
+      words: [{ page: pageIndex, line: lineIndex, word: wordIndex }],
+      color,
+    }];
+
+    // Apply highlights to visible pages
+    this.applyHighlightsToVisiblePages();
+  }
+
+  /**
+   * Highlight multiple verses
+   */
+  highlightVerses(verses: Array<{ surah: number; ayah: number }>, color: string = 'rgba(255, 255, 0, 0.3)'): void {
+    // Get all word positions for these verses
+    const words = this.verseMappingService.getWordsForVerses(
+      this.quranTextService,
+      verses
+    );
+
+    // Update highlight groups
+    this.highlightGroups = [{
+      verses,
+      words,
+      color,
+    }];
+
+    // Apply highlights to visible pages
+    this.applyHighlightsToVisiblePages();
+  }
+
+  /**
+   * Clear all highlights
+   */
+  clearHighlights(): void {
+    this.highlightGroups = [];
+    this.applyHighlightsToVisiblePages();
+  }
+
+  /**
+   * Apply highlights to all visible pages
+   */
+  private applyHighlightsToVisiblePages(): void {
+    if (!this.svgPageRenderer) return;
+
+    // Get visible pages
+    const visible = this._getVisiblePages();
+    if (!visible.views) return;
+
+    for (const viewInfo of visible.views) {
+      const view = viewInfo.view as PageViewer;
+      const wordElements = view.getWordElements();
+      if (wordElements) {
+        // Convert highlight groups to page-specific format
+        const pageHighlights = this.highlightGroups.map(group => ({
+          words: group.words?.filter(w => w.page === view.pageIndex) || [],
+          color: group.color,
+        }));
+
+        this.svgPageRenderer.applyHighlights(wordElements, pageHighlights, view.pageIndex);
+      }
+    }
   }
 }
 

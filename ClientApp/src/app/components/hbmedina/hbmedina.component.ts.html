@@ -97,22 +97,56 @@
           </mat-option>
         </mat-select>
 
-        <mat-slider class="hiddenSmallView fontsize" min="0.5" max="1.2" step="0.01" 
+        <mat-slider class="hiddenSmallView fontsize" min="0.5" max="1.2" step="0.01"
                     thumbLabel [displayWith]="formatLabel" #ngSlider>
           <input matSliderThumb #ngSliderThumb="matSliderThumb" [formControl]="fontScaleCtrl" name="fontScale" (dragEnd)="fontSizeChanged()"/>
         </mat-slider>
+
+        <mat-select disableOptionCentering panelClass="mypanelclass" [formControl]="mushafStyleCtrl" style="font-size: small; width: 140px;" class="hiddenSmallView">
+          <mat-option value="newmedina" style="font-size: small;min-height:30px"><span>New Madinah</span></mat-option>
+          <mat-option value="oldmedina" style="font-size: small;min-height:30px"><span>Old Madinah</span></mat-option>
+          <mat-option value="indopak15" style="font-size: small;min-height:30px"><span>IndoPak 15-Line</span></mat-option>
+        </mat-select>
+
+        <mat-slide-toggle [formControl]="tajweedColorCtrl" style="margin-left: 20px;" class="hiddenSmallView">Tajweed</mat-slide-toggle>
+
+        <mat-button-toggle-group [formControl]="verseNumberFormatCtrl" style="margin-left: 20px;" class="hiddenSmallView verse-number-toggle">
+          <mat-button-toggle value="arabic" title="Arabic numerals">١٢٣</mat-button-toggle>
+          <mat-button-toggle value="english" title="English numerals">123</mat-button-toggle>
+        </mat-button-toggle-group>
       </form>
     </div>
     <div class="rightnav">
-      <!--
-      <button mat-icon-button [matMenuTriggerFor]="menu1">
-        <mat-icon>tablet</mat-icon>
-      </button>
-      <mat-menu #menu1="matMenu">
-
-
-      </mat-menu>-->
       <form  style="color:black;display: flex;flex-direction: row;align-items: center;">
+
+        <!-- Mobile style selector menu -->
+        <button mat-icon-button [matMenuTriggerFor]="styleMenu" title="Mushaf Style" class="showSmallView">
+          <mat-icon>auto_stories</mat-icon>
+        </button>
+        <mat-menu #styleMenu="matMenu">
+          <button mat-menu-item type="button" (click)="navigateToMushafStyle('newmedina')" [class.selected-style]="mushafStyleCtrl.value === 'newmedina'">
+            <mat-icon *ngIf="mushafStyleCtrl.value === 'newmedina'">check</mat-icon>
+            <span>New Madinah</span>
+          </button>
+          <button mat-menu-item type="button" (click)="navigateToMushafStyle('oldmedina')" [class.selected-style]="mushafStyleCtrl.value === 'oldmedina'">
+            <mat-icon *ngIf="mushafStyleCtrl.value === 'oldmedina'">check</mat-icon>
+            <span>Old Madinah</span>
+          </button>
+          <button mat-menu-item type="button" (click)="navigateToMushafStyle('indopak15')" [class.selected-style]="mushafStyleCtrl.value === 'indopak15'">
+            <mat-icon *ngIf="mushafStyleCtrl.value === 'indopak15'">check</mat-icon>
+            <span>IndoPak 15-Line</span>
+          </button>
+        </mat-menu>
+
+        <!-- Mobile tajweed toggle -->
+        <button mat-icon-button (click)="tajweedColorCtrl.setValue(!tajweedColorCtrl.value)" title="Toggle Tajweed" class="showSmallView">
+          <mat-icon [style.color]="tajweedColorCtrl.value ? '#00A650' : ''">palette</mat-icon>
+        </button>
+
+        <!-- Mobile verse number format toggle -->
+        <button mat-icon-button (click)="verseNumberFormatCtrl.setValue(verseNumberFormatCtrl.value === 'arabic' ? 'english' : 'arabic')" title="Toggle verse number format" class="showSmallView">
+          <span style="font-weight: bold; font-size: 14px;">{{verseNumberFormatCtrl.value === 'arabic' ? '١٢٣' : '123'}}</span>
+        </button>
 
         <button *ngIf="debug" mat-icon-button [matMenuTriggerFor]="menu" title="Format">
           <mat-icon>text_format</mat-icon>
@@ -120,22 +154,6 @@
         <mat-menu *ngIf="debug" #menu="matMenu" class="panelClass">
           <button mat-menu-item type="button" (click)="saveTajweed()">Save Tajweed</button>
           <button mat-menu-item type="button" (click)="navigateToMushaf(3)">IndoPak15</button>
-          <!--
-          <div mat-menu-item>
-            <mat-icon>format_align_justify</mat-icon>
-            <mat-slide-toggle [formControl]="isJustifiedCtrl">Justification?</mat-slide-toggle>
-          </div>
-          <div mat-menu-item>
-            <mat-icon>invert_colors</mat-icon>
-            <mat-slide-toggle [formControl]="tajweedColorCtrl">Tajweed Color</mat-slide-toggle>
-          </div>
-          <div mat-menu-item style="overflow:visible">
-            <mat-icon>format_size</mat-icon>
-            <mat-slider name="fontScale" min="0.5" max="1" step="0.01" value="1" [(ngModel)]="fontScale"
-                        thumbLabel [displayWith]="formatLabel"></mat-slider>
-
-          </div>
-          -->
         </mat-menu>
         <button mat-icon-button [routerLink]='["/about"]' title="About">
           <mat-icon>info</mat-icon>

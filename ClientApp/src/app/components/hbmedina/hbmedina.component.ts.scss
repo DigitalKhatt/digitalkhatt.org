@@ -8,6 +8,17 @@
   }
 }
 
+// Show only on small screens (opposite of hiddenSmallView)
+::ng-deep .showSmallView {
+  display: none !important;
+}
+
+@media all and (max-width: 535px) {
+  ::ng-deep .showSmallView {
+    display: inline-flex !important;
+  }
+}
+
 @media all and (max-width: 770px) {
   ::ng-deep .hiddenMediumView {
     display: none !important;
@@ -252,9 +263,6 @@ html[dir='rtl'] #viewerContainer {
     }
   }
 
-  .line:first-child {
-    padding-top: 0.4em;
-  }
 
   direction: rtl;
 }
@@ -382,4 +390,35 @@ html[dir='rtl'] #viewerContainer {
 
 .sidenav {
   width: 180px;
+}
+
+// Word click and highlight styles for SVG renderer
+:host ::ng-deep .word-click-area {
+  cursor: pointer;
+  transition: fill-opacity 0.15s ease;
+  fill: transparent;
+
+  &:hover {
+    fill: rgba(0, 0, 0, 0.05);
+    fill-opacity: 1;
+  }
+
+  &.highlighted {
+    transition: fill-opacity 0.2s ease;
+  }
+}
+
+// Verse number format toggle styling
+::ng-deep .verse-number-toggle {
+  height: 32px;
+
+  .mat-button-toggle {
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .mat-button-toggle-label-content {
+    line-height: 32px !important;
+    padding: 0 8px !important;
+  }
 }

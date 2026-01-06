@@ -1,0 +1,97 @@
+{
+  "name": "@digitalkhatt/quran-engine",
+  "version": "0.1.0",
+  "description": "Framework-agnostic Quran rendering engine with HarfBuzz and VisualMetaFont support",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./core": {
+      "import": {
+        "types": "./dist/core/index.d.ts",
+        "default": "./dist/core/index.js"
+      },
+      "require": {
+        "types": "./dist/core/index.d.cts",
+        "default": "./dist/core/index.cjs"
+      }
+    },
+    "./react": {
+      "import": {
+        "types": "./dist/wrappers/react/index.d.ts",
+        "default": "./dist/wrappers/react/index.js"
+      }
+    },
+    "./angular": {
+      "import": {
+        "types": "./dist/wrappers/angular/index.d.ts",
+        "default": "./dist/wrappers/angular/index.js"
+      }
+    },
+    "./styles/svg-renderer.css": "./src/styles/svg-renderer.css"
+  },
+  "files": [
+    "dist",
+    "src/styles",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "test": "vitest",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@angular/core": ">=17.0.0",
+    "react": ">=18.0.0",
+    "rxjs": ">=6.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "@angular/core": {
+      "optional": true
+    },
+    "rxjs": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "d3-force": "^3.0.0",
+    "harfbuzzjs": "^0.4.15"
+  },
+  "devDependencies": {
+    "@types/d3-force": "^3.0.10",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "typescript": "~5.7.0",
+    "vite": "^6.0.0",
+    "vite-plugin-dts": "^4.0.0"
+  },
+  "keywords": [
+    "quran",
+    "arabic",
+    "typography",
+    "harfbuzz",
+    "opentype",
+    "rendering"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/user/digitalkhatt.org"
+  }
+}

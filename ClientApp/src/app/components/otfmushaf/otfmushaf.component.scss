@@ -403,3 +403,20 @@ html[dir='rtl'] #viewerContainer {
 .sidenav {
   width: 180px;
 }
+
+// Word click and highlight styles
+:host ::ng-deep .quran-word {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  border-radius: 2px;
+  padding: 0 1px;
+  margin: 0 -1px;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  &.highlighted {
+    transition: background-color 0.2s ease;
+  }
+}

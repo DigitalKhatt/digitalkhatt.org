@@ -147,6 +147,9 @@ publish/
 **/packages/*
 # except build/, which is used as an MSBuild target.
 !**/packages/build/
+# Track our monorepo packages (quran-engine, etc.)
+!/packages/
+!/packages/**
 # Uncomment if necessary however generally it will be regenerated when needed
 #!**/packages/repositories.config
 

@@ -42,7 +42,7 @@ import { MushafLayoutType, NewMadinahQuranTextService, OldMadinahQuranTextServic
 import { TajweedService } from '../../services/tajweed.service';
 import { saveAs } from 'file-saver-es';
 import { commonModules } from '../../app.config';
-import { LayoutService } from './layout';
+import { LayoutService, LINE_WIDTH } from '@digitalkhatt/quran-engine';
 
 
 
