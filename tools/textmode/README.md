@@ -85,9 +85,12 @@ Table built over font scales 0.5–1.2 (step 0.05), verified at 1, 0.53, 0.73,
 | layout | lines × scales | stretched words checked | glyph-identical | unexpressible (shown unstretched) | lines filling their width |
 |---|---|---|---|---|---|
 | newmadina | 52,926 | 157,663 | **157,663 (100%)** | 2 of 502,038 words | 100% |
+| oldmadina | 52,926 | 176,754 | **176,754 (100%)** | 2 of 502,044 words | 100% |
+| indopak | 53,436 | 151,074 | **151,074 (100%)** | 0 of 502,044 words | 100% |
 
-Chromium (`browser-check`, pages 3, 50, 300 at scales 1, 1.1, 0.8): every word
-within **0.015px** of HarfBuzz at 40px.
+Chromium (`browser-check`): every word within **0.016px** of HarfBuzz at 40px
+(newmadina pages 3, 50, 300 at scales 1, 1.1, 0.8; oldmadina and indopak pages
+3 and 300).
 
 ![page 3 in text mode, Chromium](docs/newmadina-p3-chromium.png)
 
