@@ -34,6 +34,33 @@ positions exactly the glyphs `justifyLine()` produces. A whole word is one span:
 <span style='font-feature-settings: "jp04" 3, "jp06" 1'>كَفَرُوا۟</span>
 ```
 
+## Spacing: the same ink gaps as the SVG renderer
+
+The SVG renderer shapes a whole line in one HarfBuzz buffer, so the font's
+contextual positioning also works *across* a space. For example, a word-initial
+kaf after a pause mark gets an extra 100 units, so its top stroke clears the
+mark. A span is shaped on its own and loses that. In New Madina, 88 word pairs
+at font scale 1 overlapped in text mode that are clear in the SVG renderer.
+
+`textModeLine()` therefore shapes the whole line too, as `renderLine()` does,
+and measures the ink distance between each pair of words: band by band, with
+outlines from `glyphToSvgPath` (`src/ink.ts`). It then corrects each space so
+the distance in the DOM is the same. The line keeps its width: any difference
+is spread evenly over its spaces. This is on by default; pass
+`{ contextualSpacing: false }` to turn it off.
+
+![contextual spacing](docs/contextual-spacing.png)
+
+## Overfull lines
+
+When a line is wider than its width (`xScale < 1`), the SVG renderer scales the
+whole line, and `textModeLine()` does the same by default. With
+`{ overfull: "words" }`, the words are narrowed instead (`transform: scaleX`
+on each word span, down to `minWordScale`, default 0.8). Aya numbers and spaces
+keep their size, as on dense lines of the printed mushaf. Only what is left
+goes to the line. Spaces then account for the narrowed words' boxes, and may
+be negative: the boxes overlap but the ink never does.
+
 ## Usage
 
 ```sh
@@ -52,9 +79,11 @@ python3 patch_font.py ../../ClientApp/src/assets/fonts/hb/madina.otf \
 # 3. verify (see below)
 node dist/verify.mjs --layout newmadina
 node dist/browser-check.mjs --layout newmadina --page 3   # needs `npx playwright install chromium`
+node dist/inkcheck.mjs --layout newmadina                   # word spacing vs the SVG renderer
+node dist/check-breaks.mjs --layout newmadina [--reference path/to/quran-qcf4/package]
 ```
 
-`./run_all.sh` does steps 1–3 for `newmadina`, `oldmadina` and `indopak`.
+`./run_all.sh` runs all of these for `newmadina`, `oldmadina` and `indopak`.
 
 In the app, `src/textmode.ts` turns one `justifyLine()` result into per-word
 CSS (`textModeLine()`) and HTML (`textModeLineHtml()`). It only needs
@@ -74,8 +103,16 @@ and, for every stretched word, shapes it twice:
 It passes only if the glyph ids, advances and offsets are **identical** for
 every glyph, and every line's words + spaces add up to the line width.
 
-`browser-check` renders a page in Chromium (or Firefox/WebKit if installed)
-and compares each word's rendered width with HarfBuzz.
+`inkcheck` lays out every justified line in text mode and measures, band by
+band, how close each pair of neighbouring words comes. It compares that with
+the same pair in the SVG renderer. It fails if any gap differs by more than 1
+unit (after allowing for the few lines the SVG renderer leaves a little short),
+or if two words touch in text mode but not in the SVG renderer.
+
+`browser-check` renders a page in Chromium (or Firefox/WebKit if installed). It
+compares each word's rendered width with HarfBuzz (0.1px tolerance) and where
+the browser puts each word in its line (0.3px: each inline-block space is
+snapped to 1/64px).
 
 ## Results
 
@@ -90,9 +127,40 @@ Table built over font scales 0.5–1.2 (step 0.05), verified at 1, 0.53, 0.73,
 
 Chromium (`browser-check`): every word within **0.016px** of HarfBuzz at 40px
 (newmadina pages 3, 50, 300 at scales 1, 1.1, 0.8; oldmadina and indopak pages
-3 and 300).
+3 and 300). Every word is also placed within **0.09px** of where HarfBuzz puts
+it (0.22px with `overfull: "words"`).
+
+Word spacing (`inkcheck`, every justified line at font scale 1; "touching"
+means closer than 10 units, 1% of an em, where the SVG renderer has them apart):
+
+| layout | word gaps | touching, words shaped alone | touching, contextual spacing | gaps ≠ SVG renderer | touching, `overfull: "words"` |
+|---|---|---|---|---|---|
+| newmadina | 74,852 | 88 | **0** | **0** | **0** |
+| oldmadina | 74,853 | 177 | **0** | **0** | **0** |
+| indopak | 74,768 | 1 | **0** | **0** | **0** |
+
+A few lines (14 in New Madina, 164 in Old Madina, 4 in IndoPak) come out of
+the SVG renderer slightly short of their width. Text mode always fills the
+width, so on those lines the gaps are compared after removing that difference.
+The 2 New Madina and 5 Old Madina gaps that touch in the SVG renderer itself
+are on the basmala of pages 1 and 2, which is drawn that way on purpose.
 
 ![page 3 in text mode, Chromium](docs/newmadina-p3-chromium.png)
+
+## Line breaks of the texts
+
+`check-breaks` reads the layout texts (`quran_text_*.ts`) as they are.
+
+- An aya number at the start of a line: 573 lines in New Madina and 566 in
+  Old Madina; IndoPak has 1.
+- With `--reference`, New Madina's lines are compared word by word with King
+  Fahd Complex's page data for the 1441H Madina Mushaf, in the layout of the
+  `quran-qcf4` npm package (JSON under MIT; the tool only reads it). In that
+  data no line starts with an aya number. Of 8,820 text lines, 7,185 match
+  exactly. 857 differ only in which line an aya number sits on. 778 have
+  words on a different line (e.g. page 579, lines 3–4).
+
+This is reported, not changed: text mode follows whatever the texts say.
 
 ## Notes
 
@@ -101,7 +169,7 @@ Chromium (`browser-check`): every word within **0.016px** of HarfBuzz at 40px
   reported as `unsupported` and shown unstretched (its line then gets slightly
   wider spaces), so pages still render correctly.
 - Shrunk lines (`xScale < 1`) are drawn with `transform: scaleX()`, like the
-  SVG renderer.
+  SVG renderer, unless `overfull: "words"` is set.
 - Safari/CoreText: custom feature tags with values are untested.
 - The patched fonts are OFL like the originals; their family name gets a
   ` TextMode` suffix.

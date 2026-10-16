@@ -1,8 +1,10 @@
 // Render one page in text mode in a real browser and compare with HarfBuzz.
 //
 //   node dist/browser-check.mjs --layout newmadina --page 3 [--scale 1] [--browser chromium]
+//        [--overfull line|words]
 // Writes out/<layout>-p<page>.html and a screenshot; fails if any word's
-// rendered width differs from HarfBuzz by more than 0.1px (at 40px).
+// rendered width differs from HarfBuzz by more than 0.1px, or the place where
+// the browser puts it in its line by more than 0.3px (at 40px).
 import { mkdirSync, readFileSync, writeFileSync, copyFileSync } from "node:fs";
 import { resolve, basename } from "node:path";
 import { parseArgs } from "node:util";
@@ -17,6 +19,7 @@ const { values } = parseArgs({
     page: { type: "string", default: "3" },
     scale: { type: "string", default: "1" },
     browser: { type: "string", default: "chromium" },
+    overfull: { type: "string", default: "line" },
     font: { type: "string" },
     table: { type: "string" },
     assets: { type: "string", default: "../../ClientApp/src/assets" },
@@ -36,16 +39,30 @@ const patched = await loadFont("patched", fontFile);
 const spaceWidth = App.getWidth(" ", original, App.FONTSIZE, null);
 
 const rows: string[] = [];
-const expected: { line: number, xScale: number, words: number[] }[] = [];
+const expected: { line: number, xScale: number, words: number[], scales: number[], right: number[] }[] = [];
 for (let l = 0; l < layout.service.quranText[pageIndex].length; l++) {
   if (!isJustifiedLine(layout, pageIndex, l)) continue;
   const { info, lineTextInfo, justResult } = justify(layout, original, spaceWidth, pageIndex, l, scale);
   const desired = App.FONTSIZE / (fontSizeLineWidthRatio(layout, scale) / info.lineWidthRatio);
-  const tm = textModeLine(original, lineTextInfo, justResult, table, desired);
+  const tm = textModeLine(original, lineTextInfo, justResult, table, desired, false,
+    { overfull: values.overfull as "line" | "words" });
   rows.push(textModeLineHtml(tm, FONT_PX));
+  const advances = tm.words.map(w => {
+      const feats = w.featureSettings ? w.featureSettings.split(", ").map(p => {
+        const [tag, v] = p.replace(/"/g, "").split(" ");
+        return { tag, value: Number(v), start: 0, end: -1 };
+      }) : [];
+      return App.getWidth(w.text, patched, FONT_PX, feats);
+    });
+  // where each word's box should end, from the line's right edge, in px (before transforms)
+  const right: number[] = [];
+  let x = 0;
+  advances.forEach((a, i) => { right.push(x); x += a + (i < tm.spaces.length ? tm.spaces[i] * FONT_PX / 1000 : 0); });
   expected.push({
     line: l + 1,
     xScale: tm.xScale,
+    scales: tm.words.map((_, i) => tm.wordScales?.[i] ?? 1),
+    right,
     words: tm.words.map(w => {
       const feats = w.featureSettings ? w.featureSettings.split(", ").map(p => {
         const [tag, v] = p.replace(/"/g, "").split(" ");
@@ -79,13 +96,27 @@ await page.waitForTimeout(300);
 const measured: number[][] = await page.evaluate(() =>
   [...document.querySelectorAll(".tm-line")].map(line =>
     [...line.querySelectorAll(".tm-word")].map(w => w.getBoundingClientRect().width)));
+// box positions, transforms off (scaleX moves ink, never the boxes)
+const positions: number[][] = await page.evaluate(() => {
+  document.querySelectorAll<HTMLElement>(".tm-line, .tm-word").forEach(e => { e.style.transform = "none"; });
+  return [...document.querySelectorAll(".tm-line")].map(line => {
+    const r = line.getBoundingClientRect().right;
+    return [...line.querySelectorAll(".tm-word")].map(w => r - w.getBoundingClientRect().right);
+  });
+});
 await page.screenshot({ path: `out/${layout.name}-p${pageIndex + 1}-${values.browser}.png`, fullPage: true });
 await browser.close();
 
-let worst = 0;
+let worst = 0, worstPos = 0;
 measured.forEach((words, i) => words.forEach((w, j) => {
-  // shrunk lines carry transform: scaleX(), which getBoundingClientRect includes
-  worst = Math.max(worst, Math.abs(w / expected[i].xScale - expected[i].words[j]));
+  // scaled lines/words carry transform: scaleX(), which getBoundingClientRect includes
+  worst = Math.max(worst, Math.abs(w / (expected[i].xScale * expected[i].scales[j]) - expected[i].words[j]));
 }));
-console.log(`${values.browser}, ${layout.name} page ${pageIndex + 1}: worst word width difference ${worst.toFixed(3)}px at ${FONT_PX}px`);
-process.exit(worst <= 0.1 ? 0 : 1);
+positions.forEach((words, i) => words.forEach((r, j) => {
+  worstPos = Math.max(worstPos, Math.abs(r - expected[i].right[j]));
+}));
+console.log(`${values.browser}, ${layout.name} page ${pageIndex + 1} (overfull: ${values.overfull}): ` +
+  `worst word width difference ${worst.toFixed(3)}px, worst position ${worstPos.toFixed(3)}px at ${FONT_PX}px`);
+// positions: each inline-block space is snapped to 1/64 px (Chromium's LayoutUnit),
+// so a line of ~15 spaces may drift by a few 1/64 px
+process.exit(worst <= 0.1 && worstPos <= 0.3 ? 0 : 1);

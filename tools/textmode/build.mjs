@@ -9,7 +9,7 @@ const here = fileURLToPath(new URL(".", import.meta.url));
 
 await build({
   entryPoints: Object.fromEntries(
-    ["collect", "verify", "browser-check"]
+    ["collect", "verify", "browser-check", "inkcheck", "check-breaks"]
       .filter(name => existsSync(`src/${name}.ts`))
       .map(name => [name, `src/${name}.ts`])),
   outdir: "dist",
